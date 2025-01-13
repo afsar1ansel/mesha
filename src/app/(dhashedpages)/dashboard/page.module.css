@@ -22,7 +22,7 @@
 .statesContainer{
     /* border: solid 1px yellow; */
     display: flex;
-    gap: 20px;
+    gap: 14px;
 }
 
 .stateBox{
@@ -76,4 +76,13 @@ text-decoration-skip-ink: none;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
+}
+
+.bChart{
+    width: 400px;
+    height: 450px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 10px;
+    padding: 16px;
+    background-color: white;
 }

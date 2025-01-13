@@ -5,6 +5,7 @@ import { TbDeviceAnalytics } from "react-icons/tb";
 import { RiUser3Line } from "react-icons/ri";
 import { IoMdPaper } from "react-icons/io";
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import BarChart from "@/app/componants/BarChart";
 
 
 
@@ -60,6 +61,18 @@ export default function Home() {
           <div className={styles.stateIcon}>
             <AiOutlineCloudUpload />
           </div>
+        </div>
+      </div>
+
+      <div className={styles.charts}>
+        <div className={styles.bChart}>
+          <div>
+            <p style={{marginBottom: "4px"}}>Data Uploads</p>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px",marginBottom: "10px"}}>
+            <h1>159</h1> <p style={{color: "green"}}>230%</p>
+            </div>
+          </div>
+        <BarChart />
         </div>
       </div>
 
