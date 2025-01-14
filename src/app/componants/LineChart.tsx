@@ -4,26 +4,28 @@ import {
   Chart,
   LinearScale,
   CategoryScale,
-  BarElement, // Use BarElement for bar charts
+  LineElement,
+  PointElement,
   Title,
   Tooltip,
   Legend,
-  BarController, // Use BarController for bar chart
+  LineController,
 } from "chart.js";
 import { getRelativePosition } from "chart.js/helpers";
 
-// Register necessary components for "bar" chart
+// Register components required for the "line" chart
 Chart.register(
-  LinearScale, // For scaling on y and x axes
-  CategoryScale, // For category-based x axis (like labels)
-  BarElement, // For bars in the chart
-  Title, // For chart title
-  Tooltip, // For tooltips
-  Legend, // For the legend
-  BarController // This is crucial for using "bar" chart type
+  LinearScale,
+  CategoryScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+  LineController
 );
 
-export default function BarChart() {
+export default function LineChart() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -31,43 +33,37 @@ export default function BarChart() {
 
     // Chart.js data and options
     const data = {
-      labels: ["02", "02", "03", "04"],
+      labels: ["01", "02", "03",],
       datasets: [
         {
-            label: "",
-          data: [65, 59, 80, 81,],
-          backgroundColor: [
-            "rgba(0, 181, 98, 0.2)",
-            "rgba(0, 181, 98, 0.4)",
-            "rgba(0, 181, 98, 0.5)",
-            "rgba(0, 181, 98, 0.8)",
-          ], // Bar color
-        //   borderColor: "rgb(75, 192, 192)",
-          borderWidth: 1,
+          label: "My First Dataset",
+          data: [0, 10, 20,],
+          fill: false,
+          borderColor: "rgb(75, 192, 192)",
+          tension: 0.1, // Curved line tension
         },
       ],
     };
 
     const options = {
-        //to remove the legend
+      responsive: true,
       plugins: {
         legend: {
-          display: false, // This disables the legend entirely
+          display: true,
+          position: "top",
+        },
+        title: {
+          display: true,
+          text: "",
         },
       },
-
-
-      onClick: (e: MouseEvent) => {
-        const chart = chartInstance.current;
-        if (!chart) return;
-
-        const canvasPosition = getRelativePosition(e, chart);
-
-        // Substitute the appropriate scale IDs
-        const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
-        const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
-
-        console.log(`X: ${dataX}, Y: ${dataY}`);
+      scales: {
+        x: {
+          beginAtZero: true,
+        },
+        y: {
+          beginAtZero: true,
+        },
       },
     };
 
@@ -77,9 +73,9 @@ export default function BarChart() {
 
     // Create the chart instance
     const chartInstance = new Chart(ctx, {
-      type: "bar", // Change the type to "bar" to create a bar chart
-      data: data,
-      options: options,
+      type: "line",
+      data,
+      options,
     });
 
     // Cleanup chart instance on component unmount
@@ -90,13 +86,14 @@ export default function BarChart() {
 
   return (
     <div>
-      <canvas ref={canvasRef} width="100px" height="100px"></canvas>
+      <canvas ref={canvasRef} width="400" height="400"></canvas>;
       <div
         style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           gap: "0px",
+         
         }}
       >
         <button
@@ -121,5 +118,5 @@ export default function BarChart() {
         </button>
       </div>
     </div>
-  );
+  ); 
 }
