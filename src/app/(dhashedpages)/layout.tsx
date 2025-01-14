@@ -2,7 +2,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import Link from "next/link";
 import "./globals.css"; 
 import Image from "next/image";
@@ -21,6 +21,7 @@ import { MdHelpOutline } from "react-icons/md";
 import { FaPowerOff } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa"; 
 
+import { usePathname } from "next/navigation";
 
 // export const metadata = {
 //   title: "Create Next App",
@@ -33,13 +34,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
 
-  const [active, setActive] = useState<string>("dashboard");
+  const pathname = usePathname();
+   const cleanedPathname = pathname.replace(/^\/+/, ""); // Remove leading slashes
+   console.log(cleanedPathname); // Check the cleaned pathname
+
+   const [active, setActive] = useState<string>(cleanedPathname);
 
    const handleNavClick = (navItem: string) => {
      setActive(navItem);
    };
-
-
 
 
   return (
