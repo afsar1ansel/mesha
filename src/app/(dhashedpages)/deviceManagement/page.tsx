@@ -66,13 +66,49 @@ const GridComponent = () => {
     },
     { field: "deviceName", filter: true },
     { field: "lastSync", filter: "agDateColumnFilter" },
-    { field: "status", filter: "agSetColumnFilter" },
+    {
+      field: "status",
+      filter: "agSetColumnFilter",
+      cellRenderer: (params: any) => (
+        <div>
+          {params.value === "Active" ? (
+            <span
+              style={{
+                color: "white",
+                borderRadius: "5px",
+                backgroundColor: "rgba(0, 181, 98, 1)",
+                padding: "4px 8px",
+                fontSize: "12px",
+                width: "60px",
+                textAlign: "center",
+              }}
+            >
+              Active
+            </span>
+          ) : (
+            <span
+              style={{
+                color: "rgba(132, 143, 139, 1)",
+                borderRadius: "5px",
+                backgroundColor: "rgba(229, 231, 232, 1)",
+                padding: "4px 8px",
+                fontSize: "12px",
+                width: "60px",
+                textAlign: "center",
+              }}
+            >
+              Offline
+            </span>
+          )}
+        </div>
+      ),
+    },
     { field: "connectedUser", filter: "agTextColumnFilter" },
     {
       field: "action",
       headerName: "Action",
       cellRenderer: (params: any) => (
-        <div style={{ display: "flex", gap: "12px" }}>
+        <div style={{ display: "flex", gap: "12px",marginTop:"10px" }}>
           <div
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}
@@ -96,13 +132,13 @@ const GridComponent = () => {
     },
   ]);
 
-  const pagination = useMemo(() => {
-    return {
-      pagination: true,
-      paginationPageSize: 10,
-      paginationPageSizeSelector: [10, 20, 30, 40, 50],
-    };
-  }, []);
+  // const pagination = useMemo(() => {
+  //   return {
+  //     pagination: true,
+  //     paginationPageSize: 10,
+  //     paginationPageSizeSelector: [10, 20, 30, 40, 50],
+  //   };
+  // }, []);
 
   function handleEdit(data: any) {
     console.log(data);
@@ -140,7 +176,14 @@ const GridComponent = () => {
           smooth operations with ease.
         </p>
       </div>
-      <div style={{ height: "100%", width: "80vw", marginTop: "40px" ,  maxWidth: "1300px" }}>
+      <div
+        style={{
+          height: "100%",
+          width: "80vw",
+          marginTop: "40px",
+          maxWidth: "1300px",
+        }}
+      >
         <div
           style={{
             height: "60px",
@@ -165,6 +208,8 @@ const GridComponent = () => {
             rowData={rowData}
             columnDefs={columnDefs}
             pagination={true}
+            paginationPageSize={10}
+            paginationAutoPageSize={true}
             getRowHeight={function (params) {
               const description = params.data?.banner_description || "";
               const words = description.split(" ").length;

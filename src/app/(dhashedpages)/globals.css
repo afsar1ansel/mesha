@@ -51,8 +51,8 @@ body {
 .searchIcon{
   /* border: solid 1px red; */
   position: relative;
-  left: 1.9vw;
-  top: 2px;
+  left: 0.9vw;
+  top: 24px;
   color: rgba(98, 108, 112, 1);
   cursor: pointer
 }
