@@ -2,9 +2,13 @@
 
 import { AgGridReact } from "ag-grid-react";
 import { useEffect, useMemo, useState } from "react";
+import { FaEye } from "react-icons/fa";
+import { CiEdit } from "react-icons/ci";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import type { ColDef } from "ag-grid-community";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
+
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -53,12 +57,41 @@ const GridComponent = () => {
   ]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "deviceId", headerName: "Device ID",filter: "agTextColumnFilter" },
+    {
+      field: "deviceId",
+      headerName: "Device ID",
+      filter: "agTextColumnFilter",
+    },
     { field: "deviceName", filter: true },
     { field: "lastSync", filter: "agDateColumnFilter" },
     { field: "status", filter: "agSetColumnFilter" },
     { field: "connectedUser", filter: "agTextColumnFilter" },
-    { field: "action" },
+    {
+      field: "action",
+      headerName: "Action",
+      cellRenderer: (params: any) => (
+        <div style={{ display: "flex", gap: "12px" }}>
+          <div
+            onClick={() => handleEdit(params.data)}
+            style={{ cursor: "pointer" }}
+          >
+            <FaEye size={20} />
+          </div>
+          <div
+            onClick={() => handleEdit(params.data)}
+            style={{ cursor: "pointer" }}
+          >
+            <CiEdit size={20} />
+          </div>
+          <div
+            onClick={() => handleEdit(params.data)}
+            style={{ cursor: "pointer" }}
+          >
+            <RiDeleteBin6Line size={20} />
+          </div>
+        </div>
+      ),
+    },
   ]);
 
   const pagination = useMemo(() => {
@@ -69,9 +102,13 @@ const GridComponent = () => {
     };
   }, []);
 
+  function handleEdit(data: any) {
+    console.log(data);
+  }
+
 
   return (
-    <div style={{ width: "80vw", height: "60vh" }}>
+    <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
       <div className={styles.hello}>
         <h3>Device Management</h3>
         <p>
@@ -79,7 +116,7 @@ const GridComponent = () => {
           smooth operations with ease.
         </p>
       </div>
-      <div style={{ height: "100%", width: "100%", marginTop: "50px" }}>
+      <div style={{ height: "100%", width: "80vw", marginTop: "50px" }}>
         <div
           style={{
             height: "60px",
@@ -87,10 +124,15 @@ const GridComponent = () => {
             backgroundColor: "white",
             padding: "20px",
             borderRadius: "10px 10px 0px 0px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           <h4>Device Management</h4>
+          <button>Add New Device</button>
         </div>
+         <div style={{ height: "100%", width: "100%", maxWidth: "1250px" }}>
         <AgGridReact
           rowData={rowData}
           columnDefs={columnDefs}
@@ -105,6 +147,7 @@ const GridComponent = () => {
             return Math.max(minHeight, calculatedHeight);
           }}
         />
+        </div>
       </div>
     </div>
   );
