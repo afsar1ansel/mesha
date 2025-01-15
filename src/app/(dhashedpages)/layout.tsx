@@ -22,6 +22,7 @@ import { FaPowerOff } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa"; 
 
 import { usePathname } from "next/navigation";
+import { ChakraProvider } from "@chakra-ui/react";
 
 // export const metadata = {
 //   title: "Create Next App",
@@ -48,125 +49,127 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="app-container">
-          {/* Header Section */}
-          <header className="header">
-            <div className="search-bar">
-              <div>
-                <FaSearch className="searchIcon" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="search-input"
-                />
-              </div>
-              <div className="icons">
-                <FaRegBell />
-                <div className="user">
-                  <Image
-                    src={profile}
-                    alt="Logo"
-                    width={40}
-                    height={40}
-                    className="user-image"
+        <ChakraProvider>
+          <div className="app-container">
+            {/* Header Section */}
+            <header className="header">
+              <div className="search-bar">
+                <div>
+                  <FaSearch className="searchIcon" />
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="search-input"
                   />
                 </div>
-              </div>
-            </div>
-          </header>
-
-          <div className="main-content">
-            {/* Sidebar Navigation */}
-            <nav className="sidebar">
-              <Image src={logo} alt="Logo" width={200} height={100} />
-              <ul>
-                <li
-                  className={active === "dashboard" ? "active" : ""}
-                  onClick={() => handleNavClick("dashboard")}
-                >
-                  <IoIosHome />
-                  <Link className="link" href="/dashboard">
-                    <p className="linkname">Dashboard</p>
-                  </Link>
-                </li>
-                <li
-                  className={active === "deviceManagement" ? "active" : ""}
-                  onClick={() => handleNavClick("deviceManagement")}
-                >
-                  <TbDeviceAnalytics />
-                  <Link href="/deviceManagement">
-                    <p className="linkname">Device Management</p>
-                  </Link>
-                </li>
-                <li
-                  className={active === "userManagement" ? "active" : ""}
-                  onClick={() => handleNavClick("userManagement")}
-                >
-                  <RiUser3Line />
-                  <Link href="/userManagement">
-                    <p className="linkname">User Management</p>
-                  </Link>
-                </li>
-                <li
-                  className={active === "dataLogs" ? "active" : ""}
-                  onClick={() => handleNavClick("dataLogs")}
-                >
-                  <AiOutlineDatabase />
-                  <Link href="/dataLogs">
-                    <p className="linkname">Data Logs</p>
-                  </Link>
-                </li>
-                <li
-                  className={active === "Reports" ? "active" : ""}
-                  onClick={() => handleNavClick("Reports")}
-                >
-                  <IoMdPaper />
-                  <Link href="/Reports">
-                    <p className="linkname">Reports</p>
-                  </Link>
-                </li>
-                <li
-                  className={active === "Notifications" ? "active" : ""}
-                  onClick={() => handleNavClick("Notifications")}
-                >
+                <div className="icons">
                   <FaRegBell />
-                  <Link href="/Notifications">
-                    <p className="linkname">Notifications</p>
-                  </Link>
-                </li>
-                <li
-                  className={active === "Settings" ? "active" : ""}
-                  onClick={() => handleNavClick("Settings")}
-                >
-                  <IoSettingsOutline />
-                  <Link href="/Settings">
-                    <p className="linkname">Settings</p>
-                  </Link>
-                </li>
-                <li
-                  className={active === "Support" ? "active" : ""}
-                  onClick={() => handleNavClick("Support")}
-                >
-                  <MdHelpOutline />
-                  <Link href="/Support">
-                    <p className="linkname">Support</p>
-                  </Link>
-                </li>
-                <li
-                  className={active === "Logout" ? "active" : ""}
-                  onClick={() => handleNavClick("Logout")}
-                >
-                  <FaPowerOff />
-                  <Link href="/Logout">
-                    <p className="linkname">Logout</p>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
+                  <div className="user">
+                    <Image
+                      src={profile}
+                      alt="Logo"
+                      width={40}
+                      height={40}
+                      className="user-image"
+                    />
+                  </div>
+                </div>
+              </div>
+            </header>
 
-            <main className="content">{children}</main>
+            <div className="main-content">
+              {/* Sidebar Navigation */}
+              <nav className="sidebar">
+                <Image src={logo} alt="Logo" width={200} height={100} />
+                <ul>
+                  <li
+                    className={active === "dashboard" ? "active" : ""}
+                    onClick={() => handleNavClick("dashboard")}
+                  >
+                    <IoIosHome />
+                    <Link className="link" href="/dashboard">
+                      <p className="linkname">Dashboard</p>
+                    </Link>
+                  </li>
+                  <li
+                    className={active === "deviceManagement" ? "active" : ""}
+                    onClick={() => handleNavClick("deviceManagement")}
+                  >
+                    <TbDeviceAnalytics />
+                    <Link href="/deviceManagement">
+                      <p className="linkname">Device Management</p>
+                    </Link>
+                  </li>
+                  <li
+                    className={active === "userManagement" ? "active" : ""}
+                    onClick={() => handleNavClick("userManagement")}
+                  >
+                    <RiUser3Line />
+                    <Link href="/userManagement">
+                      <p className="linkname">User Management</p>
+                    </Link>
+                  </li>
+                  <li
+                    className={active === "dataLogs" ? "active" : ""}
+                    onClick={() => handleNavClick("dataLogs")}
+                  >
+                    <AiOutlineDatabase />
+                    <Link href="/dataLogs">
+                      <p className="linkname">Data Logs</p>
+                    </Link>
+                  </li>
+                  <li
+                    className={active === "Reports" ? "active" : ""}
+                    onClick={() => handleNavClick("Reports")}
+                  >
+                    <IoMdPaper />
+                    <Link href="/Reports">
+                      <p className="linkname">Reports</p>
+                    </Link>
+                  </li>
+                  <li
+                    className={active === "Notifications" ? "active" : ""}
+                    onClick={() => handleNavClick("Notifications")}
+                  >
+                    <FaRegBell />
+                    <Link href="/Notifications">
+                      <p className="linkname">Notifications</p>
+                    </Link>
+                  </li>
+                  <li
+                    className={active === "Settings" ? "active" : ""}
+                    onClick={() => handleNavClick("Settings")}
+                  >
+                    <IoSettingsOutline />
+                    <Link href="/Settings">
+                      <p className="linkname">Settings</p>
+                    </Link>
+                  </li>
+                  <li
+                    className={active === "Support" ? "active" : ""}
+                    onClick={() => handleNavClick("Support")}
+                  >
+                    <MdHelpOutline />
+                    <Link href="/Support">
+                      <p className="linkname">Support</p>
+                    </Link>
+                  </li>
+                  <li
+                    className={active === "Logout" ? "active" : ""}
+                    onClick={() => handleNavClick("Logout")}
+                  >
+                    <FaPowerOff />
+                    <Link href="/Logout">
+                      <p className="linkname">Logout</p>
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
+
+              <main className="content">{children}</main>
+            </div>
           </div>
-        </div>
+        </ChakraProvider>
       </body>
     </html>
   );

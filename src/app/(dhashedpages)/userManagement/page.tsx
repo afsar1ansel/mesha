@@ -8,13 +8,26 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import type { ColDef } from "ag-grid-community";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
-import { Button, FormControl, FormLabel, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from "@chakra-ui/react";
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+} from "@chakra-ui/react";
 import Head from "next/head";
-
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const GridComponent = () => {
+const UserManagement = () => {
   const [rowData, setRowData] = useState<any[]>([
     {
       deviceId: "DMS12345",
@@ -108,28 +121,26 @@ const GridComponent = () => {
     console.log(data);
   }
 
-
   // modal
-   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [deviceId, setDeviceId] = useState("");
+  const [deviceName, setDeviceName] = useState("");
+  const [connectedUser, setConnectedUser] = useState("");
 
-    const [deviceId, setDeviceId] = useState("");
-    const [deviceName, setDeviceName] = useState("");
-    const [connectedUser, setConnectedUser] = useState("");
-
-    const handleAddDevice = () => {
-      const newDevice = {
-        deviceId,
-        deviceName,
-        connectedUser,
-      };
-      console.log(newDevice);
-      // Clear inputs and close modal (optional)
-      setDeviceId("");
-      setDeviceName("");
-      setConnectedUser("");
-      onClose();
+  const handleAddDevice = () => {
+    const newDevice = {
+      deviceId,
+      deviceName,
+      connectedUser,
     };
+    console.log(newDevice);
+    // Clear inputs and close modal (optional)
+    setDeviceId("");
+    setDeviceName("");
+    setConnectedUser("");
+    onClose();
+  };
 
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
@@ -140,7 +151,14 @@ const GridComponent = () => {
           smooth operations with ease.
         </p>
       </div>
-      <div style={{ height: "100%", width: "80vw", marginTop: "40px" ,  maxWidth: "1300px" }}>
+      <div
+        style={{
+          height: "100%",
+          width: "80vw",
+          marginTop: "40px",
+          maxWidth: "1300px",
+        }}
+      >
         <div
           style={{
             height: "60px",
@@ -218,4 +236,4 @@ const GridComponent = () => {
   );
 };
 
-export default GridComponent;
+export default UserManagement;

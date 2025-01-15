@@ -8,7 +8,7 @@
 
 body {
   font-family: Arial, sans-serif !important;
-  background-color: rgba(245, 246, 247, 1);
+  background-color: rgba(245, 246, 247, 1) !important;
 }
 
 .app-container {
@@ -89,6 +89,8 @@ body {
 
 .sidebar ul {
   list-style-type: none;
+  /* border: solid 1px red; */
+  margin-top: 20px;
 }
 
 .sidebar ul li {
@@ -113,10 +115,10 @@ body {
 
 .content {
   margin-left: 14vw;
+  margin-bottom: 20px;
   padding: 40px 0 0 40px;
   /* flex: 1; */
   /* overflow-y: auto; */
-
 }
 
 
