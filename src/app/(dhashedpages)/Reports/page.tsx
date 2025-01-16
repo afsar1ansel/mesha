@@ -29,7 +29,7 @@ import {
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const DataLogs = () => {
+const Reports = () => {
   const [rowData, setRowData] = useState<any[]>([
     {
       fileName: "UPS_Data_20250108_001.csv",
@@ -131,7 +131,7 @@ const DataLogs = () => {
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
       <div className={styles.hello}>
-        <h3>Data Logs</h3>
+        <h3>Report Management</h3>
         <p>
           Access, monitor, and manage uploaded data logs with detailed
           processing history for better transparency and control.
@@ -157,7 +157,7 @@ const DataLogs = () => {
           }}
         >
           <p style={{ fontSize: "16px", fontWeight: "600" }}>
-            Uploaded Data Logs
+            Report Management
           </p>
           {/* <Button onClick={onOpen} colorScheme="green">
             Add New User
@@ -241,4 +241,4 @@ const DataLogs = () => {
   );
 };
 
-export default DataLogs;
+export default Reports;
