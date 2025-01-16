@@ -21,8 +21,10 @@ import { MdHelpOutline } from "react-icons/md";
 import { FaPowerOff } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa"; 
 
+import { MdLogout } from "react-icons/md";
+
 import { usePathname } from "next/navigation";
-import { ChakraProvider } from "@chakra-ui/react";
+import { Button, ChakraProvider, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from "@chakra-ui/react";
 
 // export const metadata = {
 //   title: "Create Next App",
@@ -39,7 +41,10 @@ export default function RootLayout({
    const cleanedPathname = pathname.replace(/^\/+/, ""); // Remove leading slashes
    console.log(cleanedPathname); // Check the cleaned pathname
 
+   const { isOpen, onOpen, onClose } = useDisclosure();
+
    const [active, setActive] = useState<string>(cleanedPathname);
+
 
    const handleNavClick = (navItem: string) => {
      setActive(navItem);
@@ -156,10 +161,11 @@ export default function RootLayout({
                   </li>
                   <li
                     className={active === "Logout" ? "active" : ""}
-                    onClick={() => handleNavClick("Logout")}
+                    // onClick={() => handleNavClick("Logout")}
+                    onClick={onOpen}
                   >
                     <FaPowerOff />
-                    <Link href="/Logout">
+                    <Link href="">
                       <p className="linkname">Logout</p>
                     </Link>
                   </li>
@@ -168,6 +174,51 @@ export default function RootLayout({
 
               <main className="content">{children}</main>
             </div>
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalBody textAlign="center">
+                  <Flex
+                    justifyContent="center"
+                    alignItems="center"
+                    width={"100%"}
+                    flexDirection={"column"}
+                    gap={4}
+                  >
+                    <MdLogout size={100} color="red" />
+                    <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+                      <h2
+                        style={{
+                          fontSize: "18px",
+                          fontWeight: "500",
+                          color: "rgba(25, 27, 28, 1)",
+                        }}
+                      >
+                        Confirm Logout
+                      </h2>
+                      <p
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "400",
+                          color: "rgba(98, 108, 112, 1)",
+                        }}
+                      >
+                        Are you sure you want to log out?
+                      </p>
+                    </div>
+                  </Flex>
+                </ModalBody>
+
+                <ModalFooter justifyContent="space-around">
+                  <Button style={{ color: "red", backgroundColor: "white" }}>
+                    Logout
+                  </Button>
+                  <Button colorScheme="gray" mr={3} onClick={onClose}>
+                    Cancel
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
           </div>
         </ChakraProvider>
       </body>
