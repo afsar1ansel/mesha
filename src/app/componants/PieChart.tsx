@@ -40,19 +40,19 @@ export default function PieChart() {
       ],
     };
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: true,
-        position: "bottom", // Set the legend position to the bottom
-      },
-      title: {
-        display: false, // Hide the chart title
-        text: "", // No title text
-      },
-    },
-  };
+ const options = {
+   responsive: true,
+   plugins: {
+     legend: {
+       display: true,
+       position: "bottom" as const, // Change this line
+     },
+     title: {
+       display: false,
+       text: "",
+     },
+   },
+ };
 
 
 
