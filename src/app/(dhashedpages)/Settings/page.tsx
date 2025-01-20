@@ -96,12 +96,13 @@ function EditableControls() {
         size="sm"
         bgColor={"transparent"}
         icon={<CiEdit />}
-        aria-label="Edit"
+        aria-label="Edit field"
         {...getEditButtonProps()}
       />
     </Flex>
   );
 }
+
 
 
   return (
