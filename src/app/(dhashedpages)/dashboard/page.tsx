@@ -6,7 +6,7 @@ import { RiUser3Line } from "react-icons/ri";
 import { IoMdPaper } from "react-icons/io";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import BarChart from "@/app/componants/BarChart";
-import LineChart from "@/app/componants/lineChart";
+import LineChart from "@/app/componants/LineChart";
 import PieChart from "@/app/componants/PieChart";
 
 

@@ -75,7 +75,7 @@ export default function LineChart() {
     const chartInstance = new Chart(ctx, {
       type: "line",
       data,
-      options,
+    
     });
 
     // Cleanup chart instance on component unmount
