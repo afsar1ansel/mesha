@@ -25,7 +25,7 @@ Chart.register(
 
 export default function BarChart() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const chartRef = useRef<Chart<"bar", number[], string> | null>(null); 
+  const chartRef = useRef<Chart<"bar", number[], string> | null>(null);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -54,20 +54,18 @@ export default function BarChart() {
           display: false, // This disables the legend entirely
         },
       },
-      onClick: (e: MouseEvent) => {
-        if (!chartRef.current) return;
+      onClick: (event: any, elements: any[], chart: any) => {
+        if (!chart) return;
 
-       const canvasPosition = getRelativePosition(e, chartRef.current as any);
+        if (elements.length > 0) {
+          const canvasPosition = getRelativePosition(event, chart);
 
-        // Substitute the appropriate scale IDs
-        const dataX = chartRef.current.scales.x.getValueForPixel(
-          canvasPosition.x
-        );
-        const dataY = chartRef.current.scales.y.getValueForPixel(
-          canvasPosition.y
-        );
+          // Substitute the appropriate scale IDs
+          const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
+          const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
 
-        console.log(`X: ${dataX}, Y: ${dataY}`);
+          console.log(`X: ${dataX}, Y: ${dataY}`);
+        }
       },
     };
 
@@ -79,7 +77,7 @@ export default function BarChart() {
     chartRef.current = new Chart(ctx, {
       type: "bar", // Change the type to "bar" to create a bar chart
       data: data,
-      options: options,
+      options: options as any, // Use "as any" to suppress strict typing errors
     });
 
     // Cleanup chart instance on component unmount
