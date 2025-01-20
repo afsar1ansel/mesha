@@ -79,15 +79,15 @@ function EditableControls() {
         size="sm"
         bgColor={"transparent"}
         icon={<FaCheck />}
-        aria-label="Save changes"
-        {...getSubmitButtonProps()}
+        // aria-label="Save changes"
+        {...{ ...getSubmitButtonProps(), "aria-label": "Save changes" }}
       />
       <IconButton
         size="sm"
         bgColor={"transparent"}
         icon={<IoMdClose />}
-        aria-label="Cancel editing"
-        {...getCancelButtonProps()}
+        // aria-label="Cancel editing"
+        {...{ ...getCancelButtonProps(), "aria-label": "Cancel editing" }}
       />
     </ButtonGroup>
   ) : (
@@ -96,12 +96,13 @@ function EditableControls() {
         size="sm"
         bgColor={"transparent"}
         icon={<CiEdit />}
-        aria-label="Edit field"
-        {...getEditButtonProps()}
+        // aria-label="Edit field"
+        {...{ ...getEditButtonProps(), "aria-label": "Edit field" }}
       />
     </Flex>
   );
 }
+
 
 
 
