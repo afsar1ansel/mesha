@@ -8,16 +8,11 @@ import profile from "/public/BG.png";
 
 import { FiUpload } from "react-icons/fi";
 
-import {
-  FileUploadList,
-  FileUploadRoot,
-  FileUploadTrigger,
-} from "@/components/ui/file-upload";
-import { HiUpload } from "react-icons/hi";
+
 import {
   Button,
   ButtonGroup,
-  CheckboxIcon,
+  // CheckboxIcon,
   Editable,
   EditableInput,
   EditablePreview,
@@ -29,8 +24,7 @@ import {
   InputRightElement,
   useEditableControls,
 } from "@chakra-ui/react";
-import { FaClosedCaptioning } from "react-icons/fa";
-import { MdEditNotifications } from "react-icons/md";
+
 import { CiEdit } from "react-icons/ci";
 import { FaCheck } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
@@ -71,40 +65,44 @@ const Settings = () => {
 
 
   // ediltable
-  function EditableControls() {
-    const {
-      isEditing,
-      getSubmitButtonProps,
-      getCancelButtonProps,
-      getEditButtonProps,
-    } = useEditableControls();
+function EditableControls() {
+  const {
+    isEditing,
+    getSubmitButtonProps,
+    getCancelButtonProps,
+    getEditButtonProps,
+  } = useEditableControls();
 
-    return isEditing ? (
-      <ButtonGroup justifyContent="center" size="sm">
-        <IconButton
-          size="sm"
-          bgColor={"transparent"}
-          icon={<FaCheck />}
-          {...getSubmitButtonProps()}
-        />
-        <IconButton
-          size="sm"
-          bgColor={"transparent"}
-          icon={<IoMdClose />}
-          {...getCancelButtonProps()}
-        />
-      </ButtonGroup>
-    ) : (
-      <Flex justifyContent="center">
-        <IconButton
-          size="sm"
-          bgColor={"transparent"}
-          icon={<CiEdit />}
-          {...getEditButtonProps()}
-        />
-      </Flex>
-    );
-  }
+  return isEditing ? (
+    <ButtonGroup justifyContent="center" size="sm">
+      <IconButton
+        size="sm"
+        bgColor={"transparent"}
+        icon={<FaCheck />}
+        aria-label="Save changes"
+        {...getSubmitButtonProps()}
+      />
+      <IconButton
+        size="sm"
+        bgColor={"transparent"}
+        icon={<IoMdClose />}
+        aria-label="Cancel editing"
+        {...getCancelButtonProps()}
+      />
+    </ButtonGroup>
+  ) : (
+    <Flex justifyContent="center">
+      <IconButton
+        size="sm"
+        bgColor={"transparent"}
+        icon={<CiEdit />}
+        aria-label="Edit"
+        {...getEditButtonProps()}
+      />
+    </Flex>
+  );
+}
+
 
   return (
     <div className={styles.container}>
