@@ -25,6 +25,7 @@ Chart.register(
 
 export default function BarChart() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const chartRef = useRef<Chart<"bar", number[], string> | null>(null); 
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -34,38 +35,37 @@ export default function BarChart() {
       labels: ["02", "02", "03", "04"],
       datasets: [
         {
-            label: "",
-          data: [65, 59, 80, 81,],
+          label: "",
+          data: [65, 59, 80, 81],
           backgroundColor: [
             "rgba(0, 181, 98, 0.2)",
             "rgba(0, 181, 98, 0.4)",
             "rgba(0, 181, 98, 0.5)",
             "rgba(0, 181, 98, 0.8)",
-          ], // Bar color
-        //   borderColor: "rgb(75, 192, 192)",
+          ],
           borderWidth: 1,
         },
       ],
     };
 
     const options = {
-        //to remove the legend
       plugins: {
         legend: {
           display: false, // This disables the legend entirely
         },
       },
-
-
       onClick: (e: MouseEvent) => {
-        const chart = chartInstance.current;
-        if (!chart) return;
+        if (!chartRef.current) return;
 
-        const canvasPosition = getRelativePosition(e, chart);
+       const canvasPosition = getRelativePosition(e, chartRef.current as any);
 
         // Substitute the appropriate scale IDs
-        const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
-        const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
+        const dataX = chartRef.current.scales.x.getValueForPixel(
+          canvasPosition.x
+        );
+        const dataY = chartRef.current.scales.y.getValueForPixel(
+          canvasPosition.y
+        );
 
         console.log(`X: ${dataX}, Y: ${dataY}`);
       },
@@ -75,8 +75,8 @@ export default function BarChart() {
     const ctx = canvasRef.current.getContext("2d");
     if (!ctx) return;
 
-    // Create the chart instance
-    const chartInstance = new Chart(ctx, {
+    // Create the chart instance and store it in the ref
+    chartRef.current = new Chart(ctx, {
       type: "bar", // Change the type to "bar" to create a bar chart
       data: data,
       options: options,
@@ -84,7 +84,8 @@ export default function BarChart() {
 
     // Cleanup chart instance on component unmount
     return () => {
-      chartInstance.destroy();
+      chartRef.current?.destroy();
+      chartRef.current = null;
     };
   }, []);
 
