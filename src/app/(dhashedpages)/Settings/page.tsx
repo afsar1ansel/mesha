@@ -37,23 +37,27 @@ import { FaRegEyeSlash } from "react-icons/fa";
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const Settings = () => {
-  const [files, setFiles] = useState<File[]>([]);
+
+
+
+
   // Handle file selection
-  const handleFiles = (selectedFiles: FileList | null) => {
-    if (!selectedFiles) return;
-    const newFiles = Array.from(selectedFiles);
-    setFiles((prevFiles) => [
-      ...prevFiles,
-      ...newFiles.filter(
-        (file) => !prevFiles.some((f) => f.name === file.name)
-      ),
-    ]);
-  };
+  // const [files, setFiles] = useState<File[]>([]);
+  // const handleFiles = (selectedFiles: FileList | null) => {
+  //   if (!selectedFiles) return;
+  //   const newFiles = Array.from(selectedFiles);
+  //   setFiles((prevFiles) => [
+  //     ...prevFiles,
+  //     ...newFiles.filter(
+  //       (file) => !prevFiles.some((f) => f.name === file.name)
+  //     ),
+  //   ]);
+  // };
 
   // Handle removing a file
-  const removeFile = (fileName: string) => {
-    setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
-  };
+  // const removeFile = (fileName: string) => {
+  //   setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
+  // };
 
   //   password
   const [show, setShow] = React.useState(false);
@@ -117,7 +121,7 @@ function EditableControls() {
       </div>
 
       <div className={styles.mainBody}>
-        <div className={styles.profileBox}>
+        {/* <div className={styles.profileBox}>
           <Image src={profile} alt="Profile" width={150} />
           <div>
             <div className={styles.uploadContainer}>
@@ -169,7 +173,7 @@ function EditableControls() {
               format
             </p>
           </div>
-        </div>
+        </div> */}
 
         <div className={styles.info}>
           <div className={styles.infoHead}>
@@ -199,7 +203,7 @@ function EditableControls() {
             <div className={styles.infoBox}>
               <BiPhoneCall size={30} />
               <div>
-                <label htmlFor="email">PHone</label>
+                <label htmlFor="email">Phone</label>
                 <Editable
                   textAlign="center"
                   defaultValue="+91 9876543210"
