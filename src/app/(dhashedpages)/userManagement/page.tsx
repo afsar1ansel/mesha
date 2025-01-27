@@ -179,7 +179,7 @@ const UserManagement = () => {
     { field: "name", filter: true },
     { field: "email", headerName: "Email Id", filter: "agDateColumnFilter" },
     {field: "role", headerName: "Role", filter: "agDateColumnFilter"},
-    { field: "status", filter: "agSetColumnFilter" },
+    { field: "status", headerName: "Access", filter: "agSetColumnFilter" },
     { field: "dateAdded", headerName: "Date Added", filter: "agTextColumnFilter" },
     {
       field: "action",
@@ -192,12 +192,12 @@ const UserManagement = () => {
           >
             <CiEdit size={20} />
           </div>
-          <div
+          {/* <div
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}
           >
             <RiDeleteBin6Line size={20} />
-          </div>
+          </div> */}
         </div>
       ),
     },

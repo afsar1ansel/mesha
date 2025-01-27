@@ -18,42 +18,37 @@ const GridComponent = () => {
   const [rowData, setRowData] = useState<any[]>([
     {
       deviceId: "DMS12345",
-      deviceName: "UPS Alpha-01",
+      CustomerName: "John Doe",
       status: "Active",
       lastSync: "2025-01-10 10:30 AM",
-      connectedUser: "John Doe",
       action: "Edit",
     },
     {
       deviceId: "DMS56789",
-      deviceName: "UPS Beta-02",
+      CustomerName: "Jane Smith",
       status: "Inactive",
       lastSync: "2025-01-09 03:20 PM",
-      connectedUser: "Jane Smith",
       action: "Edit",
     },
     {
       deviceId: "DMS98765",
-      deviceName: "UPS Gamma-03",
+      CustomerName: "Mike Johnson",
       status: "Active",
       lastSync: "2025-01-08 08:45 AM",
-      connectedUser: "Mike Johnson",
       action: "Edit",
     },
     {
       deviceId: "DMS11223",
-      deviceName: "UPS Delta-04",
+      CustomerName: "Emily Davis",
       status: "Active",
       lastSync: "2025-01-07 02:15 PM",
-      connectedUser: "Emily Davis",
       action: "Edit",
     },
     {
       deviceId: "DMS44556",
-      deviceName: "UPS Epsilon-05",
+      CustomerName: "Chris Brown",
       status: "Inactive",
       lastSync: "2025-01-06 09:00 AM",
-      connectedUser: "Chris Brown",
       action: "Edit",
     },
   ]);
@@ -64,7 +59,7 @@ const GridComponent = () => {
       headerName: "Device ID",
       filter: "agTextColumnFilter",
     },
-    { field: "deviceName", filter: true },
+    { field: "CustomerName", filter: true },
     { field: "lastSync", filter: "agDateColumnFilter" },
     {
       field: "status",
@@ -103,7 +98,7 @@ const GridComponent = () => {
         </div>
       ),
     },
-    { field: "connectedUser", filter: "agTextColumnFilter" },
+   
     {
       field: "action",
       headerName: "Action",
@@ -235,18 +230,13 @@ const GridComponent = () => {
                 value={deviceId}
                 onChange={(e) => setDeviceId(e.target.value)}
               />
-              <FormLabel>Device name</FormLabel>
+              <FormLabel>Customer name</FormLabel>
               <Input
                 placeholder="Enter device name"
                 value={deviceName}
                 onChange={(e) => setDeviceName(e.target.value)}
               />
-              <FormLabel>Connected User</FormLabel>
-              <Input
-                placeholder="Enter user name"
-                value={connectedUser}
-                onChange={(e) => setConnectedUser(e.target.value)}
-              />
+              
             </FormControl>
           </ModalBody>
           <ModalFooter>

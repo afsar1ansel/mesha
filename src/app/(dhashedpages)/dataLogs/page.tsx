@@ -8,6 +8,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import type { ColDef } from "ag-grid-community";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
+import { FaRegCopy } from "react-icons/fa";
 import {
   Button,
   FormControl,
@@ -54,6 +55,7 @@ const DataLogs = () => {
     },
     {
       field: "status",
+      headerName: "Status",
       filter: "agSetColumnFilter",
       cellRenderer: (params: any) => (
         <div style={{ color: params.value === "Processed" ? "green" : "red" }}>
@@ -83,6 +85,12 @@ const DataLogs = () => {
             style={{ cursor: "pointer" }}
           >
             <RiDeleteBin6Line size={20} />
+          </div>
+          <div
+            onClick={() => handleEdit(params.data)}
+            style={{ cursor: "pointer" }}
+          >
+            <FaRegCopy  size={20}/>
           </div>
         </div>
       ),
@@ -131,7 +139,7 @@ const DataLogs = () => {
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
       <div className={styles.hello}>
-        <h3>Data Logs</h3>
+        <h3>Raw Data Logs</h3>
         <p>
           Access, monitor, and manage uploaded data logs with detailed
           processing history for better transparency and control.

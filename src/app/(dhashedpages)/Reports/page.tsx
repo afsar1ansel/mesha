@@ -3,9 +3,10 @@
 import { AgGridReact } from "ag-grid-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { HiDownload } from "react-icons/hi";
-import { CiEdit } from "react-icons/ci";
+import { FaEye } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import type { ColDef } from "ag-grid-community";
+import { IoReload } from "react-icons/io5";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
 import {
@@ -76,7 +77,13 @@ const Reports = () => {
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}
           >
-            <CiEdit size={20} />
+            <IoReload size={20} />
+          </div>
+          <div
+            onClick={() => handleEdit(params.data)}
+            style={{ cursor: "pointer" }}
+          >
+            <FaEye size={20} />
           </div>
           <div
             onClick={() => handleEdit(params.data)}
