@@ -86,7 +86,8 @@ text-decoration-skip-ink: none;
 }
 
 .bChart{
-    width: 23.44vw;
+    /* border: solid 1px red; */
+    width: 25vw;
     /* height: 500px; */
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     border-radius: 10px;

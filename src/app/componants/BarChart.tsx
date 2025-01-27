@@ -109,14 +109,14 @@ export default function BarChart() {
           1 week
         </button>
         <button
-          style={{ padding: "10px 1.56vw", border: "none", fontSize: "10px" }}
+          style={{ padding: "10px 1.56vw", border: "none", fontSize: "12px" }}
         >
-          3 months
+          1 month
         </button>
         <button
           style={{ padding: "10px 1.56vw", border: "none", fontSize: "12px" }}
         >
-          max
+          3 months
         </button>
       </div>
     </div>
