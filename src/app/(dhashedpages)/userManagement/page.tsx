@@ -10,6 +10,8 @@ import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
 import {
   Button,
+  Checkbox,
+  CheckboxGroup,
   FormControl,
   FormLabel,
   Heading,
@@ -24,6 +26,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Stack,
   useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
@@ -167,7 +170,6 @@ const UserManagement = () => {
       dateAdded: "10/12/2024 5:20 PM",
       action: "action",
     },
-    
   ]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
@@ -178,14 +180,18 @@ const UserManagement = () => {
     },
     { field: "name", filter: true },
     { field: "email", headerName: "Email Id", filter: "agDateColumnFilter" },
-    {field: "role", headerName: "Role", filter: "agDateColumnFilter"},
+    { field: "role", headerName: "Role", filter: "agDateColumnFilter" },
     { field: "status", headerName: "Access", filter: "agSetColumnFilter" },
-    { field: "dateAdded", headerName: "Date Added", filter: "agTextColumnFilter" },
+    {
+      field: "dateAdded",
+      headerName: "Date Added",
+      filter: "agTextColumnFilter",
+    },
     {
       field: "action",
       headerName: "Action",
       cellRenderer: (params: any) => (
-        <div style={{ display: "flex", gap: "12px", marginTop: "10px"}}>
+        <div style={{ display: "flex", gap: "12px", marginTop: "10px" }}>
           <div
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}
@@ -211,7 +217,6 @@ const UserManagement = () => {
   //   };
   // }, []);
 
-
   function handleEdit(data: any) {
     console.log(data);
   }
@@ -222,8 +227,7 @@ const UserManagement = () => {
   const [deviceId, setDeviceId] = useState("");
   const [deviceName, setDeviceName] = useState("");
   const [password, setpassword] = useState("");
-  const [role , setRole] = useState("")
-  
+  const [role, setRole] = useState("");
 
   const [show, setShow] = React.useState(false);
   const handleClickpass = () => setShow(!show);
@@ -240,7 +244,7 @@ const UserManagement = () => {
     setDeviceId("");
     setDeviceName("");
     setpassword("");
-    setRole("")
+    setRole("");
     onClose();
   };
 
@@ -339,6 +343,17 @@ const UserManagement = () => {
                 <option value="option2">Option 2</option>
                 <option value="option3">Option 3</option>
               </Select>
+              <br />
+              <FormLabel>Access To Screens</FormLabel>
+              <CheckboxGroup colorScheme="green">
+                <Stack direction="column">
+                  <Checkbox value="1">Dashboard</Checkbox>
+                  <Checkbox value="2">All Devices</Checkbox>
+                  <Checkbox value="3">OTA Update</Checkbox>
+                  <Checkbox value="4">Alert Logs</Checkbox>
+                  <Checkbox value="5">User Role</Checkbox>
+                </Stack>
+              </CheckboxGroup>
             </FormControl>
           </ModalBody>
           <ModalFooter>

@@ -48,9 +48,14 @@ const DataLogs = () => {
       filter: "agTextColumnFilter",
     },
     { field: "uploadDate", headerName: "Upload Date", filter: true },
+    // {
+    //   field: "deviceName",
+    //   headerName: "Device Name",
+    //   filter: "agDateColumnFilter",
+    // },
     {
-      field: "deviceName",
-      headerName: "Device Name",
+      field: "CustomerInfo",
+      headerName: "Customer Info",
       filter: "agDateColumnFilter",
     },
     {

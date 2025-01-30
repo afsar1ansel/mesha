@@ -19,35 +19,35 @@ const GridComponent = () => {
     {
       deviceId: "DMS12345",
       CustomerName: "John Doe",
-      status: "Active",
+      status: "",
       lastSync: "2025-01-10 10:30 AM",
       action: "Edit",
     },
     {
       deviceId: "DMS56789",
       CustomerName: "Jane Smith",
-      status: "Inactive",
+      status: "In",
       lastSync: "2025-01-09 03:20 PM",
       action: "Edit",
     },
     {
       deviceId: "DMS98765",
       CustomerName: "Mike Johnson",
-      status: "Active",
+      status: "",
       lastSync: "2025-01-08 08:45 AM",
       action: "Edit",
     },
     {
       deviceId: "DMS11223",
       CustomerName: "Emily Davis",
-      status: "Active",
+      status: "",
       lastSync: "2025-01-07 02:15 PM",
       action: "Edit",
     },
     {
       deviceId: "DMS44556",
       CustomerName: "Chris Brown",
-      status: "Inactive",
+      status: "In",
       lastSync: "2025-01-06 09:00 AM",
       action: "Edit",
     },
@@ -63,42 +63,9 @@ const GridComponent = () => {
     { field: "lastSync", filter: "agDateColumnFilter" },
     {
       field: "status",
+      headerName: "Extra Info",
       filter: "agSetColumnFilter",
-      cellRenderer: (params: any) => (
-        <div>
-          {params.value === "Active" ? (
-            <span
-              style={{
-                color: "white",
-                borderRadius: "5px",
-                backgroundColor: "rgba(0, 181, 98, 1)",
-                padding: "4px 8px",
-                fontSize: "12px",
-                width: "60px",
-                textAlign: "center",
-              }}
-            >
-              Active
-            </span>
-          ) : (
-            <span
-              style={{
-                color: "rgba(132, 143, 139, 1)",
-                borderRadius: "5px",
-                backgroundColor: "rgba(229, 231, 232, 1)",
-                padding: "4px 8px",
-                fontSize: "12px",
-                width: "60px",
-                textAlign: "center",
-              }}
-            >
-              Offline
-            </span>
-          )}
-        </div>
-      ),
     },
-   
     {
       field: "action",
       headerName: "Action",
@@ -146,19 +113,19 @@ const GridComponent = () => {
 
     const [deviceId, setDeviceId] = useState("");
     const [deviceName, setDeviceName] = useState("");
-    const [connectedUser, setConnectedUser] = useState("");
+    const [info, setinfo] = useState("");
 
     const handleAddDevice = () => {
       const newDevice = {
         deviceId,
         deviceName,
-        connectedUser,
+        info,
       };
       console.log(newDevice);
       // Clear inputs and close modal (optional)
       setDeviceId("");
       setDeviceName("");
-      setConnectedUser("");
+      setinfo("");
       onClose();
     };
 
@@ -236,7 +203,13 @@ const GridComponent = () => {
                 value={deviceName}
                 onChange={(e) => setDeviceName(e.target.value)}
               />
-              
+
+              <FormLabel>Information</FormLabel>
+              <Input
+                placeholder="User Extra Information"
+                value={info}
+                onChange={(e) => setinfo(e.target.value)}
+              />
             </FormControl>
           </ModalBody>
           <ModalFooter>

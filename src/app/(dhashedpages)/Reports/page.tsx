@@ -27,6 +27,7 @@ import {
   Select,
   useDisclosure,
 } from "@chakra-ui/react";
+import Link from "next/link";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -54,6 +55,11 @@ const Reports = () => {
       filter: "agDateColumnFilter",
     },
     {
+      field: "CustomerInfo",
+      headerName: "Customer Info",
+      filter: "agDateColumnFilter",
+    },
+    {
       field: "status",
       filter: "agSetColumnFilter",
       cellRenderer: (params: any) => (
@@ -73,18 +79,21 @@ const Reports = () => {
           >
             <HiDownload size={20} />
           </div>
+          {/* <div
+            onClick={() => handleEdit(params.data)}
+            style={{ cursor: "pointer" }}
+          >
+            <IoReload size={2} />
+          </div> */}
           <div
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}
           >
-            <IoReload size={20} />
+            <Link href="/Reports/info">
+              <FaEye size={20} />
+            </Link>
           </div>
-          <div
-            onClick={() => handleEdit(params.data)}
-            style={{ cursor: "pointer" }}
-          >
-            <FaEye size={20} />
-          </div>
+
           <div
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}

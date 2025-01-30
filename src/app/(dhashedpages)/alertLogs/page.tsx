@@ -2,20 +2,18 @@
 
 import { AgGridReact } from "ag-grid-react";
 import React, { useEffect, useMemo, useState } from "react";
-// import { FaEye } from "react-icons/fa";
-import { CiEdit } from "react-icons/ci";
-// import { RiDeleteBin6Line } from "react-icons/ri";
+import { HiDownload } from "react-icons/hi";
+import { FaEye } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import type { ColDef } from "ag-grid-community";
+import { IoReload } from "react-icons/io5";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
 import {
   Button,
-  Checkbox,
-  CheckboxGroup,
   FormControl,
   FormLabel,
   Heading,
-  HStack,
   Input,
   InputGroup,
   InputRightElement,
@@ -26,101 +24,81 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Radio,
-  RadioGroup,
   Select,
-  Stack,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import Head from "next/head";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const UserRoll = () => {
+const AlertLogs = () => {
   const [rowData, setRowData] = useState<any[]>([
     {
-      userId: "U001",
-      name: "Priya Sharma",
-      email: "priya.sharma@example.com",
-      role: [
-        "dashboard",
-        "Device Management",
-        "User Management",
-        "Notifications",
-        "ota Update",
-      ],
-      status: true,
-      dateAdded: "23/12/2024 6:30 PM",
-      action: "action",
-    },
-    {
-      userId: "U002",
-      name: "Rahul Verma",
-      email: "rahul.verma@example.com",
-      role: ["dashboard", "User Management", "ota Update"],
-      status: false,
-      dateAdded: "24/12/2024 9:15 AM",
-      action: "action",
-    },
-    {
-      userId: "U003",
-      name: "Anjali Gupta",
-      email: "anjali.gupta@example.com",
-      role: ["admin", "Device Management", "User Management", "ota Update"],
-      status: true,
-      dateAdded: "22/12/2024 5:45 PM",
+      fileName: "UPS_Data_20250108_001.csv",
+      uploadDate: "23/12/2024",
+      deviceName: "MESHA_001",
+      status: "Processed",
       action: "action",
     },
   ]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     {
-      field: "userId",
-      headerName: "Sl. Id",
-      filter: "agTextColumnFilter",
+      headerName: "Sl. No",
+      field: "index",
+      maxWidth: 80,
+      filter: false,
+      suppressAutoSize: true,
     },
-    { field: "name", filter: true },
-    { field: "email", headerName: "Email Id", filter: "agTextColumnFilter" },
     {
-      field: "role",
-      headerName: "Modules Permitted",
-      filter: "agTextColumnFilter",
-      autoHeight: true,
-      cellRenderer: (params: any) => {
-        return (
-          <div>
-            {params.data.role.map((item: string, index: number) => (
-              <div key={index}>{item}</div>
-            ))}
-          </div>
-        );
-      },
+      headerName: "Device ID",
+      field: "Cycle",
+      minWidth: 180,
     },
-    { field: "status", headerName: "Access" },
     {
-      field: "action",
-      headerName: "Action",
-      cellRenderer: (params: any) => (
-        <div style={{ display: "flex", gap: "12px", marginTop: "10px" }}>
-          <div
-            onClick={() => handleEdit(params.data)}
-            style={{ cursor: "pointer" }}
-          >
-            <CiEdit size={20} />
-          </div>
-        </div>
-      ),
+      headerName: "Parameter",
+      field: "b1",
     },
+    {
+      headerName: "Operation",
+      field: "b2",
+    },
+    {
+      headerName: "Value",
+      field: "b3",
+    },
+    // {
+    //   headerName: "Created Date",
+    //   field: "device_log_date",
+    //   filter: "agDateColumnFilter",
+    //   maxWidth: 300,
+    //   filterParams: {
+    //     comparator: (filterLocalDateAtMidnight, cellValue) => {
+    //       const dateParts = cellValue.split("-");
+    //       const year = Number(dateParts[2]);
+    //       const month = Number(dateParts[1]) - 1;
+    //       const day = Number(dateParts[0]);
+    //       const cellDate = new Date(year, month, day);
+    //       // Compare dates
+    //       if (cellDate < filterLocalDateAtMidnight) {
+    //         return -1;
+    //       } else if (cellDate > filterLocalDateAtMidnight) {
+    //         return 1;
+    //       } else {
+    //         return 0;
+    //       }
+    //     },
+    //   },
+    // },
+    // {
+    //   headerName: "Created Tiem",
+    //   field: "device_log_time",
+    //   filter: false,
+    //   sortable: false,
+    //   maxWidth: 200,
+    // },
   ]);
 
-  // const pagination = useMemo(() => {
-  //   return {
-  //     pagination: true,
-  //     paginationPageSize: 4,
-  //     paginationPageSizeSelector: [10, 20, 30, 40, 50],
-  //   };
-  // }, []);
+ 
 
   function handleEdit(data: any) {
     console.log(data);
@@ -132,7 +110,7 @@ const UserRoll = () => {
   const [deviceId, setDeviceId] = useState("");
   const [deviceName, setDeviceName] = useState("");
   const [password, setpassword] = useState("");
-  const [radioval, setRadioval] = useState("");
+  const [role, setRole] = useState("");
 
   const [show, setShow] = React.useState(false);
   const handleClickpass = () => setShow(!show);
@@ -142,24 +120,24 @@ const UserRoll = () => {
       deviceId,
       deviceName,
       password,
-      radioval,
+      role,
     };
     console.log(newDevice);
     // Clear inputs and close modal (optional)
     setDeviceId("");
     setDeviceName("");
     setpassword("");
-    setRadioval("");
+    setRole("");
     onClose();
   };
 
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
       <div className={styles.hello}>
-        <h3>User management</h3>
+        <h3>Alert Logs</h3>
         <p>
-          View/manage user accounts and configure roles for streamlined access
-          control.
+          Access, monitor, and manage uploaded data logs with detailed
+          processing history for better transparency and control.
         </p>
       </div>
       <div
@@ -181,10 +159,25 @@ const UserRoll = () => {
             alignItems: "center",
           }}
         >
-          <p style={{ fontSize: "16px", fontWeight: "600" }}>User management</p>
-          <Button onClick={onOpen} colorScheme="green">
+          <p style={{ fontSize: "16px", fontWeight: "600" }}>Alert Logs</p>
+          {/* <Button onClick={onOpen} colorScheme="green">
             Add New User
-          </Button>
+          </Button> */}
+        </div>
+        <div className={styles.vLowAndHigh}>
+          <h5>Voltage Range : </h5>
+          <p>
+            B1: L <span id="v1Low">10</span> - H <span id="v1High">12</span>
+          </p>
+          <p>
+            B2: L <span id="v2Low">12</span> - H <span id="v2High">15</span>
+          </p>
+          <p>
+            B3: L <span id="v3Low">15</span> - H <span id="v3High">20</span>
+          </p>
+          <p>
+            B4: L <span id="v4Low">20</span> - H <span id="v4High">22</span>
+          </p>
         </div>
         <div style={{ height: "100%", width: "100%" }}>
           <AgGridReact
@@ -194,10 +187,13 @@ const UserRoll = () => {
             paginationPageSize={10}
             paginationAutoPageSize={true}
             getRowHeight={function (params) {
-              const roles = params.data?.role || [];
-              const baseHeight = 20;
-              const additionalHeight = roles.length * 20;
-              return baseHeight + additionalHeight;
+              const description = params.data?.banner_description || "";
+              const words = description.split(" ").length;
+              const baseHeight = 80;
+              const heightPerWord = 6;
+              const minHeight = 80;
+              const calculatedHeight = baseHeight + words * heightPerWord;
+              return Math.max(minHeight, calculatedHeight);
             }}
           />
         </div>
@@ -236,19 +232,15 @@ const UserRoll = () => {
                   </Button>
                 </InputRightElement>
               </InputGroup>
-              <br />
-              <FormLabel>Access To Screens</FormLabel>
-              <CheckboxGroup
-                colorScheme="green"
+              <FormLabel>Role</FormLabel>
+              <Select
+                placeholder="Select option"
+                onChange={(e) => setRole(e.target.value)}
               >
-                <Stack direction="column">
-                  <Checkbox value="1">Dashboard</Checkbox>
-                  <Checkbox value="2">All Devices</Checkbox>
-                  <Checkbox value="3">OTA Update</Checkbox>
-                  <Checkbox value="4">Alert Logs</Checkbox>
-                  <Checkbox value="5">User Role</Checkbox>
-                </Stack>
-              </CheckboxGroup>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+              </Select>
             </FormControl>
           </ModalBody>
           <ModalFooter>
@@ -265,4 +257,4 @@ const UserRoll = () => {
   );
 };
 
-export default UserRoll;
+export default AlertLogs;
