@@ -13,6 +13,7 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  HStack,
   Input,
   InputGroup,
   InputRightElement,
@@ -23,20 +24,30 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Radio,
+  RadioGroup,
   Select,
+  Stack,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const UserManagement = () => {
+const UserRoll = () => {
   const [rowData, setRowData] = useState<any[]>([
     {
       userId: "U001",
       name: "Priya Sharma",
       email: "priya.sharma@example.com",
-      role: "Admin",
+      role: [
+        "dashboard",
+        "Device Management",
+        "User Management",
+        "Notifications",
+        "ota Update",
+      ],
       status: true,
       dateAdded: "23/12/2024 6:30 PM",
       action: "action",
@@ -45,7 +56,7 @@ const UserManagement = () => {
       userId: "U002",
       name: "Rahul Verma",
       email: "rahul.verma@example.com",
-      role: "User",
+      role: ["dashboard", "User Management", "ota Update"],
       status: false,
       dateAdded: "24/12/2024 9:15 AM",
       action: "action",
@@ -54,150 +65,48 @@ const UserManagement = () => {
       userId: "U003",
       name: "Anjali Gupta",
       email: "anjali.gupta@example.com",
-      role: "Manager",
+      role: ["admin", "Device Management", "User Management", "ota Update"],
       status: true,
       dateAdded: "22/12/2024 5:45 PM",
       action: "action",
     },
-    {
-      userId: "U004",
-      name: "Vikram Singh",
-      email: "vikram.singh@example.com",
-      role: "Admin",
-      status: true,
-      dateAdded: "21/12/2024 8:30 AM",
-      action: "action",
-    },
-    {
-      userId: "U005",
-      name: "Neha Jain",
-      email: "neha.jain@example.com",
-      role: "User",
-      status: false,
-      dateAdded: "20/12/2024 4:00 PM",
-      action: "action",
-    },
-    {
-      userId: "U006",
-      name: "Rohan Mehta",
-      email: "rohan.mehta@example.com",
-      role: "Admin",
-      status: true,
-      dateAdded: "19/12/2024 11:30 AM",
-      action: "action",
-    },
-    {
-      userId: "U007",
-      name: "Divya Kapoor",
-      email: "divya.kapoor@example.com",
-      role: "Manager",
-      status: true,
-      dateAdded: "18/12/2024 2:45 PM",
-      action: "action",
-    },
-    {
-      userId: "U008",
-      name: "Amit Malhotra",
-      email: "amit.malhotra@example.com",
-      role: "User",
-      status: true,
-      dateAdded: "17/12/2024 9:00 AM",
-      action: "action",
-    },
-    {
-      userId: "U009",
-      name: "Simran Kaur",
-      email: "simran.kaur@example.com",
-      role: "Admin",
-      status: false,
-      dateAdded: "16/12/2024 1:20 PM",
-      action: "action",
-    },
-    {
-      userId: "U010",
-      name: "Arjun Khanna",
-      email: "arjun.khanna@example.com",
-      role: "Manager",
-      status: true,
-      dateAdded: "15/12/2024 10:10 AM",
-      action: "action",
-    },
-    {
-      userId: "U011",
-      name: "Kavita Roy",
-      email: "kavita.roy@example.com",
-      role: "User",
-      status: false,
-      dateAdded: "14/12/2024 6:50 PM",
-      action: "action",
-    },
-    {
-      userId: "U012",
-      name: "Siddharth Chawla",
-      email: "siddharth.chawla@example.com",
-      role: "User",
-      status: true,
-      dateAdded: "13/12/2024 3:15 PM",
-      action: "action",
-    },
-    {
-      userId: "U013",
-      name: "Megha Pandey",
-      email: "megha.pandey@example.com",
-      role: "Manager",
-      status: false,
-      dateAdded: "12/12/2024 8:00 AM",
-      action: "action",
-    },
-    {
-      userId: "U014",
-      name: "Karan Oberoi",
-      email: "karan.oberoi@example.com",
-      role: "Admin",
-      status: true,
-      dateAdded: "11/12/2024 12:30 PM",
-      action: "action",
-    },
-    {
-      userId: "U015",
-      name: "Pooja Sharma",
-      email: "pooja.sharma@example.com",
-      role: "User",
-      status: true,
-      dateAdded: "10/12/2024 5:20 PM",
-      action: "action",
-    },
-    
   ]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     {
       field: "userId",
-      headerName: "User Id",
+      headerName: "Sl. Id",
       filter: "agTextColumnFilter",
     },
     { field: "name", filter: true },
-    { field: "email", headerName: "Email Id", filter: "agDateColumnFilter" },
-    {field: "role", headerName: "Role", filter: "agDateColumnFilter"},
-    { field: "status", headerName: "Access", filter: "agSetColumnFilter" },
-    { field: "dateAdded", headerName: "Date Added", filter: "agTextColumnFilter" },
+    { field: "email", headerName: "Email Id", filter: "agTextColumnFilter" },
+    {
+      field: "role",
+      headerName: "Modules Permitted",
+      filter: "agTextColumnFilter",
+      autoHeight: true,
+      cellRenderer: (params: any) => {
+        return (
+          <div>
+            {params.data.role.map((item: string, index: number) => (
+              <div key={index}>{item}</div>
+            ))}
+          </div>
+        );
+      },
+    },
+    { field: "status", headerName: "Access" },
     {
       field: "action",
       headerName: "Action",
       cellRenderer: (params: any) => (
-        <div style={{ display: "flex", gap: "12px", marginTop: "10px"}}>
+        <div style={{ display: "flex", gap: "12px", marginTop: "10px" }}>
           <div
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}
           >
             <CiEdit size={20} />
           </div>
-          {/* <div
-            onClick={() => handleEdit(params.data)}
-            style={{ cursor: "pointer" }}
-          >
-            <RiDeleteBin6Line size={20} />
-          </div> */}
         </div>
       ),
     },
@@ -211,7 +120,6 @@ const UserManagement = () => {
   //   };
   // }, []);
 
-
   function handleEdit(data: any) {
     console.log(data);
   }
@@ -222,8 +130,7 @@ const UserManagement = () => {
   const [deviceId, setDeviceId] = useState("");
   const [deviceName, setDeviceName] = useState("");
   const [password, setpassword] = useState("");
-  const [role , setRole] = useState("")
-  
+  const [radioval, setRadioval] = useState("");
 
   const [show, setShow] = React.useState(false);
   const handleClickpass = () => setShow(!show);
@@ -233,14 +140,14 @@ const UserManagement = () => {
       deviceId,
       deviceName,
       password,
-      role,
+      radioval,
     };
     console.log(newDevice);
     // Clear inputs and close modal (optional)
     setDeviceId("");
     setDeviceName("");
     setpassword("");
-    setRole("")
+    setRadioval("");
     onClose();
   };
 
@@ -285,13 +192,10 @@ const UserManagement = () => {
             paginationPageSize={10}
             paginationAutoPageSize={true}
             getRowHeight={function (params) {
-              const description = params.data?.banner_description || "";
-              const words = description.split(" ").length;
-              const baseHeight = 80;
-              const heightPerWord = 6;
-              const minHeight = 80;
-              const calculatedHeight = baseHeight + words * heightPerWord;
-              return Math.max(minHeight, calculatedHeight);
+              const roles = params.data?.role || [];
+              const baseHeight = 20;
+              const additionalHeight = roles.length * 20;
+              return baseHeight + additionalHeight;
             }}
           />
         </div>
@@ -330,15 +234,22 @@ const UserManagement = () => {
                   </Button>
                 </InputRightElement>
               </InputGroup>
-              <FormLabel>Role</FormLabel>
-              <Select
-                placeholder="Select option"
-                onChange={(e) => setRole(e.target.value)}
+              <br />
+              <FormLabel>Access TO Screens</FormLabel>
+              <RadioGroup
+                value={radioval}
+                variant={"outline"}
+                onChange={(value) => setRadioval(value)}
+                colorScheme="green"
               >
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-              </Select>
+                <Stack direction="column">
+                  <Radio value="1">Dashboard</Radio>
+                  <Radio value="2">All Devices</Radio>
+                  <Radio value="3">OTA Update</Radio>
+                  <Radio value="4">Alert Logs</Radio>
+                  <Radio value="5">User Role</Radio>
+                </Stack>
+              </RadioGroup>
             </FormControl>
           </ModalBody>
           <ModalFooter>
@@ -355,4 +266,4 @@ const UserManagement = () => {
   );
 };
 
-export default UserManagement;
+export default UserRoll;

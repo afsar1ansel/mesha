@@ -115,6 +115,15 @@ export default function RootLayout({
                     </Link>
                   </li>
                   <li
+                    className={active === "userRoll" ? "active" : ""}
+                    onClick={() => handleNavClick("userRoll")}
+                  >
+                    <RiUser3Line />
+                    <Link href="/userRoll">
+                      <p className="linkname">User Role</p>
+                    </Link>
+                  </li>
+                  <li
                     className={active === "dataLogs" ? "active" : ""}
                     onClick={() => handleNavClick("dataLogs")}
                   >
