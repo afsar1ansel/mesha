@@ -142,7 +142,7 @@ export default function RootLayout({
                       <p className="linkname">Reports</p>
                     </Link>
                   </li>
-                  <li
+                  {/* <li
                     className={active === "Notifications" ? "active" : ""}
                     onClick={() => handleNavClick("Notifications")}
                   >
@@ -150,7 +150,7 @@ export default function RootLayout({
                     <Link href="/Notifications">
                       <p className="linkname">Notifications</p>
                     </Link>
-                  </li>
+                  </li> */}
                   <li
                     className={active === "Settings" ? "active" : ""}
                     onClick={() => handleNavClick("Settings")}
