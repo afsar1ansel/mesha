@@ -20,6 +20,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { MdHelpOutline } from "react-icons/md";
 import { FaPowerOff } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa"; 
+import { FaUserEdit } from "react-icons/fa";
 
 import { MdLogout } from "react-icons/md";
 
@@ -118,7 +119,7 @@ export default function RootLayout({
                     className={active === "userRoll" ? "active" : ""}
                     onClick={() => handleNavClick("userRoll")}
                   >
-                    <RiUser3Line />
+                    <FaUserEdit />
                     <Link href="/userRoll">
                       <p className="linkname">User Role</p>
                     </Link>
