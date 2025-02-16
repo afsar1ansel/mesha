@@ -18,7 +18,7 @@ export default function Login() {
     event.preventDefault(); // Prevent default form submission
     console.log("Email:", email);
     console.log("Password:", password);
-    // You can add further logic here, such as form validation or API calls
+    
   };
 
   // Toggle password visibility

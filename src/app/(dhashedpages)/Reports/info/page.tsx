@@ -6,7 +6,6 @@ import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
 import { BsDownload } from "react-icons/bs";
 import { BsCloudCheckFill } from "react-icons/bs";
-import { m } from "framer-motion";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
