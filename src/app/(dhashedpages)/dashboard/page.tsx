@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <div className={styles.hello}>
-        <h3>👋 Hello, Amogh</h3>
+        <h3>👋 Hello, admin</h3>
         <p>Here is all your analytics overview</p>
       </div>
 

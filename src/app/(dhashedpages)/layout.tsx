@@ -62,9 +62,22 @@ export default function RootLayout({
 
   const [active, setActive] = useState<NavItem>(basePath as NavItem);
 
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
-    setActive(basePath as NavItem); // Update active state when pathname changes
+    setActive(basePath as NavItem);
   }, [pathname]);
+
+  const handleLogout = () => {
+
+    // fetch(`https://bt.meshaenergy.com/apis/app-users/logout/${token}`, {
+    //   method: "GET",
+    // });
+
+    localStorage.removeItem("token");
+    window.location.href = "/auth/login";
+  };
+
 
   return (
     <html lang="en">
@@ -210,7 +223,7 @@ export default function RootLayout({
                       backgroundColor: "white",
                       border: "1px solid red",
                     }}
-                    onClick={onClose}
+                    onClick={handleLogout}
                   >
                     Logout
                   </Button>

@@ -1,33 +1,60 @@
 "use client";
 import { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
+import { useRouter } from "next/navigation";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-toastify"; // Import toast
+import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import style from "./page.module.css";
 import Image from "next/image";
 import logo from "/public/Mesha_inc_logo-1.png";
 import photo from "/public/Photo.png";
-
 import Link from "next/link";
+
+// Initialize toast notifications
+import { ToastContainer } from "react-toastify";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  // Handle form submission
-  const handleSubmit = (event: any) => {
-    event.preventDefault(); // Prevent default form submission
-    console.log("Email:", email);
-    console.log("Password:", password);
-    
-  };
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    setLoading(true);
 
-  // Toggle password visibility
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+    const detail = new FormData();
+    detail.append("email", email);
+    detail.append("password", password);
+
+    try {
+      const response = await fetch(
+        `https://bt.meshaenergy.com/apis/app-users/validate-user`,
+        {
+          method: "POST",
+          body: detail,
+        }
+      );
+      const res = await response.json();
+
+      console.log(res);
+      if (res.errFlag === 0) {
+        localStorage.setItem("token", res.token);
+        router.push("/dashboard");
+      } else {
+        toast.error(res.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className={style.logbody}>
+      <ToastContainer position="top-right" autoClose={3000} />{" "}
       <div className={style.logo}>
         <Image src={logo} alt="Logo" width={500} height={200} />
       </div>
@@ -41,33 +68,39 @@ export default function Login() {
             <label htmlFor="email">Email</label>
             <input
               id="email"
-              style={{ marginBottom: "12px" }}
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)} // Update email state
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
+
             <div className={style.password}>
               <label htmlFor="password">Password</label>
-              
-                <Link className={style.forgotLink} href="/auth/forgotpassword">
-                  Forgot Password ?
-                </Link>
+              <Link className={style.forgotLink} href="/auth/forgotpassword">
+                Forgot Password ?
+              </Link>
             </div>
-            <div>
+
+            <div className={style.passwordField}>
               <input
                 id="password"
-                type={showPassword ? "text" : "password"} // Toggle input type
+                type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)} // Update password state
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
-              <div className={style.forgot} onClick={togglePasswordVisibility}>
+              <div
+                className={style.forgot}
+                onClick={() => setShowPassword(!showPassword)}
+              >
                 {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
               </div>
             </div>
-            <button type="submit" className="btn">
-              Login
+
+            <button type="submit" className="btn" disabled={loading}>
+              {loading ? "Loading..." : "Login"}
             </button>
           </form>
         </div>
