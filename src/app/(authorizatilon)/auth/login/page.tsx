@@ -1,17 +1,15 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { toast } from "react-toastify"; // Import toast
+import { toast, ToastContainer } from "react-toastify"; // Import toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import style from "./page.module.css";
 import Image from "next/image";
 import logo from "/public/Mesha_inc_logo-1.png";
 import photo from "/public/Photo.png";
 import Link from "next/link";
-
-// Initialize toast notifications
-import { ToastContainer } from "react-toastify";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -20,7 +18,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
 
@@ -30,22 +28,27 @@ export default function Login() {
 
     try {
       const response = await fetch(
-        `https://bt.meshaenergy.com/apis/app-users/validate-user`,
+        "https://bt.meshaenergy.com/apis/app-users/validate-user",
         {
           method: "POST",
           body: detail,
         }
       );
-      const res = await response.json();
+
+      const res: { errFlag: number; message?: string; token?: string } =
+        await response.json();
 
       console.log(res);
-      if (res.errFlag === 0) {
-        localStorage.setItem("token", res.token);
+      if (res.errFlag === 0 && res.token) {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("token", res.token);
+        }
         router.push("/dashboard");
       } else {
         toast.error(res.message || "Login failed. Please try again.");
       }
     } catch (error) {
+      console.error("Login error:", error);
       toast.error("An error occurred. Please try again.");
     } finally {
       setLoading(false);
@@ -54,7 +57,7 @@ export default function Login() {
 
   return (
     <div className={style.logbody}>
-      <ToastContainer position="top-right" autoClose={3000} />{" "}
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className={style.logo}>
         <Image src={logo} alt="Logo" width={500} height={200} />
       </div>
@@ -99,7 +102,15 @@ export default function Login() {
               </div>
             </div>
 
-            <button type="submit" className="btn" disabled={loading}>
+            <button
+              type="submit"
+              className="btn"
+              disabled={loading}
+              style={{
+                opacity: loading ? 0.5 : 1,
+                cursor: loading ? "not-allowed" : "pointer",
+              }}
+            >
               {loading ? "Loading..." : "Login"}
             </button>
           </form>
