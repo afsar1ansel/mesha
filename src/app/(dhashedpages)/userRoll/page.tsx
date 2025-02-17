@@ -114,13 +114,7 @@ const UserRoll = () => {
     },
   ]);
 
-  // const pagination = useMemo(() => {
-  //   return {
-  //     pagination: true,
-  //     paginationPageSize: 4,
-  //     paginationPageSizeSelector: [10, 20, 30, 40, 50],
-  //   };
-  // }, []);
+ 
 
   function handleEdit(data: any) {
     console.log(data);
@@ -256,7 +250,7 @@ const UserRoll = () => {
               Cancel
             </Button>
             <Button colorScheme="green" onClick={handleAddDevice}>
-              Add Device
+              Add User
             </Button>
           </ModalFooter>
         </ModalContent>

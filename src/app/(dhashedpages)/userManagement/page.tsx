@@ -27,9 +27,12 @@ import {
   ModalOverlay,
   Select,
   Stack,
+  Switch,
   useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
+
+// import Switch from "@/app/componants/Switch";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -107,69 +110,6 @@ const UserManagement = () => {
       dateAdded: "17/12/2024 9:00 AM",
       action: "action",
     },
-    {
-      userId: "U009",
-      name: "Simran Kaur",
-      email: "simran.kaur@example.com",
-      role: "Admin",
-      status: false,
-      dateAdded: "16/12/2024 1:20 PM",
-      action: "action",
-    },
-    {
-      userId: "U010",
-      name: "Arjun Khanna",
-      email: "arjun.khanna@example.com",
-      role: "Manager",
-      status: true,
-      dateAdded: "15/12/2024 10:10 AM",
-      action: "action",
-    },
-    {
-      userId: "U011",
-      name: "Kavita Roy",
-      email: "kavita.roy@example.com",
-      role: "User",
-      status: false,
-      dateAdded: "14/12/2024 6:50 PM",
-      action: "action",
-    },
-    {
-      userId: "U012",
-      name: "Siddharth Chawla",
-      email: "siddharth.chawla@example.com",
-      role: "User",
-      status: true,
-      dateAdded: "13/12/2024 3:15 PM",
-      action: "action",
-    },
-    {
-      userId: "U013",
-      name: "Megha Pandey",
-      email: "megha.pandey@example.com",
-      role: "Manager",
-      status: false,
-      dateAdded: "12/12/2024 8:00 AM",
-      action: "action",
-    },
-    {
-      userId: "U014",
-      name: "Karan Oberoi",
-      email: "karan.oberoi@example.com",
-      role: "Admin",
-      status: true,
-      dateAdded: "11/12/2024 12:30 PM",
-      action: "action",
-    },
-    {
-      userId: "U015",
-      name: "Pooja Sharma",
-      email: "pooja.sharma@example.com",
-      role: "User",
-      status: true,
-      dateAdded: "10/12/2024 5:20 PM",
-      action: "action",
-    },
   ]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
@@ -181,7 +121,18 @@ const UserManagement = () => {
     { field: "name", filter: true },
     { field: "email", headerName: "Email Id", filter: "agDateColumnFilter" },
     { field: "role", headerName: "Role", filter: "agDateColumnFilter" },
-    { field: "status", headerName: "Access", filter: "agSetColumnFilter" },
+    {
+      field: "status",
+      headerName: "Access",
+      filter: "agSetColumnFilter",
+      cellRenderer: (params: any) => (
+        <Switch
+          colorScheme="green"
+          onChange={handleToggle}
+          defaultChecked={params.data.status}
+        />
+      ),
+    },
     {
       field: "dateAdded",
       headerName: "Date Added",
@@ -209,13 +160,13 @@ const UserManagement = () => {
     },
   ]);
 
-  // const pagination = useMemo(() => {
-  //   return {
-  //     pagination: true,
-  //     paginationPageSize: 4,
-  //     paginationPageSizeSelector: [10, 20, 30, 40, 50],
-  //   };
-  // }, []);
+  const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  
+    const newCheckedState = event.target.checked;
+    console.log("Switch is:", newCheckedState);
+  };
+
 
   function handleEdit(data: any) {
     console.log(data);
@@ -240,7 +191,6 @@ const UserManagement = () => {
       role,
     };
     console.log(newDevice);
-    // Clear inputs and close modal (optional)
     setDeviceId("");
     setDeviceName("");
     setpassword("");
@@ -250,6 +200,8 @@ const UserManagement = () => {
 
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
+      {/* <Switch /> */}
+      
       <div className={styles.hello}>
         <h3>User management</h3>
         <p>
@@ -361,7 +313,7 @@ const UserManagement = () => {
               Cancel
             </Button>
             <Button colorScheme="green" onClick={handleAddDevice}>
-              Add Device
+              Add User
             </Button>
           </ModalFooter>
         </ModalContent>
