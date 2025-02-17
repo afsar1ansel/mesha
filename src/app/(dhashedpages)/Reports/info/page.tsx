@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
@@ -82,6 +82,14 @@ const Info = () => {
     console.log("Save", data);
     // Implement save functionality
   };
+
+useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Safe to use localStorage
+      const storedData = localStorage.getItem("token");
+      console.log(storedData);
+    }
+  }, []);
 
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
