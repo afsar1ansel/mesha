@@ -78,7 +78,7 @@ export default function RootLayout({
 
 
   return (
-    <html lang="en">
+    // <html lang="en">
       <body>
         <ChakraProvider>
           <div className="app-container">
@@ -234,6 +234,6 @@ export default function RootLayout({
           </div>
         </ChakraProvider>
       </body>
-    </html>
+    // </html>
   );
 }

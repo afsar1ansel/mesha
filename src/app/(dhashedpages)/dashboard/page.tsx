@@ -1,4 +1,5 @@
 // import Image from "next/image";
+"use client";
 import styles from "./page.module.css";
 
 import { TbDeviceAnalytics } from "react-icons/tb";
@@ -9,10 +10,18 @@ import BarChart from "@/app/componants/BarChart";
 import LineChart from "@/app/componants/LineChart";
 import PieChart from "@/app/componants/PieChart";
 
+import { useMyContext } from "../../context/MyContext";
+
 
 
 
 export default function Home() {
+
+  const { state: token } = useMyContext();
+  console.log( "token", token);
+
+  // console.log("landed")
+
   return (
     <div className={styles.page}>
       <div className={styles.hello}>

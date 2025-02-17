@@ -10,6 +10,7 @@ import Image from "next/image";
 import logo from "/public/Mesha_inc_logo-1.png";
 import photo from "/public/Photo.png";
 import Link from "next/link";
+import { useMyContext } from "../../../context/MyContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { setState } = useMyContext();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,8 +42,7 @@ export default function Login() {
 
       console.log(res);
       if (res.errFlag === 0 && res.token) {
-        if (typeof window !== "undefined") {
-        }
+        setState(res.token);
         router.push("/dashboard");
       } else {
         toast.error(res.message || "Login failed. Please try again.");
