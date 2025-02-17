@@ -62,7 +62,6 @@ export default function RootLayout({
 
   const [active, setActive] = useState<NavItem>(basePath as NavItem);
 
-  // const token = localStorage.getItem("token");
 
   useEffect(() => {
     setActive(basePath as NavItem);
@@ -74,7 +73,6 @@ export default function RootLayout({
     //   method: "GET",
     // });
 
-    // localStorage.removeItem("token");
     window.location.href = "/auth/login";
   };
 

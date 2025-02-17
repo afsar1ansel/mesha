@@ -41,7 +41,6 @@ export default function Login() {
       console.log(res);
       if (res.errFlag === 0 && res.token) {
         if (typeof window !== "undefined") {
-          // localStorage.setItem("token", res.token);
         }
         router.push("/dashboard");
       } else {

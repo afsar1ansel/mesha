@@ -85,8 +85,6 @@ const Info = () => {
 
 useEffect(() => {
     if (typeof window !== "undefined") {
-      // Safe to use localStorage
-      // const storedData = localStorage.getItem("token");
       // console.log(storedData);
     }
   }, []);
