@@ -47,7 +47,11 @@ const UserManagement = () => {
     { email: string; id: number; role_name: string; username: string }[]
   >([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const tok = sessionStorage.getItem("token");
+
+  // const tok = sessionStorage.getItem("token");
+
+  const tok =
+    typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
 
   useEffect(() => {
     if (tok) {
@@ -155,7 +159,7 @@ const UserManagement = () => {
     newUserData.append("roleId", role);
    newUserData.append("token", tok ?? "");
 
-    console.log(Object.fromEntries(newUserData));
+    // console.log(Object.fromEntries(newUserData));
 
     fetch("https://bt.meshaenergy.com/apis/app-users/add", {
       method: "POST",
@@ -175,7 +179,7 @@ const UserManagement = () => {
         console.error("Error adding user:", error);
       });
     
-    // console.log(newUser);
+   
     setuserId("");
     setuserEmail("");
     setpassword("");
