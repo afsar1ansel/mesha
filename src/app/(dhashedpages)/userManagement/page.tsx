@@ -48,8 +48,6 @@ const UserManagement = () => {
   >([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // const tok = localStorage.getItem("token");
-
   const tok =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
@@ -106,7 +104,7 @@ const UserManagement = () => {
       cellRenderer: (params: any) => (
         <Switch
           colorScheme="green"
-          onChange={handleToggle}
+          onChange={(event) => handleToggle(event, params.data)}
           defaultChecked={params.data.status}
         />
       ),
@@ -120,6 +118,7 @@ const UserManagement = () => {
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}
           >
+            Edit
             <CiEdit size={20} />
           </div>
         </div>
@@ -127,22 +126,97 @@ const UserManagement = () => {
     },
   ]);
 
-  const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleToggle = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    data: any
+  ) => {
+    console.log(data);
     const newCheckedState = event.target.checked;
     console.log("Switch is:", newCheckedState);
+
+    const status = newCheckedState ? 1 : 0;
+
+    fetch(
+      `https://bt.meshaenergy.com/apis/app-users/status-change-app-user/${tok}/${status}/${data.id}`,
+      {
+        method: "GET",
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   };
 
-  function handleEdit(data: any) {
-    console.log(data);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onClose: onEditClose,
+  } = useDisclosure();
+
+
+  const handleEdit = (data: any) => {
+    // setEditUserData(data);
+// console.log(data)
+    setEditUserName(data.username);
+    setEditUserEmail(data.email);
+    setEditUserPassword(data.password);
+    setEditRoleId(data.role_id);
+    setEditUserId(data.id);
+    onEditOpen();
+  };
+
+  function handleEdituser () {
+      const editData = new FormData();
+      editData.append("username", editUserName);
+      editData.append("email", editUserEmail);
+      editData.append("password", editUserPassword);
+      editData.append("roleId", editRoleId);
+      editData.append("token", tok ?? "");
+      editData.append("appUserId", editUserId);
+
+      console.log(Object.fromEntries(editData));
+
+        fetch(
+          "https://bt.meshaenergy.com/apis/app-users/app-users/update-app-user",
+          {
+            method: "POST",
+            body: editData,
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => {
+            console.error("Error adding user:", error);
+          });
+
+        setEditUserName("");
+        setEditUserEmail("");
+        setEditUserPassword("");
+        setEditRoleId("");
+        setEditUserId("");
+        onEditClose();
   }
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [userId, setuserId] = useState("");
   const [userEmail, setuserEmail] = useState("");
   const [password, setpassword] = useState("");
   const [role, setRole] = useState("");
   const [show, setShow] = React.useState(false);
   const handleClickpass = () => setShow(!show);
+
+  const [editUserName , setEditUserName] = useState("");
+  const [editUserEmail , setEditUserEmail] = useState("");
+  const [editUserPassword , setEditUserPassword] = useState("");
+  const [editRoleId , setEditRoleId] = useState("");
+  const [editUserId , setEditUserId] = useState("");
+  
 
   const handleAdduser = () => {
     const newUser = {
@@ -158,8 +232,6 @@ const UserManagement = () => {
     newUserData.append("password", password);
     newUserData.append("roleId", role);
     newUserData.append("token", tok ?? "");
-
-    // console.log(Object.fromEntries(newUserData));
 
     fetch("https://bt.meshaenergy.com/apis/app-users/add", {
       method: "POST",
@@ -184,9 +256,6 @@ const UserManagement = () => {
     setRole("");
     onClose();
   };
-
-  // console.log(JSON.stringify(allRole, null, 2));
-  console.log(JSON.stringify(users, null, 2));
 
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
@@ -309,6 +378,58 @@ const UserManagement = () => {
             </Button>
             <Button colorScheme="green" onClick={handleAdduser}>
               Add User
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isEditOpen} onClose={onEditClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit User</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl>
+              <FormLabel>Name</FormLabel>
+              <Input
+                placeholder="Enter User Name"
+                value={editUserName}
+                onChange={(e) => setEditUserName(e.target.value)}
+              />
+              <FormLabel>Email ID</FormLabel>
+              <Input
+                placeholder="Enter Email Id"
+                value={editUserEmail}
+                onChange={(e) => setEditUserEmail(e.target.value)}
+              />
+              <FormLabel>Role</FormLabel>
+              <Select
+                placeholder="Select option"
+                value={editRoleId}
+                onChange={(e) => setEditRoleId(e.target.value)}
+              >
+                {loading ? (
+                  <option value="">Loading...</option>
+                ) : (
+                  allRole?.map((role, index) => (
+                    <option key={index} value={role.id}>
+                      {role.role_name}
+                    </option>
+                  ))
+                )}
+              </Select>
+              <FormControl>Password</FormControl>
+              <Input type="password" value={editUserPassword} onChange={(e) => setEditUserPassword(e.target.value)} />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="gray" mr={3} onClick={onEditClose}>
+              Cancel
+            </Button>
+            <Button
+              colorScheme="green"
+              onClick={handleEdituser}
+            >
+              Save Changes
             </Button>
           </ModalFooter>
         </ModalContent>
