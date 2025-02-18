@@ -174,7 +174,7 @@ const UserManagement = () => {
       const editData = new FormData();
       editData.append("username", editUserName);
       editData.append("email", editUserEmail);
-      editData.append("password", editUserPassword);
+      editData.append("password", editUserPassword ?? "");
       editData.append("roleId", editRoleId);
       editData.append("token", tok ?? "");
       editData.append("appUserId", editUserId);
@@ -202,6 +202,7 @@ const UserManagement = () => {
         setEditRoleId("");
         setEditUserId("");
         onEditClose();
+        
   }
 
   const [userId, setuserId] = useState("");
@@ -418,7 +419,7 @@ const UserManagement = () => {
                 )}
               </Select>
               <FormControl>Password</FormControl>
-              <Input type="password" value={editUserPassword} onChange={(e) => setEditUserPassword(e.target.value)} />
+              <Input type="password" value={""} onChange={(e) => setEditUserPassword(e.target.value)} />
             </FormControl>
           </ModalBody>
           <ModalFooter>
