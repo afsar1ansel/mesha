@@ -50,9 +50,14 @@ const UserManagement = () => {
 
   // const tok = sessionStorage.getItem("token");
 
-  const tok =
-    typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
+  const [tok, setTok] = useState<string | null>(null);
 
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    setTok(token);
+  }, []);
+
+  //all role
   useEffect(() => {
     if (tok) {
       fetch(`https://bt.meshaenergy.com/apis/app-users/all-roles/${tok}`, {
@@ -68,8 +73,9 @@ const UserManagement = () => {
           setLoading(false);
         });
     }
-  }, []);
+  }, [tok]);
 
+  //all users
   useEffect(() => {
     if (tok) {
       fetch(
@@ -88,7 +94,7 @@ const UserManagement = () => {
           setLoading(false);
         });
     }
-  }, []);
+  }, [tok]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     {
