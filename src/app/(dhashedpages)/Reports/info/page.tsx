@@ -12,21 +12,18 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const Info = () => {
   const [activeTab, setActiveTab] = useState("pending");
 
+    const tok =
+      typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
+
   const [pendingReports, setPendingReports] = useState<any[]>([
     {
       fileName: "UPS_Data_20250108_001.csv",
-      // uploadDate: "23/12/2024",
-      // deviceName: "MESHA_001",
-      // status: "Pending",
     },
   ]);
 
   const [generatedReports, setGeneratedReports] = useState<any[]>([
     {
       fileName: "UPS_Data_20250108_002.csv",
-      // uploadDate: "24/12/2024",
-      // deviceName: "MESHA_002",
-      // status: "Generated",
     },
   ]);
 
@@ -37,8 +34,6 @@ const Info = () => {
       filter: "agTextColumnFilter",
       minWidth: 500,
     },
-    // { field: "uploadDate", headerName: "Upload Date", filter: true },
-    // { field: "deviceName", headerName: "Device Name", filter: true },
     {
       field: "action",
       headerName: "Action",
