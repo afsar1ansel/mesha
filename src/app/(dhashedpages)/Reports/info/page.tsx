@@ -12,8 +12,6 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const Info = () => {
   const [activeTab, setActiveTab] = useState("pending");
 
-  const tok =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const [pendingReports, setPendingReports] = useState<any[]>([
     {
