@@ -78,11 +78,7 @@ const Info = () => {
     // Implement save functionality
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      // console.log(storedData);
-    }
-  }, []);
+ 
 
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
