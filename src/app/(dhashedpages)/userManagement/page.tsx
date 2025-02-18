@@ -48,10 +48,9 @@ const UserManagement = () => {
   >([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const tok =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
   useEffect(() => {
+    const tok =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (tok) {
       fetch(`https://bt.meshaenergy.com/apis/app-users/all-roles/${tok}`, {
         method: "GET",
@@ -69,6 +68,8 @@ const UserManagement = () => {
   }, []);
 
   useEffect(() => {
+    const tok =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (tok) {
       fetch(
         `https://bt.meshaenergy.com/apis/app-users/get-all-app-user/${tok}`,
@@ -130,25 +131,29 @@ const UserManagement = () => {
     event: React.ChangeEvent<HTMLInputElement>,
     data: any
   ) => {
+    const tok =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
     console.log(data);
     const newCheckedState = event.target.checked;
     console.log("Switch is:", newCheckedState);
 
     const status = newCheckedState ? 1 : 0;
 
-    fetch(
-      `https://bt.meshaenergy.com/apis/app-users/status-change-app-user/${tok}/${status}/${data.id}`,
-      {
-        method: "GET",
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    if (tok) {
+      fetch(
+        `https://bt.meshaenergy.com/apis/app-users/status-change-app-user/${tok}/${status}/${data.id}`,
+        {
+          method: "GET",
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -158,10 +163,9 @@ const UserManagement = () => {
     onClose: onEditClose,
   } = useDisclosure();
 
-
   const handleEdit = (data: any) => {
     // setEditUserData(data);
-// console.log(data)
+    // console.log(data)
     setEditUserName(data.username);
     setEditUserEmail(data.email);
     setEditUserPassword(data.password);
@@ -170,39 +174,41 @@ const UserManagement = () => {
     onEditOpen();
   };
 
-  function handleEdituser () {
-      const editData = new FormData();
-      editData.append("username", editUserName);
-      editData.append("email", editUserEmail);
-      editData.append("password", editUserPassword ?? "");
-      editData.append("roleId", editRoleId);
-      editData.append("token", tok ?? "");
-      editData.append("appUserId", editUserId);
+  function handleEdituser() {
+    const tok =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-      console.log(Object.fromEntries(editData));
+    const editData = new FormData();
+    editData.append("username", editUserName);
+    editData.append("email", editUserEmail);
+    editData.append("password", editUserPassword ?? "");
+    editData.append("roleId", editRoleId);
+    editData.append("token", tok ?? "");
+    editData.append("appUserId", editUserId);
 
-        fetch(
-          "https://bt.meshaenergy.com/apis/app-users/app-users/update-app-user",
-          {
-            method: "POST",
-            body: editData,
-          }
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((error) => {
-            console.error("Error adding user:", error);
-          });
+    console.log(Object.fromEntries(editData));
 
-        setEditUserName("");
-        setEditUserEmail("");
-        setEditUserPassword("");
-        setEditRoleId("");
-        setEditUserId("");
-        onEditClose();
-        
+    fetch(
+      "https://bt.meshaenergy.com/apis/app-users/app-users/update-app-user",
+      {
+        method: "POST",
+        body: editData,
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error adding user:", error);
+      });
+
+    setEditUserName("");
+    setEditUserEmail("");
+    setEditUserPassword("");
+    setEditRoleId("");
+    setEditUserId("");
+    onEditClose();
   }
 
   const [userId, setuserId] = useState("");
@@ -212,20 +218,25 @@ const UserManagement = () => {
   const [show, setShow] = React.useState(false);
   const handleClickpass = () => setShow(!show);
 
-  const [editUserName , setEditUserName] = useState("");
-  const [editUserEmail , setEditUserEmail] = useState("");
-  const [editUserPassword , setEditUserPassword] = useState("");
-  const [editRoleId , setEditRoleId] = useState("");
-  const [editUserId , setEditUserId] = useState("");
-  
+  const [editUserName, setEditUserName] = useState("");
+  const [editUserEmail, setEditUserEmail] = useState("");
+  const [editUserPassword, setEditUserPassword] = useState("");
+  const [editRoleId, setEditRoleId] = useState("");
+  const [editUserId, setEditUserId] = useState("");
 
   const handleAdduser = () => {
+
+     const tok =
+       typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
     const newUser = {
       userId,
       userEmail,
       password,
       role,
     };
+
+
 
     const newUserData = new FormData();
     newUserData.append("username", userId);
@@ -419,17 +430,18 @@ const UserManagement = () => {
                 )}
               </Select>
               <FormControl>Password</FormControl>
-              <Input type="password" value={""} onChange={(e) => setEditUserPassword(e.target.value)} />
+              <Input
+                type="password"
+                value={""}
+                onChange={(e) => setEditUserPassword(e.target.value)}
+              />
             </FormControl>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="gray" mr={3} onClick={onEditClose}>
               Cancel
             </Button>
-            <Button
-              colorScheme="green"
-              onClick={handleEdituser}
-            >
+            <Button colorScheme="green" onClick={handleEdituser}>
               Save Changes
             </Button>
           </ModalFooter>
