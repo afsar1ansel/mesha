@@ -27,6 +27,7 @@ export const MyContextProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [state, setState] = useState<string | null>(null);
 
+
   return (
     <MyContext.Provider value={{ state, setState }}>
       {children}

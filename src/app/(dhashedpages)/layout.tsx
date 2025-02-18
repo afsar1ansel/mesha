@@ -62,11 +62,11 @@ export default function RootLayout({
 
   const [active, setActive] = useState<NavItem>(basePath as NavItem);
 
-const token = sessionStorage.getItem("token");
+// const token = sessionStorage.getItem("token");
 
-if(!token){
-  window.location.href = "/auth/login";
-}
+// if(!token){
+//   window.location.href = "/auth/login";
+// }
 
   useEffect(() => {
     setActive(basePath as NavItem);
