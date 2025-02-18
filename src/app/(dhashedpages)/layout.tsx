@@ -62,186 +62,182 @@ export default function RootLayout({
 
   const [active, setActive] = useState<NavItem>(basePath as NavItem);
 
-// const token = sessionStorage.getItem("token");
+  // const token = localStorage.getItem("token");
 
-// if(!token){
-//   window.location.href = "/auth/login";
-// }
+  // if(!token){
+  //   window.location.href = "/auth/login";
+  // }
 
   useEffect(() => {
     setActive(basePath as NavItem);
   }, [pathname]);
 
   const handleLogout = () => {
-
     // fetch(`https://bt.meshaenergy.com/apis/app-users/logout/${token}`, {
     //   method: "GET",
     // });
 
-   sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
     window.location.href = "/auth/login";
   };
 
-
-
-
   return (
     // <html lang="en">
-      // <body>
-        <ChakraProvider>
-          <div className="app-container">
-            {/* Header Section */}
-            <header className="header">
-              <div className="search-bar">
-                <div>
-                  <FaSearch className="searchIcon" />
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="search-input"
-                  />
-                </div>
-                <div className="icons">
-                  <div className="user">
-                    <Image
-                      src={profile}
-                      alt="Logo"
-                      width={40}
-                      height={40}
-                      className="user-image"
-                    />
-                  </div>
-                </div>
-              </div>
-            </header>
-
-            <div className="main-content">
-              {/* Sidebar Navigation */}
-              <nav className="sidebar">
-                <Image src={logo} alt="Logo" width={200} height={100} />
-                <ul>
-                  <li className={active === "dashboard" ? "active" : ""}>
-                    <IoIosHome />
-                    <Link className="link" href="/dashboard">
-                      <p className="linkname">Dashboard</p>
-                    </Link>
-                  </li>
-                  <li className={active === "deviceManagement" ? "active" : ""}>
-                    <TbDeviceAnalytics />
-                    <Link href="/deviceManagement">
-                      <p className="linkname">Device Management</p>
-                    </Link>
-                  </li>
-                  <li className={active === "userManagement" ? "active" : ""}>
-                    <RiUser3Line />
-                    <Link href="/userManagement">
-                      <p className="linkname">User Management</p>
-                    </Link>
-                  </li>
-                  <li className={active === "userRoll" ? "active" : ""}>
-                    <FaUserEdit />
-                    <Link href="/userRoll">
-                      <p className="linkname">User Role</p>
-                    </Link>
-                  </li>
-                  <li className={active === "dataLogs" ? "active" : ""}>
-                    <AiOutlineDatabase />
-                    <Link href="/dataLogs">
-                      <p className="linkname">Data Logs</p>
-                    </Link>
-                  </li>
-                  <li className={active === "alertLogs" ? "active" : ""}>
-                    <FiAlertTriangle />
-                    <Link href="/alertLogs">
-                      <p className="linkname">Alert Logs</p>
-                    </Link>
-                  </li>
-                  <li className={active === "Reports" ? "active" : ""}>
-                    <IoMdPaper />
-                    <Link href="/Reports">
-                      <p className="linkname">Reports</p>
-                    </Link>
-                  </li>
-                  <li className={active === "Settings" ? "active" : ""}>
-                    <IoSettingsOutline />
-                    <Link href="/Settings">
-                      <p className="linkname">Settings</p>
-                    </Link>
-                  </li>
-                  <li className={active === "Support" ? "active" : ""}>
-                    <MdHelpOutline />
-                    <Link href="/Support">
-                      <p className="linkname">Support</p>
-                    </Link>
-                  </li>
-                  <li
-                    className={active === "Logout" ? "active" : ""}
-                    onClick={onOpen}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <FaPowerOff />
-                    <p className="linkname">Logout</p>
-                  </li>
-                </ul>
-              </nav>
-
-              <main className="content">{children}</main>
+    // <body>
+    <ChakraProvider>
+      <div className="app-container">
+        {/* Header Section */}
+        <header className="header">
+          <div className="search-bar">
+            <div>
+              <FaSearch className="searchIcon" />
+              <input
+                type="text"
+                placeholder="Search..."
+                className="search-input"
+              />
             </div>
-            <Modal isOpen={isOpen} onClose={onClose}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalBody textAlign="center" padding="40px">
-                  <Flex
-                    justifyContent="center"
-                    alignItems="center"
-                    width={"100%"}
-                    flexDirection={"column"}
-                    gap={4}
-                  >
-                    <MdLogout size={100} color="red" />
-                    <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-                      <h2
-                        style={{
-                          fontSize: "18px",
-                          fontWeight: "500",
-                          color: "rgba(25, 27, 28, 1)",
-                        }}
-                      >
-                        Confirm Logout
-                      </h2>
-                      <p
-                        style={{
-                          fontSize: "14px",
-                          fontWeight: "400",
-                          color: "rgba(98, 108, 112, 1)",
-                        }}
-                      >
-                        Are you sure you want to log out?
-                      </p>
-                    </div>
-                  </Flex>
-                </ModalBody>
-
-                <ModalFooter justifyContent="space-around" padding="20px">
-                  <Button
-                    style={{
-                      color: "red",
-                      backgroundColor: "white",
-                      border: "1px solid red",
-                    }}
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </Button>
-                  <Button colorScheme="gray" mr={3} onClick={onClose}>
-                    Cancel
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
+            <div className="icons">
+              <div className="user">
+                <Image
+                  src={profile}
+                  alt="Logo"
+                  width={40}
+                  height={40}
+                  className="user-image"
+                />
+              </div>
+            </div>
           </div>
-        </ChakraProvider>
-      // </body>
+        </header>
+
+        <div className="main-content">
+          {/* Sidebar Navigation */}
+          <nav className="sidebar">
+            <Image src={logo} alt="Logo" width={200} height={100} />
+            <ul>
+              <li className={active === "dashboard" ? "active" : ""}>
+                <IoIosHome />
+                <Link className="link" href="/dashboard">
+                  <p className="linkname">Dashboard</p>
+                </Link>
+              </li>
+              <li className={active === "deviceManagement" ? "active" : ""}>
+                <TbDeviceAnalytics />
+                <Link href="/deviceManagement">
+                  <p className="linkname">Device Management</p>
+                </Link>
+              </li>
+              <li className={active === "userManagement" ? "active" : ""}>
+                <RiUser3Line />
+                <Link href="/userManagement">
+                  <p className="linkname">User Management</p>
+                </Link>
+              </li>
+              <li className={active === "userRoll" ? "active" : ""}>
+                <FaUserEdit />
+                <Link href="/userRoll">
+                  <p className="linkname">User Role</p>
+                </Link>
+              </li>
+              <li className={active === "dataLogs" ? "active" : ""}>
+                <AiOutlineDatabase />
+                <Link href="/dataLogs">
+                  <p className="linkname">Data Logs</p>
+                </Link>
+              </li>
+              <li className={active === "alertLogs" ? "active" : ""}>
+                <FiAlertTriangle />
+                <Link href="/alertLogs">
+                  <p className="linkname">Alert Logs</p>
+                </Link>
+              </li>
+              <li className={active === "Reports" ? "active" : ""}>
+                <IoMdPaper />
+                <Link href="/Reports">
+                  <p className="linkname">Reports</p>
+                </Link>
+              </li>
+              <li className={active === "Settings" ? "active" : ""}>
+                <IoSettingsOutline />
+                <Link href="/Settings">
+                  <p className="linkname">Settings</p>
+                </Link>
+              </li>
+              <li className={active === "Support" ? "active" : ""}>
+                <MdHelpOutline />
+                <Link href="/Support">
+                  <p className="linkname">Support</p>
+                </Link>
+              </li>
+              <li
+                className={active === "Logout" ? "active" : ""}
+                onClick={onOpen}
+                style={{ cursor: "pointer" }}
+              >
+                <FaPowerOff />
+                <p className="linkname">Logout</p>
+              </li>
+            </ul>
+          </nav>
+
+          <main className="content">{children}</main>
+        </div>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalBody textAlign="center" padding="40px">
+              <Flex
+                justifyContent="center"
+                alignItems="center"
+                width={"100%"}
+                flexDirection={"column"}
+                gap={4}
+              >
+                <MdLogout size={100} color="red" />
+                <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+                  <h2
+                    style={{
+                      fontSize: "18px",
+                      fontWeight: "500",
+                      color: "rgba(25, 27, 28, 1)",
+                    }}
+                  >
+                    Confirm Logout
+                  </h2>
+                  <p
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "400",
+                      color: "rgba(98, 108, 112, 1)",
+                    }}
+                  >
+                    Are you sure you want to log out?
+                  </p>
+                </div>
+              </Flex>
+            </ModalBody>
+
+            <ModalFooter justifyContent="space-around" padding="20px">
+              <Button
+                style={{
+                  color: "red",
+                  backgroundColor: "white",
+                  border: "1px solid red",
+                }}
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+              <Button colorScheme="gray" mr={3} onClick={onClose}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </div>
+    </ChakraProvider>
+    // </body>
     // </html>
   );
 }

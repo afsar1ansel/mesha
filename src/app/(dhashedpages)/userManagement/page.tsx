@@ -31,12 +31,9 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 
-
-
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const UserManagement = () => {
-  
   const [allRole, setAllRole] = useState<
     {
       id: number;
@@ -51,11 +48,10 @@ const UserManagement = () => {
   >([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // const tok = sessionStorage.getItem("token");
+  // const tok = localStorage.getItem("token");
 
-  
   const tok =
-    typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   useEffect(() => {
     if (tok) {
@@ -161,7 +157,7 @@ const UserManagement = () => {
     newUserData.append("email", userEmail);
     newUserData.append("password", password);
     newUserData.append("roleId", role);
-   newUserData.append("token", tok ?? "");
+    newUserData.append("token", tok ?? "");
 
     // console.log(Object.fromEntries(newUserData));
 
@@ -172,9 +168,8 @@ const UserManagement = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        if (data.errFlag === 0 ) {
-          
-          //reload the page here so the new data can reflect here 
+        if (data.errFlag === 0) {
+          //reload the page here so the new data can reflect here
         } else {
           toast.error(data.message || "Login failed. Please try again.");
         }
@@ -182,8 +177,7 @@ const UserManagement = () => {
       .catch((error) => {
         console.error("Error adding user:", error);
       });
-    
-   
+
     setuserId("");
     setuserEmail("");
     setpassword("");
@@ -191,10 +185,8 @@ const UserManagement = () => {
     onClose();
   };
 
-// console.log(JSON.stringify(allRole, null, 2));
-console.log(JSON.stringify(users, null, 2));
-
-  
+  // console.log(JSON.stringify(allRole, null, 2));
+  console.log(JSON.stringify(users, null, 2));
 
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>

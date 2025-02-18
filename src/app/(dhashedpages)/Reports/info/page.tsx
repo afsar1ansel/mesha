@@ -12,8 +12,8 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const Info = () => {
   const [activeTab, setActiveTab] = useState("pending");
 
-    const tok =
-      typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
+  const tok =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const [pendingReports, setPendingReports] = useState<any[]>([
     {
@@ -78,7 +78,7 @@ const Info = () => {
     // Implement save functionality
   };
 
-useEffect(() => {
+  useEffect(() => {
     if (typeof window !== "undefined") {
       // console.log(storedData);
     }
@@ -140,7 +140,7 @@ useEffect(() => {
                 color: activeTab === "generated" ? "green" : "inherit",
                 backgroundColor:
                   activeTab === "generated" ? "#e6f4ea" : "transparent",
-                padding: "8px 16px", 
+                padding: "8px 16px",
                 borderRadius: "8px",
                 border: "none", // Remove default border
                 cursor: "pointer", // Add pointer cursor
