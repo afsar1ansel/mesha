@@ -10,12 +10,16 @@ import BarChart from "@/app/componants/BarChart";
 import LineChart from "@/app/componants/LineChart";
 import PieChart from "@/app/componants/PieChart";
 
-import { useMyContext } from "../../context/MyContext";
+import { useMyContext } from "@/app/context/MyContext";
+
 
 
 
 
 export default function Home() {
+
+  const tok = sessionStorage.getItem("token");
+  console.log( "token", tok);
 
   const { state: token } = useMyContext();
   console.log( "token", token);

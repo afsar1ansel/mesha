@@ -56,12 +56,17 @@ export default function RootLayout({
   const pathname = usePathname();
   const cleanedPathname = pathname.replace(/^\/+/, ""); // Remove leading slashes
   const basePath = cleanedPathname.split("/")[0]; // Extract the base path
-  console.log(basePath); // Check the base path
+  // console.log(basePath);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [active, setActive] = useState<NavItem>(basePath as NavItem);
 
+const token = sessionStorage.getItem("token");
+
+if(!token){
+  window.location.href = "/auth/login";
+}
 
   useEffect(() => {
     setActive(basePath as NavItem);
@@ -73,13 +78,16 @@ export default function RootLayout({
     //   method: "GET",
     // });
 
+   sessionStorage.removeItem("token");
     window.location.href = "/auth/login";
   };
 
 
+
+
   return (
     // <html lang="en">
-      <body>
+      // <body>
         <ChakraProvider>
           <div className="app-container">
             {/* Header Section */}
@@ -233,7 +241,7 @@ export default function RootLayout({
             </Modal>
           </div>
         </ChakraProvider>
-      </body>
+      // </body>
     // </html>
   );
 }

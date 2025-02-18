@@ -40,9 +40,10 @@ export default function Login() {
       const res: { errFlag: number; message?: string; token?: string } =
         await response.json();
 
-      console.log(res);
+      // console.log(res);
       if (res.errFlag === 0 && res.token) {
         setState(res.token);
+        sessionStorage.setItem("token", res.token);
         router.push("/dashboard");
       } else {
         toast.error(res.message || "Login failed. Please try again.");
