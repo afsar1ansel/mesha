@@ -13,11 +13,11 @@ import PieChart from "@/app/componants/PieChart";
 import { useMyContext } from "@/app/context/MyContext";
 
 export default function Home() {
-  const tok = localStorage.getItem("token");
-  console.log("token", tok);
+  // const tok = localStorage.getItem("token");
+  // console.log("token", tok);
 
-  const { state: token } = useMyContext();
-  console.log("token", token);
+  // const { state: token } = useMyContext();
+  // console.log("token", token);
 
   // console.log("landed")
 
