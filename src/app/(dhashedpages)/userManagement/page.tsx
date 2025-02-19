@@ -432,7 +432,7 @@ const UserManagement = () => {
               <FormControl>Password</FormControl>
               <Input
                 type="password"
-                value={""}
+                value={editUserPassword}
                 onChange={(e) => setEditUserPassword(e.target.value)}
               />
             </FormControl>
