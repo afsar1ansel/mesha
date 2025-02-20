@@ -34,6 +34,9 @@ import Head from "next/head";
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const UserManagement = () => {
+
+  let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+
   const [allRole, setAllRole] = useState<
     {
       id: number;
@@ -52,7 +55,7 @@ const UserManagement = () => {
     const tok =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (tok) {
-      fetch(`https://bt.meshaenergy.com/apis/app-users/all-roles/${tok}`, {
+      fetch(`${baseURL}/all-roles/${tok}`, {
         method: "GET",
       })
         .then((response) => response.json())
@@ -72,7 +75,7 @@ const UserManagement = () => {
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (tok) {
       fetch(
-        `https://bt.meshaenergy.com/apis/app-users/get-all-app-user/${tok}`,
+        `${baseURL}/get-all-app-user/${tok}`,
         {
           method: "GET",
         }
@@ -141,7 +144,7 @@ const UserManagement = () => {
 
     if (tok) {
       fetch(
-        `https://bt.meshaenergy.com/apis/app-users/status-change-app-user/${tok}/${status}/${data.id}`,
+        `${baseURL}/status-change-app-user/${tok}/${status}/${data.id}`,
         {
           method: "GET",
         }
@@ -189,7 +192,7 @@ const UserManagement = () => {
     console.log(Object.fromEntries(editData));
 
     fetch(
-      "https://bt.meshaenergy.com/apis/app-users/app-users/update-app-user",
+      `${baseURL}/update-app-user`,
       {
         method: "POST",
         body: editData,
@@ -245,7 +248,7 @@ const UserManagement = () => {
     newUserData.append("roleId", role);
     newUserData.append("token", tok ?? "");
 
-    fetch("https://bt.meshaenergy.com/apis/app-users/add", {
+    fetch(`${baseURL}/add`, {
       method: "POST",
       body: newUserData,
     })

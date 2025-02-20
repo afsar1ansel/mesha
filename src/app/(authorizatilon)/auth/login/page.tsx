@@ -12,13 +12,18 @@ import photo from "/public/Photo.png";
 import Link from "next/link";
 import { useMyContext } from "../../../context/MyContext";
 
+
 export default function Login() {
+  let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { setState } = useMyContext();
+
+  // console.log("we are here")
+  // console.log(baseUrl)
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -30,7 +35,7 @@ export default function Login() {
 
     try {
       const response = await fetch(
-        "https://bt.meshaenergy.com/apis/app-users/validate-user",
+        `${baseURL}/validate-user`,
         {
           method: "POST",
           body: detail,
