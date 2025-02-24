@@ -203,18 +203,71 @@ async function handleSubmit() {
 
 
 
-
 // for email changing 
 function hadndleEditEmail(newEmail: string) {
-  console.log("Updated Email:", newEmail);
+  // console.log("Updated Email:", newEmail);
+
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  let email = new FormData();
+  email.append("email", newEmail);
+  email.append("token", token || "");
+
+  fetch(`${baseURL}/change-email`, {
+    method: "POST",
+    body: email,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      // {"errFlag": 0,"message": "Email Changed Successfully"}
+      
+      // demo_user@meshaenergy.com
+      if (data.errFlag === 0) {
+        alert("Email changed successfully!");
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+
+
   setUserEmail(newEmail);
 }
 
 // for user id changing
 function handleEditUserId(newUserId: string) {
-  console.log("Updated User ID:", newUserId);
-  setUserID(newUserId);
+  const token = 
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  // console.log("Updated User ID:", newUserId);
 
+  let userId = new FormData();
+  userId.append("username", newUserId);
+  userId.append("token", token || "");
+
+  fetch(`${baseURL}/change-username`, {
+    method: "POST",
+    body: userId,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      // {"errFlag": 0,"message": "username Changed Successfully"}
+      if (data.errFlag === 0) {
+        alert("User ID changed successfully!");
+      }
+      else{
+        alert(data.message);
+      }
+
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  setUserID(newUserId);
 }
 
 
