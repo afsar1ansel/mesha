@@ -5,7 +5,7 @@ import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
 import Image from "next/image";
 import profile from "/public/BG.png";
-
+import { FaUserEdit } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
 
 
@@ -39,6 +39,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const Settings = () => {
 
 
+     let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 
   // Handle file selection
@@ -63,6 +64,18 @@ const Settings = () => {
   const [show, setShow] = React.useState(false);
   const [newPass, setNewpass] = React.useState(false);
   const [confirm , setConfirm] = React.useState(false);
+
+  const [userID , setUserID] = React.useState('User name');
+  const [userEmail, setUserEmail] = React.useState('Email@gmail.com');
+
+
+
+  const [currentPassword, setCurrentPassword] = React.useState("");
+  const [newPassword, setNewPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+
+
+
 
   const handleClick = () => setShow(!show);
 
@@ -107,6 +120,102 @@ function EditableControls() {
   );
 }
 
+
+// for password changing
+
+  const handleLogout = () => {
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+    if (!token) {
+      console.warn("No token found, redirecting to login...");
+      window.location.href = "/auth/login";
+      return;
+    }
+
+    fetch(`https://bt.meshaenergy.com/apis/app-users/logout/${token}`, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        localStorage.removeItem("token");
+        window.location.href = "/auth/login";
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
+
+async function handleSubmit() {
+  // console.log("Current Password:", currentPassword);
+  // console.log("New Password:", newPassword);
+  // console.log("Confirm Password:", confirmPassword);
+
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  // Password validation
+  if (newPassword !== confirmPassword) {
+    console.log("Passwords do not match");
+    alert("Passwords do not match");
+    return;
+  }
+
+  const detail = new FormData();
+  detail.append("oldPassword", currentPassword);
+  detail.append("newPassword", newPassword);
+  detail.append("token", token || "");
+
+  console.log(Object.entries(detail));
+  try {
+
+    const response = await fetch(`${baseURL}/change-password`, {
+      method: "POST",
+      body: detail,
+    });
+
+    const data = await response.json();
+    console.log("Success:", data);
+
+    // {"errFlag": 0,"message": "Password updated successfully."}
+
+    if (data.errFlag === 0) {
+      alert("Password changed successfully!");
+      handleLogout();
+    }
+    else{
+      alert(data.message);
+    }
+
+    // Optionally, clear password fields after success
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+  } catch (error) {
+    console.error("Request failed:", error);
+    alert("Something went wrong. Please try again later.");
+  }
+}
+
+
+
+
+
+
+// for email changing 
+function hadndleEditEmail(newEmail: string) {
+  console.log("Updated Email:", newEmail);
+  setUserEmail(newEmail);
+}
+
+// for user id changing
+function handleEditUserId(newUserId: string) {
+  console.log("Updated User ID:", newUserId);
+  setUserID(newUserId);
+
+}
 
 
 
@@ -184,12 +293,13 @@ function EditableControls() {
             <div className={styles.infoBox}>
               <AiTwotoneMail size={30} />
               <div>
-                <label htmlFor="email">email</label>
+                <label htmlFor="email">Email</label>
                 <Editable
                   textAlign="center"
-                  defaultValue="amogh@gmail.com"
+                  defaultValue={userEmail}
                   fontSize="16px"
                   isPreviewFocusable={false}
+                  onSubmit={hadndleEditEmail}
                 >
                   <Flex className={styles.editable}>
                     <EditablePreview />
@@ -201,14 +311,15 @@ function EditableControls() {
             </div>
 
             <div className={styles.infoBox}>
-              <BiPhoneCall size={30} />
+              <FaUserEdit size={30} />
               <div>
-                <label htmlFor="email">Phone</label>
+                <label htmlFor="/">User ID</label>
                 <Editable
                   textAlign="center"
-                  defaultValue="+91 9876543210"
+                  defaultValue={userID}
                   fontSize="16px"
                   isPreviewFocusable={false}
+                  onSubmit={handleEditUserId}
                 >
                   <Flex className={styles.editable}>
                     <EditablePreview />
@@ -219,7 +330,7 @@ function EditableControls() {
               </div>
             </div>
 
-            <div className={styles.infoBox}>
+            {/* <div className={styles.infoBox}>
               <IoLocationOutline size={30} />
               <div>
                 <label htmlFor="email">Location</label>
@@ -236,7 +347,7 @@ function EditableControls() {
                   </Flex>
                 </Editable>
               </div>
-            </div>
+            </div>    */}
           </div>
         </div>
 
@@ -246,6 +357,7 @@ function EditableControls() {
           </div>
 
           <div className={styles.passBody}>
+            {/* Current Password Field */}
             <div>
               <FormLabel>Current Password</FormLabel>
               <InputGroup size="md">
@@ -253,13 +365,15 @@ function EditableControls() {
                   pr="4.5rem"
                   type={show ? "text" : "password"}
                   placeholder="Enter password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
                 />
                 <InputRightElement width="4.5rem">
                   <Button
                     h="1.75rem"
                     size="sm"
                     onClick={handleClick}
-                    bgColor={"white"}
+                    bgColor="white"
                   >
                     {show ? <FaRegEye /> : <FaRegEyeSlash />}
                   </Button>
@@ -267,7 +381,7 @@ function EditableControls() {
               </InputGroup>
             </div>
 
-            {/* Second Password Field */}
+            {/* New Password Field */}
             <div>
               <FormLabel>New Password</FormLabel>
               <InputGroup size="md">
@@ -275,13 +389,15 @@ function EditableControls() {
                   pr="4.5rem"
                   type={newPass ? "text" : "password"}
                   placeholder="Enter new password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                 />
                 <InputRightElement width="4.5rem">
                   <Button
                     h="1.75rem"
                     size="sm"
                     onClick={() => setNewpass(!newPass)}
-                    bgColor={"white"}
+                    bgColor="white"
                   >
                     {newPass ? <FaRegEye /> : <FaRegEyeSlash />}
                   </Button>
@@ -289,7 +405,7 @@ function EditableControls() {
               </InputGroup>
             </div>
 
-            {/* Third Password Field */}
+            {/* Confirm Password Field */}
             <div>
               <FormLabel>Confirm Password</FormLabel>
               <InputGroup size="md">
@@ -297,19 +413,26 @@ function EditableControls() {
                   pr="4.5rem"
                   type={confirm ? "text" : "password"}
                   placeholder="Confirm new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <InputRightElement width="4.5rem">
                   <Button
                     h="1.75rem"
                     size="sm"
                     onClick={() => setConfirm(!confirm)}
-                    bgColor={"white"}
+                    bgColor="white"
                   >
                     {confirm ? <FaRegEye /> : <FaRegEyeSlash />}
                   </Button>
                 </InputRightElement>
               </InputGroup>
             </div>
+
+            {/* Submit Button */}
+            <Button colorScheme="green" mt="4" onClick={handleSubmit}>
+              Submit
+            </Button>
           </div>
         </div>
       </div>
