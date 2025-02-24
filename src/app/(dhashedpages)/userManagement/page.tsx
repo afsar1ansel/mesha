@@ -34,7 +34,6 @@ import Head from "next/head";
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const UserManagement = () => {
-
   let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
   const [allRole, setAllRole] = useState<
@@ -74,15 +73,13 @@ const UserManagement = () => {
     const tok =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (tok) {
-      fetch(
-        `${baseURL}/get-all-app-user/${tok}`,
-        {
-          method: "GET",
-        }
-      )
+      fetch(`${baseURL}/get-all-app-user/${tok}`, {
+        method: "GET",
+      })
         .then((response) => response.json())
         .then((data) => {
           setUsers(data);
+          console.log(data)
           setLoading(false);
         })
         .catch((error) => {
@@ -143,12 +140,9 @@ const UserManagement = () => {
     const status = newCheckedState ? 1 : 0;
 
     if (tok) {
-      fetch(
-        `${baseURL}/status-change-app-user/${tok}/${status}/${data.id}`,
-        {
-          method: "GET",
-        }
-      )
+      fetch(`${baseURL}/status-change-app-user/${tok}/${status}/${data.id}`, {
+        method: "GET",
+      })
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
@@ -191,16 +185,14 @@ const UserManagement = () => {
 
     console.log(Object.fromEntries(editData));
 
-    fetch(
-      `${baseURL}/update-app-user`,
-      {
-        method: "POST",
-        body: editData,
-      }
-    )
+    fetch(`${baseURL}/update-app-user`, {
+      method: "POST",
+      body: editData,
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        toast.success("User updated successfully.");
       })
       .catch((error) => {
         console.error("Error adding user:", error);
@@ -228,9 +220,8 @@ const UserManagement = () => {
   const [editUserId, setEditUserId] = useState("");
 
   const handleAdduser = () => {
-
-     const tok =
-       typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const tok =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
     const newUser = {
       userId,
@@ -239,14 +230,14 @@ const UserManagement = () => {
       role,
     };
 
-
-
     const newUserData = new FormData();
     newUserData.append("username", userId);
     newUserData.append("email", userEmail);
     newUserData.append("password", password);
     newUserData.append("roleId", role);
     newUserData.append("token", tok ?? "");
+
+   
 
     fetch(`${baseURL}/add`, {
       method: "POST",
@@ -257,8 +248,9 @@ const UserManagement = () => {
         console.log(data);
         if (data.errFlag === 0) {
           //reload the page here so the new data can reflect here
+
         } else {
-          toast.error(data.message || "Login failed. Please try again.");
+          toast.error(data.message || "Adding user failed. Please try again.");
         }
       })
       .catch((error) => {

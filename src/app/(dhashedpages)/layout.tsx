@@ -62,23 +62,39 @@ export default function RootLayout({
 
   const [active, setActive] = useState<NavItem>(basePath as NavItem);
 
-  // const token = localStorage.getItem("token");
 
-  // if(!token){
-  //   window.location.href = "/auth/login";
-  // }
+
+
 
   useEffect(() => {
     setActive(basePath as NavItem);
   }, [pathname]);
 
   const handleLogout = () => {
-    // fetch(`https://bt.meshaenergy.com/apis/app-users/logout/${token}`, {
-    //   method: "GET",
-    // });
 
-    localStorage.removeItem("token");
-    window.location.href = "/auth/login";
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+         if (!token) {
+           console.warn("No token found, redirecting to login...");
+           window.location.href = "/auth/login";
+           return;
+         }
+
+    fetch(`https://bt.meshaenergy.com/apis/app-users/logout/${token}`, {
+      method: "GET",
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      localStorage.removeItem("token");
+      window.location.href = "/auth/login";
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+
+
   };
 
   return (

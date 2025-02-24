@@ -22,8 +22,6 @@ export default function Login() {
   const router = useRouter();
   const { setState } = useMyContext();
 
-  // console.log("we are here")
-  // console.log(baseUrl)
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
