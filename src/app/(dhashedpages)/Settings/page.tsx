@@ -222,8 +222,7 @@ function hadndleEditEmail(newEmail: string) {
     .then((data) => {
       console.log(data);
       // {"errFlag": 0,"message": "Email Changed Successfully"}
-      
-      // demo_user@meshaenergy.com
+
       if (data.errFlag === 0) {
         alert("Email changed successfully!");
       } else {

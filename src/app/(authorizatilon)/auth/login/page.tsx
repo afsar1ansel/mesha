@@ -47,6 +47,7 @@ export default function Login() {
       if (res.errFlag === 0 && res.token) {
         setState(res.token);
         localStorage.setItem("token", res.token);
+        console.log(res)
         router.push("/dashboard");
       } else {
         toast.error(res.message || "Login failed. Please try again.");
