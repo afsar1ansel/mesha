@@ -32,13 +32,11 @@ export default function Login() {
     detail.append("password", password);
 
     try {
-      const response = await fetch(
-        `${baseURL}/validate-user`,
-        {
-          method: "POST",
-          body: detail,
-        }
-      );
+      const response = await fetch(`${baseURL}/validate-user`, {
+        method: "POST",
+        body: detail,
+        // mode: "no-cors",
+      });
 
       const res: { errFlag: number; message?: string; token?: string } =
         await response.json();
@@ -47,7 +45,7 @@ export default function Login() {
       if (res.errFlag === 0 && res.token) {
         setState(res.token);
         localStorage.setItem("token", res.token);
-        console.log(res)
+        // console.log(res)
         router.push("/dashboard");
       } else {
         toast.error(res.message || "Login failed. Please try again.");

@@ -8,7 +8,6 @@ import profile from "/public/BG.png";
 import { FaUserEdit } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
 
-
 import {
   Button,
   ButtonGroup,
@@ -37,10 +36,7 @@ import { FaRegEyeSlash } from "react-icons/fa";
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const Settings = () => {
-
-
-     let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
+  let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
   // Handle file selection
   // const [files, setFiles] = useState<File[]>([]);
@@ -63,65 +59,57 @@ const Settings = () => {
   //   password
   const [show, setShow] = React.useState(false);
   const [newPass, setNewpass] = React.useState(false);
-  const [confirm , setConfirm] = React.useState(false);
-
-  const [userID , setUserID] = React.useState('User name');
-  const [userEmail, setUserEmail] = React.useState('Email@gmail.com');
-
-
+  const [confirm, setConfirm] = React.useState(false);
+ const [loading, setLoading] = useState(false);
+  const [userID, setUserID] = React.useState("User name");
+  const [userEmail, setUserEmail] = React.useState("Dire@gmail.com");
 
   const [currentPassword, setCurrentPassword] = React.useState("");
   const [newPassword, setNewPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
-
-
-
   const handleClick = () => setShow(!show);
 
-
-
   // ediltable
-function EditableControls() {
-  const {
-    isEditing,
-    getSubmitButtonProps,
-    getCancelButtonProps,
-    getEditButtonProps,
-  } = useEditableControls();
+  function EditableControls() {
+    const {
+      isEditing,
+      getSubmitButtonProps,
+      getCancelButtonProps,
+      getEditButtonProps,
+    } = useEditableControls();
 
-  return isEditing ? (
-    <ButtonGroup justifyContent="center" size="sm">
-      <IconButton
-        size="sm"
-        bgColor={"transparent"}
-        icon={<FaCheck />}
-        // aria-label="Save changes"
-        {...{ ...getSubmitButtonProps(), "aria-label": "Save changes" }}
-      />
-      <IconButton
-        size="sm"
-        bgColor={"transparent"}
-        icon={<IoMdClose />}
-        // aria-label="Cancel editing"
-        {...{ ...getCancelButtonProps(), "aria-label": "Cancel editing" }}
-      />
-    </ButtonGroup>
-  ) : (
-    <Flex justifyContent="center">
-      <IconButton
-        size="sm"
-        bgColor={"transparent"}
-        icon={<CiEdit />}
-        // aria-label="Edit field"
-        {...{ ...getEditButtonProps(), "aria-label": "Edit field" }}
-      />
-    </Flex>
-  );
-}
+    return isEditing ? (
+      <ButtonGroup justifyContent="center" size="sm">
+        <IconButton
+          size="sm"
+          bgColor={"transparent"}
+          icon={<FaCheck />}
+          // aria-label="Save changes"
+          {...{ ...getSubmitButtonProps(), "aria-label": "Save changes" }}
+        />
+        <IconButton
+          size="sm"
+          bgColor={"transparent"}
+          icon={<IoMdClose />}
+          // aria-label="Cancel editing"
+          {...{ ...getCancelButtonProps(), "aria-label": "Cancel editing" }}
+        />
+      </ButtonGroup>
+    ) : (
+      <Flex justifyContent="center">
+        <IconButton
+          size="sm"
+          bgColor={"transparent"}
+          icon={<CiEdit />}
+          // aria-label="Edit field"
+          {...{ ...getEditButtonProps(), "aria-label": "Edit field" }}
+        />
+      </Flex>
+    );
+  }
 
-
-// for password changing
+  // for password changing
 
   const handleLogout = () => {
     const token =
@@ -147,129 +135,121 @@ function EditableControls() {
       });
   };
 
-
-async function handleSubmit() {
-  // console.log("Current Password:", currentPassword);
-  // console.log("New Password:", newPassword);
-  // console.log("Confirm Password:", confirmPassword);
-
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
-  // Password validation
-  if (newPassword !== confirmPassword) {
-    console.log("Passwords do not match");
-    alert("Passwords do not match");
-    return;
-  }
-
-  const detail = new FormData();
-  detail.append("oldPassword", currentPassword);
-  detail.append("newPassword", newPassword);
-  detail.append("token", token || "");
-
-  console.log(Object.entries(detail));
-  try {
-
-    const response = await fetch(`${baseURL}/change-password`, {
-      method: "POST",
-      body: detail,
-    });
-
-    const data = await response.json();
-    console.log("Success:", data);
-
-    // {"errFlag": 0,"message": "Password updated successfully."}
-
-    if (data.errFlag === 0) {
-      alert("Password changed successfully!");
-      handleLogout();
-    }
-    else{
-      alert(data.message);
-    }
-
-    // Optionally, clear password fields after success
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-  } catch (error) {
-    console.error("Request failed:", error);
-    alert("Something went wrong. Please try again later.");
-  }
-}
-
-
-
-
-
-// for email changing 
-function hadndleEditEmail(newEmail: string) {
-  // console.log("Updated Email:", newEmail);
+  async function handleSubmit() {
+    // console.log("Current Password:", currentPassword);
+    // console.log("New Password:", newPassword);
+    // console.log("Confirm Password:", confirmPassword);
+    setLoading(true); 
 
     const token =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-  let email = new FormData();
-  email.append("email", newEmail);
-  email.append("token", token || "");
+    // Password validation
+    if (newPassword !== confirmPassword) {
+      console.log("Passwords do not match");
+      alert("Passwords do not match");
+       setLoading(false);
+      return;
+    }
 
-  fetch(`${baseURL}/change-email`, {
-    method: "POST",
-    body: email,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      // {"errFlag": 0,"message": "Email Changed Successfully"}
+    const detail = new FormData();
+    detail.append("oldPassword", currentPassword);
+    detail.append("newPassword", newPassword);
+    detail.append("token", token || "");
+
+    console.log(Object.entries(detail));
+    try {
+      const response = await fetch(`${baseURL}/change-password`, {
+        method: "POST",
+        body: detail,
+      });
+
+      const data = await response.json();
+      console.log("Success:", data);
+
+      // {"errFlag": 0,"message": "Password updated successfully."}
 
       if (data.errFlag === 0) {
-        alert("Email changed successfully!");
+        alert("Password changed successfully!");
+        handleLogout();
       } else {
         alert(data.message);
       }
+
+      // Optionally, clear password fields after success
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      console.error("Request failed:", error);
+      alert("Something went wrong. Please try again later.");
+    } finally {
+      setLoading(false); // Stop loading in all cases
+    }
+  }
+
+  // for email changing
+  function hadndleEditEmail(newEmail: string) {
+    // console.log("Updated Email:", newEmail);
+
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+    let email = new FormData();
+    email.append("email", newEmail);
+    email.append("token", token || "");
+
+    fetch(`${baseURL}/change-email`, {
+      method: "POST",
+      body: email,
     })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // {"errFlag": 0,"message": "Email Changed Successfully"}
 
+        if (data.errFlag === 0) {
+          alert("Email changed successfully!");
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
 
-  setUserEmail(newEmail);
-}
+    setUserEmail(newEmail);
+  }
 
-// for user id changing
-function handleEditUserId(newUserId: string) {
-  const token = 
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  // console.log("Updated User ID:", newUserId);
+  // for user id changing
+  function handleEditUserId(newUserId: string) {
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    // console.log("Updated User ID:", newUserId);
 
-  let userId = new FormData();
-  userId.append("username", newUserId);
-  userId.append("token", token || "");
+    let userId = new FormData();
+    userId.append("username", newUserId);
+    userId.append("token", token || "");
 
-  fetch(`${baseURL}/change-username`, {
-    method: "POST",
-    body: userId,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      // {"errFlag": 0,"message": "username Changed Successfully"}
-      if (data.errFlag === 0) {
-        alert("User ID changed successfully!");
-      }
-      else{
-        alert(data.message);
-      }
-
+    fetch(`${baseURL}/change-username`, {
+      method: "POST",
+      body: userId,
     })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
-  setUserID(newUserId);
-}
-
-
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // {"errFlag": 0,"message": "username Changed Successfully"}
+        if (data.errFlag === 0) {
+          alert("User ID changed successfully!");
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+    setUserID(newUserId);
+  }
 
   return (
     <div className={styles.container}>
@@ -482,8 +462,13 @@ function handleEditUserId(newUserId: string) {
             </div>
 
             {/* Submit Button */}
-            <Button colorScheme="green" mt="4" onClick={handleSubmit}>
-              Submit
+            <Button
+              colorScheme="green"
+              disabled={loading}
+              mt="4"
+              onClick={handleSubmit}
+            >
+              {loading ? "Loading..." : "Submit"}
             </Button>
           </div>
         </div>

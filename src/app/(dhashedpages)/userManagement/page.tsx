@@ -30,6 +30,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
+import { s } from "framer-motion/client";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -149,7 +150,8 @@ const UserManagement = () => {
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
-        });
+        })
+       
     }
   };
 
@@ -196,6 +198,9 @@ const UserManagement = () => {
       })
       .catch((error) => {
         console.error("Error adding user:", error);
+      })
+      .finally(() => {
+        setBtnLoading(false); // Re-enable the button
       });
 
     setEditUserName("");
@@ -218,6 +223,8 @@ const UserManagement = () => {
   const [editUserPassword, setEditUserPassword] = useState("");
   const [editRoleId, setEditRoleId] = useState("");
   const [editUserId, setEditUserId] = useState("");
+
+   const [btnLoading, setBtnLoading] = useState(false);
 
   const handleAdduser = () => {
     const tok =
@@ -248,14 +255,16 @@ const UserManagement = () => {
         console.log(data);
         if (data.errFlag === 0) {
           //reload the page here so the new data can reflect here
-
         } else {
           toast.error(data.message || "Adding user failed. Please try again.");
         }
       })
       .catch((error) => {
         console.error("Error adding user:", error);
-      });
+      })
+      .finally(() => {
+      setBtnLoading(false); // Re-enable the button
+    });
 
     setuserId("");
     setuserEmail("");
@@ -383,8 +392,15 @@ const UserManagement = () => {
             <Button colorScheme="gray" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="green" onClick={handleAdduser}>
-              Add User
+            <Button
+              colorScheme="green"
+              disabled={btnLoading}
+              onClick={() => {
+                setBtnLoading(true); // Disable the button
+                handleAdduser();
+              }}
+            >
+              {btnLoading ? "Adding..." : "Add User"}
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -436,8 +452,15 @@ const UserManagement = () => {
             <Button colorScheme="gray" mr={3} onClick={onEditClose}>
               Cancel
             </Button>
-            <Button colorScheme="green" onClick={handleEdituser}>
-              Save Changes
+            <Button
+              colorScheme="green"
+              disabled={btnLoading}
+              onClick={() => {
+                setBtnLoading(true); // Disable the button
+                handleEdituser();
+              }}
+            >
+              {btnLoading ? "Saving..." : "Save Changes"}
             </Button>
           </ModalFooter>
         </ModalContent>
