@@ -183,7 +183,9 @@ const UserManagement = () => {
     editData.append("password", editUserPassword ?? "");
     editData.append("roleId", editRoleId);
     editData.append("token", tok ?? "");
-    editData.append("appUserId", editUserId);
+   editData.append("appUserId", editUserId);
+
+
 
     console.log(Object.fromEntries(editData));
 
@@ -244,7 +246,7 @@ const UserManagement = () => {
     newUserData.append("roleId", role);
     newUserData.append("token", tok ?? "");
 
-   
+   console.log(Object.fromEntries(newUserData));
 
     fetch(`${baseURL}/add`, {
       method: "POST",
@@ -441,11 +443,25 @@ const UserManagement = () => {
                 )}
               </Select>
               <FormControl>Password</FormControl>
-              <Input
+              {/* <Input
                 type="password"
                 value={editUserPassword}
                 onChange={(e) => setEditUserPassword(e.target.value)}
-              />
+              /> */}
+              <InputGroup size="md">
+                <Input
+                  pr="4.5rem"
+                  type={show ? "text" : "password"}
+                  placeholder="Enter password"
+                  value={editUserPassword}
+                  onChange={(e) => setEditUserPassword(e.target.value)}
+                />
+                <InputRightElement width="4.5rem">
+                  <Button h="1.75rem" size="sm" onClick={handleClickpass}>
+                    {show ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
             </FormControl>
           </ModalBody>
           <ModalFooter>
