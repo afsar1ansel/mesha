@@ -51,7 +51,7 @@ const Settings = () => {
   //   ]);
   // };
 
-  // Handle removing a file
+  // Handle removing a 
   // const removeFile = (fileName: string) => {
   //   setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
   // };
