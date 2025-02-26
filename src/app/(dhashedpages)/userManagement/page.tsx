@@ -168,7 +168,7 @@ const UserManagement = () => {
     setEditUserName(data.username);
     setEditUserEmail(data.email);
     setEditUserPassword(data.password);
-    setEditRoleId(data.role_id);
+    setEditRoleId(data.role_name);
     setEditUserId(data.id);
     onEditOpen();
   };
@@ -177,11 +177,15 @@ const UserManagement = () => {
     const tok =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
+      const roleId = editRoleId == "Admin" ? 1 : 2;
+
+      
+
     const editData = new FormData();
     editData.append("username", editUserName);
     editData.append("email", editUserEmail);
     editData.append("password", editUserPassword ?? "");
-    editData.append("roleId", editRoleId);
+    editData.append("roleId", roleId.toString());
     editData.append("token", tok ?? "");
    editData.append("appUserId", editUserId);
 
@@ -229,6 +233,12 @@ const UserManagement = () => {
    const [btnLoading, setBtnLoading] = useState(false);
 
   const handleAdduser = () => {
+
+      if (role === undefined) {
+        toast.error("Please select a role.");
+        return; // Exit the function early
+      }
+
     const tok =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
@@ -239,14 +249,16 @@ const UserManagement = () => {
       role,
     };
 
+  
+
     const newUserData = new FormData();
     newUserData.append("username", userId);
     newUserData.append("email", userEmail);
     newUserData.append("password", password);
-    newUserData.append("roleId", role);
+    newUserData.append("roleId", role );
     newUserData.append("token", tok ?? "");
 
-   console.log(Object.fromEntries(newUserData));
+    console.log(Object.fromEntries(newUserData));
 
     fetch(`${baseURL}/add`, {
       method: "POST",
@@ -265,8 +277,8 @@ const UserManagement = () => {
         console.error("Error adding user:", error);
       })
       .finally(() => {
-      setBtnLoading(false); // Re-enable the button
-    });
+        setBtnLoading(false); // Re-enable the button
+      });
 
     setuserId("");
     setuserEmail("");
@@ -419,6 +431,7 @@ const UserManagement = () => {
                 placeholder="Enter User Name"
                 value={editUserName}
                 onChange={(e) => setEditUserName(e.target.value)}
+                
               />
               <FormLabel>Email ID</FormLabel>
               <Input
