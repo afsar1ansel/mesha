@@ -32,7 +32,7 @@ export default function Login() {
     detail.append("password", password);
 
     try {
-      const response = await fetch(`${baseURL}/validate-user`, {
+      const response = await fetch(`${baseURL}/app-users/validate-user`, {
         method: "POST",
         body: detail,
         // mode: "no-cors",

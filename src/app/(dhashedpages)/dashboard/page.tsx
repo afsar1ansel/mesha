@@ -11,15 +11,52 @@ import LineChart from "@/app/componants/LineChart";
 import PieChart from "@/app/componants/PieChart";
 
 import { useMyContext } from "@/app/context/MyContext";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  // const tok = localStorage.getItem("token");
-  // console.log("token", tok);
 
-  // const { state: token } = useMyContext();
-  // console.log("token", token);
+   let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+  const [totalDeviceRegistored , setTotalDeviceRegistored] = useState(0);
+  const [activeUsers , setActiveUsers] = useState(0);
+  const [totalUpload , setTotalUpload] = useState(0);
 
-  // console.log("landed")
+  useEffect(() => {
+    fetchstatedata();
+  }, []);
+
+  const fetchstatedata = async () => {
+
+    const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+    try{
+      const response = await fetch(
+        `${baseURL}//dashboard/cards-data//${token}`,
+        {
+          method: "GET",
+        }
+      );
+
+      const data = await response.json();
+
+      setTotalDeviceRegistored(data.totalDevices);
+      setActiveUsers(data.activeUsers);
+      setTotalUpload(data.totalReportUploadedToday);
+      // console.log(data)
+    }
+    catch(error){
+      console.error("Error fetching data:", error);
+    }
+  };
+
+//   {
+//     "activeUsers": 0,
+//     "totalDevices": 0,
+//     "totalReportUploadedToday": 0
+// }
+
+  
+
 
   return (
     <div className={styles.page}>
@@ -32,8 +69,8 @@ export default function Home() {
         <div className={styles.stateBox}>
           <div className={styles.stateText}>
             <p>TOTAL DEVICES REGISTERED</p>
-            <h2>1990</h2>
-            <p className={styles.measure}>↑ 3.5% Increase</p>
+            <h2>{totalDeviceRegistored}</h2>
+            {/* <p className={styles.measure}>↑ 3.5% Increase</p> */}
           </div>
           <div className={styles.stateIcon}>
             <TbDeviceAnalytics />
@@ -43,17 +80,17 @@ export default function Home() {
         <div className={styles.stateBox}>
           <div className={styles.stateText}>
             <p>ACTIVE USERS</p>
-            <h2>90</h2>
-            <p className={styles.measure} style={{ color: "red" }}>
+            <h2>{activeUsers}</h2>
+            {/* <p className={styles.measure} style={{ color: "red" }}>
               ↑ 3.5% Increase
-            </p>
+            </p> */}
           </div>
           <div className={styles.stateIcon}>
             <RiUser3Line />
           </div>
         </div>
 
-        <div className={styles.stateBox}>
+        {/* <div className={styles.stateBox}>
           <div className={styles.stateText}>
             <p>REPORTS GENERATED</p>
             <h2>90</h2>
@@ -62,13 +99,13 @@ export default function Home() {
           <div className={styles.stateIcon}>
             <IoMdPaper />
           </div>
-        </div>
+        </div> */}
 
         <div className={styles.stateBox}>
           <div className={styles.stateText}>
             <p>REPORTS UPLOADED TODAY</p>
-            <h2>9</h2>
-            <p className={styles.measure}>↑ 3.5% Increase</p>
+            <h2>{totalUpload}</h2>
+            {/* <p className={styles.measure}>↑ 3.5% Increase</p> */}
           </div>
           <div className={styles.stateIcon}>
             <AiOutlineCloudUpload />

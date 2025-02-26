@@ -61,6 +61,7 @@ export default function RootLayout({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [active, setActive] = useState<NavItem>(basePath as NavItem);
+  let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 
 
@@ -81,7 +82,7 @@ export default function RootLayout({
            return;
          }
 
-    fetch(`https://bt.meshaenergy.com/apis/app-users/logout/${token}`, {
+    fetch(`${baseURL}/app-users/logout/${token}`, {
       method: "GET",
     })
     .then((response) => response.json())

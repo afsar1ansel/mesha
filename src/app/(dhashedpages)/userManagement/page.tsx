@@ -55,7 +55,7 @@ const UserManagement = () => {
     const tok =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (tok) {
-      fetch(`${baseURL}/all-roles/${tok}`, {
+      fetch(`${baseURL}/app-users/all-roles/${tok}`, {
         method: "GET",
       })
         .then((response) => response.json())
@@ -74,13 +74,13 @@ const UserManagement = () => {
     const tok =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (tok) {
-      fetch(`${baseURL}/get-all-app-user/${tok}`, {
+      fetch(`${baseURL}/app-users/get-all-app-user/${tok}`, {
         method: "GET",
       })
         .then((response) => response.json())
         .then((data) => {
           setUsers(data);
-          console.log(data)
+          console.log(data);
           setLoading(false);
         })
         .catch((error) => {
@@ -141,17 +141,19 @@ const UserManagement = () => {
     const status = newCheckedState ? 1 : 0;
 
     if (tok) {
-      fetch(`${baseURL}/status-change-app-user/${tok}/${status}/${data.id}`, {
-        method: "GET",
-      })
+      fetch(
+        `${baseURL}/app-users/status-change-app-user/${tok}/${status}/${data.id}`,
+        {
+          method: "GET",
+        }
+      )
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
-        })
-       
+        });
     }
   };
 
@@ -177,9 +179,7 @@ const UserManagement = () => {
     const tok =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-      const roleId = editRoleId == "Admin" ? 1 : 2;
-
-      
+    const roleId = editRoleId == "Admin" ? 1 : 2;
 
     const editData = new FormData();
     editData.append("username", editUserName);
@@ -187,13 +187,11 @@ const UserManagement = () => {
     editData.append("password", editUserPassword ?? "");
     editData.append("roleId", roleId.toString());
     editData.append("token", tok ?? "");
-   editData.append("appUserId", editUserId);
-
-
+    editData.append("appUserId", editUserId);
 
     console.log(Object.fromEntries(editData));
 
-    fetch(`${baseURL}/update-app-user`, {
+    fetch(`${baseURL}/app-users/update-app-user`, {
       method: "POST",
       body: editData,
     })
@@ -217,6 +215,10 @@ const UserManagement = () => {
     onEditClose();
   }
 
+  //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pblRva2VuIjoiZGlyZUBnbWFpbC5jb20tNC0yMDI1MDIyNjEzMjk0NiJ9.kvTFstI5ZckUkY6lQZh5x5cOkDWXaofniu8F3a4eIFw
+
+  // {"totalDevices": 0,"totalReportUploadedToday": 0}
+
   const [userId, setuserId] = useState("");
   const [userEmail, setuserEmail] = useState("");
   const [password, setpassword] = useState("");
@@ -230,14 +232,13 @@ const UserManagement = () => {
   const [editRoleId, setEditRoleId] = useState("");
   const [editUserId, setEditUserId] = useState("");
 
-   const [btnLoading, setBtnLoading] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
 
   const handleAdduser = () => {
-
-      if (role === undefined) {
-        toast.error("Please select a role.");
-        return; // Exit the function early
-      }
+    if (role === undefined) {
+      toast.error("Please select a role.");
+      return; // Exit the function early
+    }
 
     const tok =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
@@ -249,18 +250,16 @@ const UserManagement = () => {
       role,
     };
 
-  
-
     const newUserData = new FormData();
     newUserData.append("username", userId);
     newUserData.append("email", userEmail);
     newUserData.append("password", password);
-    newUserData.append("roleId", role );
+    newUserData.append("roleId", role);
     newUserData.append("token", tok ?? "");
 
     console.log(Object.fromEntries(newUserData));
 
-    fetch(`${baseURL}/add`, {
+    fetch(`${baseURL}/app-users/add`, {
       method: "POST",
       body: newUserData,
     })
@@ -431,7 +430,6 @@ const UserManagement = () => {
                 placeholder="Enter User Name"
                 value={editUserName}
                 onChange={(e) => setEditUserName(e.target.value)}
-                
               />
               <FormLabel>Email ID</FormLabel>
               <Input

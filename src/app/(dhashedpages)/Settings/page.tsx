@@ -72,6 +72,7 @@ const Settings = () => {
 
   // ediltable
   function EditableControls() {
+
     const {
       isEditing,
       getSubmitButtonProps,
@@ -112,6 +113,7 @@ const Settings = () => {
   // for password changing
 
   const handleLogout = () => {
+
     const token =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
@@ -121,7 +123,7 @@ const Settings = () => {
       return;
     }
 
-    fetch(`https://bt.meshaenergy.com/apis/app-users/logout/${token}`, {
+    fetch(`${baseURL}/app-users/logout/${token}`, {
       method: "GET",
     })
       .then((response) => response.json())
@@ -159,7 +161,7 @@ const Settings = () => {
 
     console.log(Object.entries(detail));
     try {
-      const response = await fetch(`${baseURL}/change-password`, {
+      const response = await fetch(`${baseURL}/app-users/change-password`, {
         method: "POST",
         body: detail,
       });
@@ -199,7 +201,7 @@ const Settings = () => {
     email.append("email", newEmail);
     email.append("token", token || "");
 
-    fetch(`${baseURL}/change-email`, {
+    fetch(`${baseURL}/app-users/change-email`, {
       method: "POST",
       body: email,
     })
@@ -231,7 +233,7 @@ const Settings = () => {
     userId.append("username", newUserId);
     userId.append("token", token || "");
 
-    fetch(`${baseURL}/change-username`, {
+    fetch(`${baseURL}/app-users/change-username`, {
       method: "POST",
       body: userId,
     })
