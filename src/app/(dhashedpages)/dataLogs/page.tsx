@@ -27,46 +27,56 @@ import {
   Select,
   useDisclosure,
 } from "@chakra-ui/react";
+import { fetchExternalImage } from "next/dist/server/image-optimizer";
+import { div } from "framer-motion/client";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const DataLogs = () => {
-  const [rowData, setRowData] = useState<any[]>([
-    {
-      fileName: "UPS_Data_20250108_001.csv",
-      uploadDate: "23/12/2024",
-      deviceName: "MESHA_001",
-      status: "Processed",
-      action: "action",
-    },
-  ]);
+
+  const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+
+  const [rowData, setRowData] = useState<any[]>([]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     {
-      field: "fileName",
+      field: "filename",
+      headerName: "Customer Name",
+      filter: "agTextColumnFilter",
+      cellRenderer: (params: any) => {
+        const customerName =
+          params.data.scanned_user_details[0]?.cutomer_name || "N/A";
+        return (
+          <div>
+            <a>{customerName}</a>
+          </div>
+        );
+      },
+    },
+    {
+      field: "filename",
       headerName: "File Name",
       filter: "agTextColumnFilter",
+      cellRenderer: (params: any) => (
+        <div>
+          <a>{params.data.filename}</a>
+        </div>
+      ),
     },
-    { field: "uploadDate", headerName: "Upload Date", filter: true },
-    // {
-    //   field: "deviceName",
-    //   headerName: "Device Name",
-    //   filter: "agDateColumnFilter",
-    // },
     {
-      field: "CustomerInfo",
-      headerName: "Customer Info",
-      filter: "agDateColumnFilter",
+      field: "deviceId",
+      headerName: "Device ID",
+      maxWidth: 110,
+    },
+    {
+      field: "upload_date",
+      headerName: "Upload Date",
+      maxWidth: 150,
     },
     {
       field: "status",
       headerName: "Status",
-      filter: "agSetColumnFilter",
-      cellRenderer: (params: any) => (
-        <div style={{ color: params.value === "Processed" ? "green" : "red" }}>
-          {params.value}
-        </div>
-      ),
+      maxWidth: 110,
     },
     {
       field: "action",
@@ -79,40 +89,64 @@ const DataLogs = () => {
           >
             <HiDownload size={20} />
           </div>
-          <div
+          {/* <div
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}
           >
             <CiEdit size={20} />
-          </div>
+          </div> */}
           <div
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}
           >
             <RiDeleteBin6Line size={20} />
           </div>
-          <div
+          {/* <div
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}
           >
-            <FaRegCopy  size={20}/>
-          </div>
+            <FaRegCopy size={20} />
+          </div> */}
         </div>
       ),
     },
   ]);
 
-  // const pagination = useMemo(() => {
-  //   return {
-  //     pagination: true,
-  //     paginationPageSize: 4,
-  //     paginationPageSizeSelector: [10, 20, 30, 40, 50],
-  //   };
-  // }, []);
 
   function handleEdit(data: any) {
     console.log(data);
   }
+
+  //data fetch
+
+async function fetchData() {
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+
+  try {
+    const response = await fetch(`${baseURL}/app/reports/raw-data-logs/${token}`, {
+      method: "GET",
+    });
+
+    const data = await response.json();
+    console.log(data);
+    setRowData(data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+
+
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+
+
+
 
   // modal
   const { isOpen, onOpen, onClose } = useDisclosure();
