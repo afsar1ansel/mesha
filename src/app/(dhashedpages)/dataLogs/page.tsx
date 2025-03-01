@@ -40,33 +40,24 @@ const DataLogs = () => {
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     {
-      field: "filename",
+      field: "customer_name",
       headerName: "Customer Name",
       filter: "agTextColumnFilter",
-      cellRenderer: (params: any) => {
-        const customerName =
-          params.data.scanned_user_details[0]?.cutomer_name || "N/A";
-        return (
-          <div>
-            <a>{customerName}</a>
-          </div>
-        );
-      },
+    },
+    {
+      field: "username",
+      headerName: "User Name",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "device_id",
+      headerName: "Device ID",
+      filter: "agTextColumnFilter",
     },
     {
       field: "filename",
       headerName: "File Name",
-      filter: "agTextColumnFilter",
-      cellRenderer: (params: any) => (
-        <div>
-          <a>{params.data.filename}</a>
-        </div>
-      ),
-    },
-    {
-      field: "deviceId",
-      headerName: "Device ID",
-      maxWidth: 110,
+      // maxWidth: 110,
     },
     {
       field: "upload_date",
