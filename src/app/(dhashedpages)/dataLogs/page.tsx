@@ -2,8 +2,8 @@
 
 import { AgGridReact } from "ag-grid-react";
 import React, { useEffect, useMemo, useState } from "react";
-import { HiDownload } from "react-icons/hi";
-import { CiEdit } from "react-icons/ci";
+import { PiFileCsvDuotone } from "react-icons/pi";
+import { GrFormView } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import type { ColDef } from "ag-grid-community";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
@@ -73,21 +73,19 @@ const DataLogs = () => {
       field: "action",
       headerName: "Action",
       cellRenderer: (params: any) => (
+        // console.log(params.data),
         <div style={{ display: "flex", gap: "12px", marginTop: "10px" }}>
-          <div
-            onClick={() => handleEdit(params.data)}
-            style={{ cursor: "pointer" }}
-          >
-            <HiDownload size={20} />
+          <div style={{ cursor: "pointer" }}>
+            <PiFileCsvDuotone size={20} onClick={downloadCSV} />
           </div>
           {/* <div
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}
           >
-            <CiEdit size={20} />
+            <GrFormView size={20} />
           </div> */}
           <div
-            onClick={() => handleEdit(params.data)}
+            // onClick={}
             style={{ cursor: "pointer" }}
           >
             <RiDeleteBin6Line size={20} />
@@ -135,6 +133,59 @@ async function fetchData() {
     fetchData();
   }, []);
 
+
+  //csv file 
+
+
+const convertToCSV = (data: any[]) => {
+  const headers = Object.keys(data[0]).join(",") + "\n";
+  const rows = data.map((row) => Object.values(row).join(",")).join("\n");
+  return headers + rows;
+};
+
+
+
+// const [jsonData, setJsonData] = useState<any[]>([]);
+
+async function fetchjsonrawdata() {
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  try {
+    const response = await fetch(
+      `${baseURL}/app/reports/raw-data-logs/${token}`,
+      {
+        method: "GET",
+      }
+    );
+
+    const data = await response.json();
+    console.log(data);
+    // setJsonData(data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+
+
+
+const downloadCSV = async () => {
+
+  const jsonData = await fetchjsonrawdata();
+
+  const csvData = convertToCSV(jsonData);
+  const blob = new Blob([csvData], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "data.csv";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
 
 
