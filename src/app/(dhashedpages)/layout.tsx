@@ -106,14 +106,14 @@ export default function RootLayout({
         {/* Header Section */}
         <header className="header">
           <div className="search-bar">
-            <div>
+            {/* <div>
               <FaSearch className="searchIcon" />
               <input
                 type="text"
                 placeholder="Search..."
                 className="search-input"
               />
-            </div>
+            </div> */}
             <div className="icons">
               <div className="user">
                 <Image
