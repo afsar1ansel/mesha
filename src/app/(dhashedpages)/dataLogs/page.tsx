@@ -9,6 +9,7 @@ import type { ColDef } from "ag-grid-community";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
 import { FaRegCopy } from "react-icons/fa";
+import { PiFilePdf } from "react-icons/pi";
 import {
   Button,
   FormControl,
@@ -90,17 +91,21 @@ const DataLogs = () => {
           >
             <RiDeleteBin6Line size={20} />
           </div>
-          {/* <div
-            onClick={() => handleEdit(params.data)}
+          <div
+            onClick={handlePdfGen}
             style={{ cursor: "pointer" }}
           >
-            <FaRegCopy size={20} />
-          </div> */}
+            <PiFilePdf  size={20} />
+          </div>
         </div>
       ),
     },
   ]);
 
+  function handlePdfGen(data: any) {
+    console.log("pdf",data);
+
+  }
 
   function handleEdit(data: any) {
     console.log(data);
@@ -153,7 +158,7 @@ async function fetchjsonrawdata() {
 
   try {
     const response = await fetch(
-      `${baseURL}/app/reports/raw-data-logs/${token}`,
+      `${baseURL}/app/reports/logged-values/${token}`,
       {
         method: "GET",
       }
@@ -192,7 +197,14 @@ const downloadCSV = async () => {
 
   // modal
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+      isOpen: isLoadOpen,
+      onOpen: onLoadOpen,
+      onClose: onLoadClose,
+    } = useDisclosure();
 
+  const [isLoading, setIsLoading] = useState(false);
+  
   const [deviceId, setDeviceId] = useState("");
   const [deviceName, setDeviceName] = useState("");
   const [password, setpassword] = useState("");
@@ -326,6 +338,10 @@ const downloadCSV = async () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      {/* <Modal isOpen={isEditOpen} onClose={onEditClose}>
+
+      </Modal> */}
     </div>
   );
 };
