@@ -12,6 +12,7 @@ import { FaRegCopy } from "react-icons/fa";
 import { PiFilePdf } from "react-icons/pi";
 import {
   Button,
+  CircularProgress,
   FormControl,
   FormLabel,
   Heading,
@@ -30,6 +31,7 @@ import {
 } from "@chakra-ui/react";
 import { fetchExternalImage } from "next/dist/server/image-optimizer";
 import { div } from "framer-motion/client";
+import { toast, ToastContainer } from "react-toastify";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -77,7 +79,10 @@ const DataLogs = () => {
         // console.log(params.data),
         <div style={{ display: "flex", gap: "12px", marginTop: "10px" }}>
           <div style={{ cursor: "pointer" }}>
-            <PiFileCsvDuotone size={20} onClick={downloadCSV} />
+            <PiFileCsvDuotone
+              size={20}
+              onClick={() => downloadCSV(params.data.scanned_file_log_id)}
+            />
           </div>
           {/* <div
             onClick={() => handleEdit(params.data)}
@@ -85,34 +90,87 @@ const DataLogs = () => {
           >
             <GrFormView size={20} />
           </div> */}
-          <div
+          {/* <div
             // onClick={}
             style={{ cursor: "pointer" }}
           >
             <RiDeleteBin6Line size={20} />
-          </div>
+          </div> */}
           <div
-            onClick={handlePdfGen}
+            onClick={() => handlePdfGen(params.data)}
             style={{ cursor: "pointer" }}
           >
-            <PiFilePdf  size={20} />
+            <PiFilePdf size={20} />
           </div>
         </div>
       ),
     },
   ]);
 
-  function handlePdfGen(data: any) {
-    console.log("pdf",data);
+  //pdf
+  const [pdfFilename, setPdfFilename] = useState("")
+  async function handlePdfGen(data: any) {
+    console.log("pdf", data);
+    onLoadOpen(); // Open the modal
 
+    const fileID = data.scanned_file_log_id.toString();
+    console.log(fileID);
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+    const formVal = new FormData();
+    formVal.append("scannedFileId", fileID);
+    formVal.append("token", token || "");
+
+    try {
+      // Request PDF generation
+      const response = await fetch(`${baseURL}/app/get-pdf-report`, {
+        method: "POST",
+        body: formVal,
+      });
+
+      const res = await response.json();
+      console.log(res);
+
+      if (res.pdfFileName) {
+        await downloadPDf(res.pdfFileName);
+      } else {
+        console.error("No PDF filename received");
+         toast.error(res.message || "Something Went Wrong Please Try Again");
+      }
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      // Close the modal after 2 seconds
+      setTimeout(() => {
+        onLoadClose();
+      }, 2000);
+    }
   }
 
-  function handleEdit(data: any) {
-    console.log(data);
+
+
+  async function downloadPDf(name: any) {
+  
+      try{
+        const response = await fetch(`${baseURL}/pdf-report/${name}`, {
+          method: "GET",
+        });
+        const data = await response.blob();
+        const url = window.URL.createObjectURL(data);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = name || "report.pdf";
+        link.click();
+      }catch(error){
+        console.log(error);
+      }
+      finally{
+        onLoadClose();
+      }
   }
 
   //data fetch
-
 async function fetchData() {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
@@ -131,17 +189,12 @@ async function fetchData() {
   }
 }
 
-
-
-
   useEffect(() => {
     fetchData();
   }, []);
 
 
   //csv file 
-
-
 const convertToCSV = (data: any[]) => {
   const headers = Object.keys(data[0]).join(",") + "\n";
   const rows = data.map((row) => Object.values(row).join(",")).join("\n");
@@ -152,13 +205,16 @@ const convertToCSV = (data: any[]) => {
 
 // const [jsonData, setJsonData] = useState<any[]>([]);
 
-async function fetchjsonrawdata() {
+async function fetchjsonrawdata(number: any) {
+
+  // console.log("datanumber", datanumber);
+
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   try {
     const response = await fetch(
-      `${baseURL}/app/reports/logged-values/${token}`,
+      `${baseURL}/app/reports/logged-values/${token}/${number}`,
       {
         method: "GET",
       }
@@ -176,9 +232,9 @@ async function fetchjsonrawdata() {
 
 
 
-const downloadCSV = async () => {
-
-  const jsonData = await fetchjsonrawdata();
+const downloadCSV = async (datanumber: any) => {
+const num = datanumber
+  const jsonData = await fetchjsonrawdata(num);
 
   const csvData = convertToCSV(jsonData);
   const blob = new Blob([csvData], { type: "text/csv" });
@@ -194,7 +250,6 @@ const downloadCSV = async () => {
 
 
 
-
   // modal
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -203,31 +258,8 @@ const downloadCSV = async () => {
       onClose: onLoadClose,
     } = useDisclosure();
 
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   
-  const [deviceId, setDeviceId] = useState("");
-  const [deviceName, setDeviceName] = useState("");
-  const [password, setpassword] = useState("");
-  const [role, setRole] = useState("");
-
-  const [show, setShow] = React.useState(false);
-  const handleClickpass = () => setShow(!show);
-
-  const handleAddDevice = () => {
-    const newDevice = {
-      deviceId,
-      deviceName,
-      password,
-      role,
-    };
-    console.log(newDevice);
-    // Clear inputs and close modal (optional)
-    setDeviceId("");
-    setDeviceName("");
-    setpassword("");
-    setRole("");
-    onClose();
-  };
 
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
@@ -283,65 +315,27 @@ const downloadCSV = async () => {
           />
         </div>
       </div>
-      <Modal isOpen={isOpen} onClose={onClose}>
+
+      <Modal isOpen={isLoadOpen} onClose={onLoadClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create New User</ModalHeader>
+          <ModalHeader>Loading Data Please wait... </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl>
-              <FormLabel>Name</FormLabel>
-              <Input
-                placeholder="Enter User Name"
-                value={deviceId}
-                onChange={(e) => setDeviceId(e.target.value)}
-              />
-              <FormLabel>Email ID</FormLabel>
-              <Input
-                placeholder="Enter Email Id"
-                value={deviceName}
-                onChange={(e) => setDeviceName(e.target.value)}
-              />
-              <FormLabel>Password</FormLabel>
-              <InputGroup size="md">
-                <Input
-                  pr="4.5rem"
-                  type={show ? "text" : "password"}
-                  placeholder="Enter password"
-                  value={password}
-                  onChange={(e) => setpassword(e.target.value)}
-                />
-                <InputRightElement width="4.5rem">
-                  <Button h="1.75rem" size="sm" onClick={handleClickpass}>
-                    {show ? "Hide" : "Show"}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-              <FormLabel>Role</FormLabel>
-              <Select
-                placeholder="Select option"
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-              </Select>
-            </FormControl>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <CircularProgress isIndeterminate color="green.300" />
+            </div>
           </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="gray" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="green" onClick={handleAddDevice}>
-              Add Device
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
-
-      {/* <Modal isOpen={isEditOpen} onClose={onEditClose}>
-
-      </Modal> */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+      />
     </div>
   );
 };
