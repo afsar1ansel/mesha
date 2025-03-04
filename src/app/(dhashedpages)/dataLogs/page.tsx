@@ -36,7 +36,6 @@ import { toast, ToastContainer } from "react-toastify";
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const DataLogs = () => {
-
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
   const [rowData, setRowData] = useState<any[]>([]);
@@ -108,7 +107,7 @@ const DataLogs = () => {
   ]);
 
   //pdf
-  const [pdfFilename, setPdfFilename] = useState("")
+  const [pdfFilename, setPdfFilename] = useState("");
   async function handlePdfGen(data: any) {
     console.log("pdf", data);
     onLoadOpen(); // Open the modal
@@ -136,7 +135,7 @@ const DataLogs = () => {
         await downloadPDf(res.pdfFileName);
       } else {
         console.error("No PDF filename received");
-         toast.error(res.message || "Something Went Wrong Please Try Again");
+        toast.error(res.message || "Something Went Wrong Please Try Again");
       }
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -148,118 +147,106 @@ const DataLogs = () => {
     }
   }
 
-
-
   async function downloadPDf(name: any) {
-  
-      try{
-        const response = await fetch(`${baseURL}/pdf-report/${name}`, {
-          method: "GET",
-        });
-        const data = await response.blob();
-        const url = window.URL.createObjectURL(data);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = name || "report.pdf";
-        link.click();
-      }catch(error){
-        console.log(error);
-      }
-      finally{
-        onLoadClose();
-      }
+    try {
+      const response = await fetch(`${baseURL}/pdf-report/${name}`, {
+        method: "GET",
+      });
+      const data = await response.blob();
+      const url = window.URL.createObjectURL(data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = name || "report.pdf";
+      link.click();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      onLoadClose();
+    }
   }
 
   //data fetch
-async function fetchData() {
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  async function fetchData() {
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
+    try {
+      const response = await fetch(
+        `${baseURL}/app/reports/raw-data-logs/${token}`,
+        {
+          method: "GET",
+        }
+      );
 
-  try {
-    const response = await fetch(`${baseURL}/app/reports/raw-data-logs/${token}`, {
-      method: "GET",
-    });
-
-    const data = await response.json();
-    console.log(data);
-    setRowData(data);
-  } catch (error) {
-    console.error("Error fetching data:", error);
+      const data = await response.json();
+      console.log(data);
+      setRowData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }
-}
 
   useEffect(() => {
     fetchData();
   }, []);
 
+  //csv file
+  const convertToCSV = (data: any[]) => {
+    const headers = Object.keys(data[0]).join(",") + "\n";
+    const rows = data.map((row) => Object.values(row).join(",")).join("\n");
+    return headers + rows;
+  };
 
-  //csv file 
-const convertToCSV = (data: any[]) => {
-  const headers = Object.keys(data[0]).join(",") + "\n";
-  const rows = data.map((row) => Object.values(row).join(",")).join("\n");
-  return headers + rows;
-};
+  // const [jsonData, setJsonData] = useState<any[]>([]);
 
+  async function fetchjsonrawdata(number: any) {
+    // console.log("datanumber", datanumber);
 
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-// const [jsonData, setJsonData] = useState<any[]>([]);
+    try {
+      const response = await fetch(
+        `${baseURL}/app/reports/logged-values/${token}/${number}`,
+        {
+          method: "GET",
+        }
+      );
 
-async function fetchjsonrawdata(number: any) {
-
-  // console.log("datanumber", datanumber);
-
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
-  try {
-    const response = await fetch(
-      `${baseURL}/app/reports/logged-values/${token}/${number}`,
-      {
-        method: "GET",
-      }
-    );
-
-    const data = await response.json();
-    console.log(data);
-    // setJsonData(data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
+      const data = await response.json();
+      console.log(data);
+      // setJsonData(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }
-}
 
+  const downloadCSV = async (datanumber: any) => {
+    const num = datanumber;
+    const jsonData = await fetchjsonrawdata(num);
 
+    const csvData = convertToCSV(jsonData);
+    const blob = new Blob([csvData], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
 
-
-const downloadCSV = async (datanumber: any) => {
-const num = datanumber
-  const jsonData = await fetchjsonrawdata(num);
-
-  const csvData = convertToCSV(jsonData);
-  const blob = new Blob([csvData], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "data.csv";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
-
-
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "data.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // modal
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-      isOpen: isLoadOpen,
-      onOpen: onLoadOpen,
-      onClose: onLoadClose,
-    } = useDisclosure();
+    isOpen: isLoadOpen,
+    onOpen: onLoadOpen,
+    onClose: onLoadClose,
+  } = useDisclosure();
 
   // const [isLoading, setIsLoading] = useState(false);
-  
 
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
@@ -301,7 +288,8 @@ const num = datanumber
             rowData={rowData}
             columnDefs={columnDefs}
             pagination={true}
-            paginationPageSize={10}
+            paginationPageSize={5}
+            paginationPageSizeSelector={[5, 10, 15]}
             paginationAutoPageSize={true}
             getRowHeight={function (params) {
               const description = params.data?.banner_description || "";
