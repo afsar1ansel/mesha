@@ -29,9 +29,11 @@ export default function Home() {
     const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
+    console.log(token)
+    console.log("tryied")
     try{
       const response = await fetch(
-        `${baseURL}//dashboard/cards-data//${token}`,
+        `${baseURL}/dashboard/cards-data/${token}`,
         {
           method: "GET",
         }
@@ -42,7 +44,7 @@ export default function Home() {
       setTotalDeviceRegistored(data.totalDevices);
       setActiveUsers(data.activeUsers);
       setTotalUpload(data.totalReportUploadedToday);
-      // console.log(data)
+      console.log(data)
     }
     catch(error){
       console.error("Error fetching data:", error);
