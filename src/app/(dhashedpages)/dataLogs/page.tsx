@@ -138,7 +138,9 @@ const DataLogs = () => {
         toast.error(res.message || "Something Went Wrong Please Try Again");
       }
     } catch (error) {
+      toast.error("Something Went Wrong Please Try Again");
       console.error("Error generating PDF:", error);
+      onLoadClose();
     } finally {
       // Close the modal after 2 seconds
       setTimeout(() => {

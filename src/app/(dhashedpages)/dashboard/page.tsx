@@ -29,8 +29,7 @@ export default function Home() {
     const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-    console.log(token)
-    console.log("tryied")
+   
     try{
       const response = await fetch(
         `${baseURL}/dashboard/cards-data/${token}`,
