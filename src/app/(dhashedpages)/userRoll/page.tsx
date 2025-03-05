@@ -37,7 +37,7 @@ const UserRoll = () => {
   // for permits to admin or sub admin
   const ModulesPermittedRenderer = (params: { value: string }) => {
     const modules = params.value.split(",");
-
+    // console.log(modules)
     // Define all pages for Admin (when modules_permitted is "0")
     const allPages = [
       "Dashboard",

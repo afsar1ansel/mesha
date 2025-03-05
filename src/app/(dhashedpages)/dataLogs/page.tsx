@@ -39,8 +39,18 @@ const DataLogs = () => {
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
   const [rowData, setRowData] = useState<any[]>([]);
-
+  const [slNo, setslNo] = useState(1);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
+    {
+      field: "index",
+      headerName: "Sl. No.",
+      maxWidth: 80,
+      filter: false,
+      suppressAutoSize: true,
+      valueGetter: (params) =>
+        params.node?.id !== undefined ? Number(params.node.id) + 1 : null,
+    },
+
     {
       field: "customer_name",
       headerName: "Customer Name",
@@ -69,12 +79,12 @@ const DataLogs = () => {
     {
       field: "status",
       headerName: "Status",
-      maxWidth: 110,
+      maxWidth: 100,
       cellRenderer: (params: any) => (
         <div style={{ color: params.data.status === 1 ? "green" : "red" }}>
           {params.data.status === 1 ? "Active" : "Inactilve"}
         </div>
-      )
+      ),
     },
     {
       field: "action",
