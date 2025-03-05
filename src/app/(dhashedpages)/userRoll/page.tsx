@@ -2,9 +2,7 @@
 
 import { AgGridReact } from "ag-grid-react";
 import React, { useEffect, useMemo, useState } from "react";
-// import { FaEye } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
-// import { RiDeleteBin6Line } from "react-icons/ri";
 import type { ColDef } from "ag-grid-community";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
@@ -14,8 +12,6 @@ import {
   CheckboxGroup,
   FormControl,
   FormLabel,
-  Heading,
-  HStack,
   Input,
   InputGroup,
   InputRightElement,
@@ -26,108 +22,121 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Radio,
-  RadioGroup,
-  Select,
   Stack,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import Head from "next/head";
+import { div } from "framer-motion/client";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const UserRoll = () => {
-  const [rowData, setRowData] = useState<any[]>([
-    {
-      userId: "U001",
-      name: "Priya Sharma",
-      email: "priya.sharma@example.com",
-      role: [
-        "dashboard",
-        "Device Management",
-        "User Management",
-        "Notifications",
-        "ota Update",
-      ],
-      status: true,
-      dateAdded: "23/12/2024 6:30 PM",
-      action: "action",
-    },
-    {
-      userId: "U002",
-      name: "Rahul Verma",
-      email: "rahul.verma@example.com",
-      role: ["dashboard", "User Management", "ota Update"],
-      status: false,
-      dateAdded: "24/12/2024 9:15 AM",
-      action: "action",
-    },
-    {
-      userId: "U003",
-      name: "Anjali Gupta",
-      email: "anjali.gupta@example.com",
-      role: ["admin", "Device Management", "User Management", "ota Update"],
-      status: true,
-      dateAdded: "22/12/2024 5:45 PM",
-      action: "action",
-    },
-  ]);
+  let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+  const [rowData, setRowData] = useState<any[]>([]);
+
+
+  // for permits to admin or sub admin
+  const ModulesPermittedRenderer = (params: { value: string }) => {
+    const modules = params.value.split(",");
+
+    // Define all pages for Admin (when modules_permitted is "0")
+    const allPages = [
+      "Dashboard",
+      "Alert Logs",
+      "Data Logs",
+      "Device Management",
+      "Reports",
+      "Settings",
+      "User Role",
+    ];
+
+    // If modules_permitted is "0" (Admin), return all pages vertically
+    if (modules.includes("0")) {
+      return (
+        <div>
+          {allPages.map((item, index) => (
+            <div key={index}>{item}</div>
+          ))}
+        </div>
+      );
+    }
+
+    // For Sub Admin, map the accessible modules to their names
+    const moduleNames = modules.map((module) => {
+      switch (module) {
+        case "1":
+          return "Admin User Page";
+        case "2":
+          return "Dashboard";
+        case "3":
+          return "Raw Data Page";
+        default:
+          return "Unknown";
+      }
+    });
+
+    return (
+      <div>
+        {moduleNames.map((item, index) => (
+          <div key={index}>{item}</div>
+        ))}
+      </div>
+    );
+  };
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     {
-      field: "userId",
+      field: "id",
       headerName: "Sl. Id",
       filter: "agTextColumnFilter",
     },
-    { field: "name", filter: true },
-    { field: "email", headerName: "Email Id", filter: "agTextColumnFilter" },
+    { field: "role_name", headerName: "Role Name", filter: true },
     {
-      field: "role",
+      field: "modules_permitted",
       headerName: "Modules Permitted",
       filter: "agTextColumnFilter",
       autoHeight: true,
-      cellRenderer: (params: any) => {
-        return (
-          <div>
-            {params.data.role.map((item: string, index: number) => (
-              <div key={index}>{item}</div>
-            ))}
-          </div>
-        );
-      },
+      cellRenderer: ModulesPermittedRenderer, // Use the custom cell renderer
     },
-    { field: "status", headerName: "Access" },
     {
-      field: "action",
-      headerName: "Action",
-      cellRenderer: (params: any) => (
-        <div style={{ display: "flex", gap: "12px", marginTop: "10px" }}>
-          <div
-            onClick={() => handleEdit(params.data)}
-            style={{ cursor: "pointer" }}
-          >
-            <CiEdit size={20} />
-          </div>
-        </div>
-      ),
+      field: "status",
+      headerName: "Access",
+      valueFormatter: (params) => (params.value === 1 ? "Active" : "Inactive"),
     },
   ]);
 
- 
+  useEffect(() => {
+    fetcher();
+  }, []);
+
+  function fetcher() {
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+    try {
+      fetch(`${baseURL}/app-users/all-roles/${token}`)
+        .then((res) => res.json())
+        .then((data) => {
+          const transformedData = data.map((item: any) => ({
+            ...item,
+            modules_permitted: item.modules_permitted || "0", // Ensure modules_permitted is not null
+          }));
+          setRowData(transformedData);
+        });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   function handleEdit(data: any) {
     console.log(data);
   }
 
-  // modal
+  // Modal
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const [deviceId, setDeviceId] = useState("");
   const [deviceName, setDeviceName] = useState("");
-  const [password, setpassword] = useState("");
+  const [password, setPassword] = useState("");
   const [radioval, setRadioval] = useState("");
-
   const [show, setShow] = React.useState(false);
   const handleClickpass = () => setShow(!show);
 
@@ -139,10 +148,9 @@ const UserRoll = () => {
       radioval,
     };
     console.log(newDevice);
-    // Clear inputs and close modal (optional)
     setDeviceId("");
     setDeviceName("");
-    setpassword("");
+    setPassword("");
     setRadioval("");
     onClose();
   };
@@ -187,8 +195,8 @@ const UserRoll = () => {
             pagination={true}
             paginationPageSize={10}
             paginationAutoPageSize={true}
-            getRowHeight={function (params) {
-              const roles = params.data?.role || [];
+            getRowHeight={(params) => {
+              const roles = params.data?.modules_permitted.split(",") || [];
               const baseHeight = 20;
               const additionalHeight = roles.length * 20;
               return baseHeight + additionalHeight;
@@ -222,7 +230,7 @@ const UserRoll = () => {
                   type={show ? "text" : "password"}
                   placeholder="Enter password"
                   value={password}
-                  onChange={(e) => setpassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <InputRightElement width="4.5rem">
                   <Button h="1.75rem" size="sm" onClick={handleClickpass}>
@@ -232,9 +240,7 @@ const UserRoll = () => {
               </InputGroup>
               <br />
               <FormLabel>Access To Screens</FormLabel>
-              <CheckboxGroup
-                colorScheme="green"
-              >
+              <CheckboxGroup colorScheme="green">
                 <Stack direction="column">
                   <Checkbox value="1">Dashboard</Checkbox>
                   <Checkbox value="2">All Devices</Checkbox>
