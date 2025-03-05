@@ -70,6 +70,11 @@ const DataLogs = () => {
       field: "status",
       headerName: "Status",
       maxWidth: 110,
+      cellRenderer: (params: any) => (
+        <div style={{ color: params.data.status === 1 ? "green" : "red" }}>
+          {params.data.status === 1 ? "Active" : "Inactilve"}
+        </div>
+      )
     },
     {
       field: "action",
