@@ -139,12 +139,12 @@ export default function RootLayout({
                   <p className="linkname">Dashboard</p>
                 </Link>
               </li>
-              <li className={active === "deviceManagement" ? "active" : ""}>
+              {/* <li className={active === "deviceManagement" ? "active" : ""}>
                 <TbDeviceAnalytics />
                 <Link href="/deviceManagement">
                   <p className="linkname">Device Management</p>
                 </Link>
-              </li>
+              </li> */}
               <li className={active === "userManagement" ? "active" : ""}>
                 <RiUser3Line />
                 <Link href="/userManagement">
@@ -181,12 +181,12 @@ export default function RootLayout({
                   <p className="linkname">Settings</p>
                 </Link>
               </li>
-              <li className={active === "Support" ? "active" : ""}>
+              {/* <li className={active === "Support" ? "active" : ""}>
                 <MdHelpOutline />
                 <Link href="/Support">
                   <p className="linkname">Support</p>
                 </Link>
-              </li>
+              </li> */}
               <li
                 className={active === "Logout" ? "active" : ""}
                 onClick={onOpen}
