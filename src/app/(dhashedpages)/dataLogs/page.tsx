@@ -62,9 +62,10 @@ const DataLogs = () => {
       headerName: "Customer Name",
       filter: "agTextColumnFilter",
       cellRenderer: (params: any) => (
-        <div>
-          <div onClick={() => handleSummary(params.data)}>{params.data.customer_name}</div>
-          
+        <div style={{ cursor: "pointer" }}>
+          <div onClick={() => handleSummary(params.data)}>
+            {params.data.customer_name}
+          </div>
         </div>
       ),
     },
