@@ -27,10 +27,16 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
   useDisclosure,
 } from "@chakra-ui/react";
 import { fetchExternalImage } from "next/dist/server/image-optimizer";
-import { div } from "framer-motion/client";
+import { data, div } from "framer-motion/client";
 import { toast, ToastContainer } from "react-toastify";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -55,6 +61,12 @@ const DataLogs = () => {
       field: "customer_name",
       headerName: "Customer Name",
       filter: "agTextColumnFilter",
+      cellRenderer: (params: any) => (
+        <div>
+          <div onClick={() => handleSummary(params.data)}>{params.data.customer_name}</div>
+          
+        </div>
+      ),
     },
     {
       field: "username",
@@ -256,7 +268,6 @@ const DataLogs = () => {
   };
 
   // modal
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isLoadOpen,
     onOpen: onLoadOpen,
@@ -264,6 +275,86 @@ const DataLogs = () => {
   } = useDisclosure();
 
   // const [isLoading, setIsLoading] = useState(false);
+
+  //summury for pdf details modal
+
+//   {
+//     "Battery Capacity": "12V",
+//     "Battery Company/Brand": "Livguard",
+//     "Battery Rating": "8",
+//     "Custome Details": {
+//         "customerMobile": "9090901212",
+//         "customerName": "demo_customer",
+//         "customerPlace": "Prayagraj"
+//     },
+//     "Report Generation Time and Date": "15:42:1740737570",
+//     "Sl No of Battery": "123456",
+//     "Test End Time": "15:45:00",
+//     "Test Start Time": "20:01:00",
+//     "batterySystem": "12V"
+// }
+
+
+   const { isOpen, onOpen, onClose } = useDisclosure();
+   const [summaryData, setSummaryData] = useState(null);
+
+  async function handleSummary(data: any) {
+    console.log(data.scanned_file_log_id);
+
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      try{
+        const response = await fetch(
+          `${baseURL}/app/reports/summary/${token}/${data.scanned_file_log_id}`,
+          {
+            method: "GET",
+          }
+        );
+
+        const datas = await response.json();
+          setSummaryData(datas);
+        console.log(datas);
+        onOpen();
+        
+      }catch(error){
+        console.error("Error fetching data:", error);
+      }
+  }
+
+const renderValue = (value: any): React.ReactNode => {
+  if (value === null || value === undefined) {
+    return "N/A"; // Fallback for null or undefined
+  }
+
+  if (typeof value === "object" && !Array.isArray(value)) {
+    if (Object.keys(value).length === 0) {
+      return "N/A"; // Fallback for empty objects
+    }
+
+    return Object.entries(value).map(([subKey, subValue]) => (
+      <div key={subKey}>
+        <strong>{formatKey(subKey)}:</strong>{" "}
+        {subValue !== null && subValue !== undefined
+          ? renderValue(subValue)
+          : "N/A"}
+      </div>
+    ));
+  }
+
+  return value; // Render primitive values directly
+};
+
+// Helper function to format camelCase keys into human-readable format
+const formatKey = (key: string): string => {
+  // Split camelCase into words
+  const words = key.replace(/([A-Z])/g, " $1").trim();
+  // Capitalize the first letter of each word
+  return words
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
 
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
@@ -341,6 +432,40 @@ const DataLogs = () => {
         pauseOnHover
         draggable
       />
+
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Battery Summary</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {summaryData && (
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th>Field</Th>
+                    <Th>Value</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Object.entries(summaryData).map(([key, value]) => (
+                    <Tr key={key}>
+                      <Td>{key}</Td>
+                      <Td>{renderValue(value)} </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            )}
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
