@@ -184,9 +184,9 @@ const UserRoll = () => {
           }}
         >
           <p style={{ fontSize: "16px", fontWeight: "600" }}>User management</p>
-          <Button onClick={onOpen} colorScheme="green">
+          {/* <Button onClick={onOpen} colorScheme="green">
             Add New User
-          </Button>
+          </Button> */}
         </div>
         <div style={{ height: "100%", width: "100%" }}>
           <AgGridReact
