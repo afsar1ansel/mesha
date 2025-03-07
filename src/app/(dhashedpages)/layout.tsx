@@ -65,6 +65,7 @@ export default function RootLayout({
 
  const [permit , setPermit] = useState("");
 
+
   useEffect(() => {
     setActive(basePath as NavItem);
    const perm =

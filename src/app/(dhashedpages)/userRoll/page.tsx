@@ -33,6 +33,38 @@ const UserRoll = () => {
   let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
   const [rowData, setRowData] = useState<any[]>([]);
 
+   //permission checker
+    useEffect(() => {
+      // Fetch the permit value from localStorage
+      const permit =
+        typeof window !== "undefined"
+          ? localStorage.getItem("permits") ?? ""
+          : "";
+      console.log("Permit from localStorage:", permit); // Debugging log
+  
+      // Redirect logic
+      if (permit === "") {
+        // If permit is not set, redirect to login
+        console.warn("No permit found, redirecting to login...");
+        window.location.href = "/auth/login";
+        return;
+      }
+  
+      // Check if the user is a super admin (permit === "0")
+      if (permit === "0") {
+        // Super admin has access to all pages, so no need to redirect
+        return;
+      }
+  
+      // Check if the user has the required permission for the dashboard
+      if (!permit.includes("4")) {
+        // If the user doesn't have permission, redirect to login
+        console.warn("User does not have permission, redirecting to login...");
+        window.location.href = "/auth/login";
+        return;
+      }
+    }, []);
+
 
   // for permits to admin or sub admin
   const ModulesPermittedRenderer = (params: { value: string }) => {

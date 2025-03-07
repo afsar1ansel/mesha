@@ -21,7 +21,40 @@ export default function Home() {
   const [totalUpload , setTotalUpload] = useState(0);
 
   useEffect(() => {
+
+    
     fetchstatedata();
+  }, []);
+
+  useEffect(() => {
+    // Fetch the permit value from localStorage
+    const permit =
+      typeof window !== "undefined"
+        ? localStorage.getItem("permits") ?? ""
+        : "";
+    console.log("Permit from localStorage:", permit); // Debugging log
+
+    // Redirect logic
+    if (permit === "") {
+      // If permit is not set, redirect to login
+      console.warn("No permit found, redirecting to login...");
+      window.location.href = "/auth/login";
+      return;
+    }
+
+    // Check if the user is a super admin (permit === "0")
+    if (permit === "0") {
+      // Super admin has access to all pages, so no need to redirect
+      return;
+    }
+
+    // Check if the user has the required permission for the dashboard
+    if (!permit.includes("2")) {
+      // If the user doesn't have permission, redirect to login
+      console.warn("User does not have permission, redirecting to login...");
+      window.location.href = "/auth/login";
+      return;
+    }
   }, []);
 
   const fetchstatedata = async () => {
@@ -29,7 +62,6 @@ export default function Home() {
     const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-   
     try{
       const response = await fetch(
         `${baseURL}/dashboard/cards-data/${token}`,
@@ -50,13 +82,6 @@ export default function Home() {
     }
   };
 
-//   {
-//     "activeUsers": 0,
-//     "totalDevices": 0,
-//     "totalReportUploadedToday": 0
-// }
-
-  
 
 
   return (
