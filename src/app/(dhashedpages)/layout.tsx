@@ -63,12 +63,14 @@ export default function RootLayout({
   const [active, setActive] = useState<NavItem>(basePath as NavItem);
   let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
-
-
-
+ const [permit , setPermit] = useState("");
 
   useEffect(() => {
     setActive(basePath as NavItem);
+   const perm =
+     typeof window !== "undefined" ? localStorage.getItem("permit") ?? "" : "";
+    setPermit(perm);
+    handleBeforeUnload(); 
   }, [pathname]);
 
   const handleLogout = () => {
@@ -87,16 +89,46 @@ export default function RootLayout({
     })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       localStorage.removeItem("token");
+      localStorage.removeItem("permits");
       window.location.href = "/auth/login";
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
     });
-
-
   };
+
+  useEffect(() => {
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (!token) {
+      console.warn("No User found, redirecting to login...");
+      window.location.href = "/auth/login";
+    }
+
+     handleBeforeUnload() 
+
+  }, []);
+
+  function handleBeforeUnload() {
+    const perm =
+      typeof window !== "undefined"
+        ? localStorage.getItem("permits") ?? ""
+        : "";
+    setPermit(perm);
+  }
+
+   const hasPermission = (requiredPermission: string) => {
+     if (permit === "0") {
+       return true;
+     }
+
+     if (permit.includes(requiredPermission)) {
+       return true;
+     }
+     return false;
+   };
 
   return (
     // <html lang="en">
@@ -133,54 +165,58 @@ export default function RootLayout({
           <nav className="sidebar">
             <Image src={logo} alt="Logo" width={200} height={100} />
             <ul>
-              <li className={active === "dashboard" ? "active" : ""}>
-                <IoIosHome />
-                <Link className="link" href="/dashboard">
-                  <p className="linkname">Dashboard</p>
-                </Link>
-              </li>
+              {hasPermission("2") && (
+                <li className={active === "dashboard" ? "active" : ""}>
+                  <IoIosHome />
+                  <Link className="link" href="/dashboard">
+                    <p className="linkname">Dashboard</p>
+                  </Link>
+                </li>
+              )}
               {/* <li className={active === "deviceManagement" ? "active" : ""}>
                 <TbDeviceAnalytics />
                 <Link href="/deviceManagement">
                   <p className="linkname">Device Management</p>
                 </Link>
               </li> */}
-              <li className={active === "userManagement" ? "active" : ""}>
+              { hasPermission("1") && <li className={active === "userManagement" ? "active" : ""}>
                 <RiUser3Line />
                 <Link href="/userManagement">
                   <p className="linkname">User Management</p>
                 </Link>
-              </li>
-              <li className={active === "userRoll" ? "active" : ""}>
+              </li>}
+              { hasPermission("4") && <li className={active === "userRoll" ? "active" : ""}>
                 <FaUserEdit />
                 <Link href="/userRoll">
                   <p className="linkname">User Role</p>
                 </Link>
-              </li>
-              <li className={active === "dataLogs" ? "active" : ""}>
+              </li>}
+              { hasPermission("3") && <li className={active === "dataLogs" ? "active" : ""}>
                 <AiOutlineDatabase />
                 <Link href="/dataLogs">
                   <p className="linkname">Data Logs</p>
                 </Link>
-              </li>
-              <li className={active === "alertLogs" ? "active" : ""}>
+              </li>}
+              { hasPermission("1") && <li className={active === "alertLogs" ? "active" : ""}>
                 <FiAlertTriangle />
                 <Link href="/alertLogs">
                   <p className="linkname">Alert Logs</p>
                 </Link>
-              </li>
+              </li>}
               {/* <li className={active === "Reports" ? "active" : ""}>
                 <IoMdPaper />
                 <Link href="/Reports">
                   <p className="linkname">Reports</p>
                 </Link>
               </li> */}
-              <li className={active === "Settings" ? "active" : ""}>
-                <IoSettingsOutline />
-                <Link href="/Settings">
-                  <p className="linkname">Settings</p>
-                </Link>
-              </li>
+              {hasPermission("1") && (
+                <li className={active === "Settings" ? "active" : ""}>
+                  <IoSettingsOutline />
+                  <Link href="/Settings">
+                    <p className="linkname">Settings</p>
+                  </Link>
+                </li>
+              )}
               {/* <li className={active === "Support" ? "active" : ""}>
                 <MdHelpOutline />
                 <Link href="/Support">

@@ -12,7 +12,6 @@ import photo from "/public/Photo.png";
 import Link from "next/link";
 import { useMyContext } from "../../../context/MyContext";
 
-
 export default function Login() {
   let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
   const [email, setEmail] = useState("");
@@ -21,7 +20,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { setState } = useMyContext();
-
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -38,14 +36,23 @@ export default function Login() {
         // mode: "no-cors",
       });
 
-      const res: { errFlag: number; message?: string; token?: string } =
-        await response.json();
+      const res: {
+        errFlag: number;
+        message?: string;
+        token?: string;
+        modules_permitted?: string;
+      } = await response.json();
 
       // console.log(res);
       if (res.errFlag === 0 && res.token) {
         setState(res.token);
         localStorage.setItem("token", res.token);
-        // console.log(res)
+       if (res.modules_permitted !== undefined) {
+         localStorage.setItem("permits", res.modules_permitted);
+       }else{
+         localStorage.setItem("permits", "Nan");
+       }
+        // console.log(res);
         router.push("/dashboard");
       } else {
         toast.error(res.message || "Login failed. Please try again.");
