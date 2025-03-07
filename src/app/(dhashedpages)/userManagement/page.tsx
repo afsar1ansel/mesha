@@ -389,7 +389,7 @@ const UserManagement = () => {
                 )}
               </Select>
               <br />
-              <FormLabel>Access To Screens</FormLabel>
+              {/* <FormLabel>Access To Screens</FormLabel>
               <CheckboxGroup colorScheme="green">
                 <Stack direction="column">
                   <Checkbox value="1">Dashboard</Checkbox>
@@ -398,7 +398,7 @@ const UserManagement = () => {
                   <Checkbox value="4">Alert Logs</Checkbox>
                   <Checkbox value="5">User Role</Checkbox>
                 </Stack>
-              </CheckboxGroup>
+              </CheckboxGroup> */}
             </FormControl>
           </ModalBody>
           <ModalFooter>
