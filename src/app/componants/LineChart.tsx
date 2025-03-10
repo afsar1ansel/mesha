@@ -33,11 +33,11 @@ export default function LineChart() {
 
     // Chart.js data and options
     const data = {
-      labels: ["01", "02", "03","04" ],
+      labels: ["1 day", "1 week", " 1 month", "3 months"],
       datasets: [
         {
           label: "My First Dataset",
-          data: [0, 10, 20,15],
+          data: [0, 10, 20, 15],
           fill: false,
           borderColor: "rgb(75, 192, 192)",
           tension: 0.1, // Curved line tension
@@ -99,22 +99,22 @@ export default function LineChart() {
         <button
           style={{ padding: "10px 1.56vw", border: "none", fontSize: "12px" }}
         >
-          1 day
+          
         </button>
         <button
           style={{ padding: "10px 1.56vw", border: "none", fontSize: "12px" }}
         >
-          1 week
+          
         </button>
         <button
           style={{ padding: "10px 1.56vw", border: "none", fontSize: "12px" }}
         >
-          1 month
+         
         </button>
         <button
           style={{ padding: "10px 1.56vw", border: "none", fontSize: "12px" }}
         >
-          3 months
+          
         </button>
       </div>
     </div>

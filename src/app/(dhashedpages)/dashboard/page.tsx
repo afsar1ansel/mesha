@@ -14,15 +14,12 @@ import { useMyContext } from "@/app/context/MyContext";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-
-   let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-  const [totalDeviceRegistored , setTotalDeviceRegistored] = useState(0);
-  const [activeUsers , setActiveUsers] = useState(0);
-  const [totalUpload , setTotalUpload] = useState(0);
+  let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+  const [totalDeviceRegistored, setTotalDeviceRegistored] = useState(0);
+  const [activeUsers, setActiveUsers] = useState(0);
+  const [totalUpload, setTotalUpload] = useState(0);
 
   useEffect(() => {
-
-    
     fetchstatedata();
   }, []);
 
@@ -58,31 +55,24 @@ export default function Home() {
   }, []);
 
   const fetchstatedata = async () => {
-
     const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-    try{
-      const response = await fetch(
-        `${baseURL}/dashboard/cards-data/${token}`,
-        {
-          method: "GET",
-        }
-      );
+    try {
+      const response = await fetch(`${baseURL}/dashboard/cards-data/${token}`, {
+        method: "GET",
+      });
 
       const data = await response.json();
 
       setTotalDeviceRegistored(data.totalDevices);
       setActiveUsers(data.activeUsers);
       setTotalUpload(data.totalReportUploadedToday);
-      console.log(data)
-    }
-    catch(error){
+      // console.log(data);
+    } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
-
 
   return (
     <div className={styles.page}>
@@ -143,7 +133,7 @@ export default function Home() {
         <div className={styles.bChart}>
           <div>
             <p style={{ marginBottom: "4px" }}>Data Uploads</p>
-            <div
+            {/* <div
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -152,14 +142,14 @@ export default function Home() {
               }}
             >
               <h1>159</h1> <p style={{ color: "green" }}>230%</p>
-            </div>
+            </div> */}
           </div>
           <BarChart />
         </div>
         <div className={styles.bChart}>
           <div>
             <p style={{ marginBottom: "4px" }}>Reports Generated</p>
-            <div
+            {/* <div
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -168,19 +158,17 @@ export default function Home() {
               }}
             >
               <h1>09</h1> <p style={{ color: "green" }}>90%</p>
-            </div>
+            </div> */}
           </div>
           <LineChart />
         </div>
-        <div className={styles.bChart}>
+        {/* <div className={styles.bChart}>
           <div>
             <p style={{ marginBottom: "60px" }}>Device Activity</p>
           </div>
           <PieChart />
-        </div>
+        </div> */}
       </div>
     </div>
   );
 }
-
-
