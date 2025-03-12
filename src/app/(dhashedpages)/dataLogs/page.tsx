@@ -180,7 +180,7 @@ const DataLogs = () => {
       );
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       setRowData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -215,7 +215,7 @@ const DataLogs = () => {
       );
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       // setJsonData(data);
       return data;
     } catch (error) {
@@ -246,25 +246,6 @@ const DataLogs = () => {
     onClose: onLoadClose,
   } = useDisclosure();
 
-  // const [isLoading, setIsLoading] = useState(false);
-
-  //summury for pdf details modal
-
-//   {
-//     "Battery Capacity": "12V",
-//     "Battery Company/Brand": "Livguard",
-//     "Battery Rating": "8",
-//     "Custome Details": {
-//         "customerMobile": "9090901212",
-//         "customerName": "demo_customer",
-//         "customerPlace": "Prayagraj"
-//     },
-//     "Report Generation Time and Date": "15:42:1740737570",
-//     "Sl No of Battery": "123456",
-//     "Test End Time": "15:45:00",
-//     "Test Start Time": "20:01:00",
-//     "batterySystem": "12V"
-// }
 
 
    const { isOpen, onOpen, onClose } = useDisclosure();
