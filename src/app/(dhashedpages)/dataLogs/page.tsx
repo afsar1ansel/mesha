@@ -45,6 +45,7 @@ const DataLogs = () => {
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
   const [rowData, setRowData] = useState<any[]>([]);
+  // const [isLoading, setIsLoading] = useState(false);
   const [slNo, setslNo] = useState(1);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     {
@@ -124,7 +125,7 @@ const DataLogs = () => {
             <RiDeleteBin6Line size={20} />
           </div> */}
           <div
-            onClick={() => handlePdfGen(params.data)}
+            onClick={() => downloadPDf(params.data.saved_file_name)}
             style={{ cursor: "pointer" }}
           >
             <PiFilePdf size={20} />
@@ -135,63 +136,33 @@ const DataLogs = () => {
   ]);
 
   //pdf
-  const [pdfFilename, setPdfFilename] = useState("");
-  async function handlePdfGen(data: any) {
-    console.log("pdf", data);
-    onLoadOpen(); // Open the modal
-
-    const fileID = data.scanned_file_log_id.toString();
-    console.log(fileID);
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
-    const formVal = new FormData();
-    formVal.append("scannedFileId", fileID);
-    formVal.append("token", token || "");
-
-    try {
-      // Request PDF generation
-      const response = await fetch(`${baseURL}/app/get-pdf-report`, {
-        method: "POST",
-        body: formVal,
-      });
-
-      const res = await response.json();
-      console.log(res);
-
-      if (res.pdfFileName) {
-        await downloadPDf(res.pdfFileName);
-      } else {
-        console.error("No PDF filename received");
-        toast.error(res.message || "Something Went Wrong Please Try Again");
-      }
-    } catch (error) {
-      toast.error("Something Went Wrong Please Try Again");
-      console.error("Error generating PDF:", error);
-      onLoadClose();
-    } finally {
-      // Close the modal after 2 seconds
-      setTimeout(() => {
-        onLoadClose();
-      }, 2000);
-    }
-  }
-
   async function downloadPDf(name: any) {
+    if (!name) {
+      toast.error("File name is missing. Unable to download PDF.");
+      return;
+    }
+    onLoadOpen();
+
     try {
       const response = await fetch(`${baseURL}/pdf-report/${name}`, {
         method: "GET",
       });
       const data = await response.blob();
+      // console.log(data);
+
+
       const url = window.URL.createObjectURL(data);
       const link = document.createElement("a");
       link.href = url;
       link.download = name || "report.pdf";
       link.click();
     } catch (error) {
-      console.log(error);
+      console.error("Error downloading PDF:", error);
+      toast.error("Failed to download PDF. Please try again.");
     } finally {
-      onLoadClose();
+       setTimeout(() => {
+         onLoadClose();
+       }, 1000);
     }
   }
 
