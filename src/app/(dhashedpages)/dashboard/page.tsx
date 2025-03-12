@@ -18,9 +18,11 @@ export default function Home() {
   const [totalDeviceRegistored, setTotalDeviceRegistored] = useState(0);
   const [activeUsers, setActiveUsers] = useState(0);
   const [totalUpload, setTotalUpload] = useState(0);
+  const [totalnumberscanned, setTotalnumberscanned] = useState(0);
 
   useEffect(() => {
     fetchstatedata();
+    fetchtotalscannedDev();
   }, []);
 
   useEffect(() => {
@@ -53,6 +55,26 @@ export default function Home() {
       return;
     }
   }, []);
+
+
+  async function fetchtotalscannedDev(){
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+      try{
+        const res = await fetch(
+          `${baseURL}/app/reports/total-device/${token}`,
+          { method: "GET" }
+        );
+
+        const data = await res.json();
+        // console.log(data);
+        setTotalnumberscanned(data.no_of_devices_till_date);
+      }
+      catch(error){
+        console.error("Error fetching data:", error);
+      }
+  }
 
   const fetchstatedata = async () => {
     const token =
@@ -106,17 +128,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* <div className={styles.stateBox}>
-          <div className={styles.stateText}>
-            <p>REPORTS GENERATED</p>
-            <h2>90</h2>
-            <p className={styles.measure}>↑ 3.5% Increase</p>
-          </div>
-          <div className={styles.stateIcon}>
-            <IoMdPaper />
-          </div>
-        </div> */}
-
         <div className={styles.stateBox}>
           <div className={styles.stateText}>
             <p>REPORTS UPLOADED TODAY</p>
@@ -125,6 +136,17 @@ export default function Home() {
           </div>
           <div className={styles.stateIcon}>
             <AiOutlineCloudUpload />
+          </div>
+        </div>
+
+        <div className={styles.stateBox}>
+          <div className={styles.stateText}>
+            <p>TOTAL NO OF SCANNED DEVICES</p>
+            <h2>{totalnumberscanned}</h2>
+            {/* <p className={styles.measure}>↑ 3.5% Increase</p> */}
+          </div>
+          <div className={styles.stateIcon}>
+            <IoMdPaper />
           </div>
         </div>
       </div>
