@@ -48,7 +48,7 @@ export default function BarChart() {
       );
       const data = await response.json();
       setGraphData(data);
-      console.log(data, "graphData" , graphData);
+      // console.log(data, "graphData" , graphData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

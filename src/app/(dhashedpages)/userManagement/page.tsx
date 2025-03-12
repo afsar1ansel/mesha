@@ -1,7 +1,7 @@
 "use client";
 
 import { AgGridReact } from "ag-grid-react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import type { ColDef } from "ag-grid-community";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
@@ -10,8 +10,6 @@ import { toast, ToastContainer } from "react-toastify"; // Import toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import {
   Button,
-  Checkbox,
-  CheckboxGroup,
   FormControl,
   FormLabel,
   Input,
@@ -25,12 +23,9 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
-  Stack,
   Switch,
   useDisclosure,
 } from "@chakra-ui/react";
-import Head from "next/head";
-import { s } from "framer-motion/client";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -38,37 +33,36 @@ const UserManagement = () => {
   let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
   //permission checker
-      useEffect(() => {
-        // Fetch the permit value from localStorage
-        const permit =
-          typeof window !== "undefined"
-            ? localStorage.getItem("permits") ?? ""
-            : "";
-        console.log("Permit from localStorage:", permit); // Debugging log
-    
-        // Redirect logic
-        if (permit === "") {
-          // If permit is not set, redirect to login
-          console.warn("No permit found, redirecting to login...");
-          window.location.href = "/auth/login";
-          return;
-        }
-    
-        // Check if the user is a super admin (permit === "0")
-        if (permit === "0") {
-          // Super admin has access to all pages, so no need to redirect
-          return;
-        }
-    
-        // Check if the user has the required permission for the dashboard
-        if (!permit.includes("1")) {
-          // If the user doesn't have permission, redirect to login
-          console.warn("User does not have permission, redirecting to login...");
-          window.location.href = "/auth/login";
-          return;
-        }
-      }, []);
+  // useEffect(() => {
+  //   // Fetch the permit value from localStorage
+  //   const permit =
+  //     typeof window !== "undefined"
+  //       ? localStorage.getItem("permits") ?? ""
+  //       : "";
+  //   console.log("Permit from localStorage:", permit); // Debugging log
 
+  //   // Redirect logic
+  //   if (permit === "") {
+  //     // If permit is not set, redirect to login
+  //     console.warn("No permit found, redirecting to login...");
+  //     window.location.href = "/auth/login";
+  //     return;
+  //   }
+
+  //   // Check if the user is a super admin (permit === "0")
+  //   if (permit === "0") {
+  //     // Super admin has access to all pages, so no need to redirect
+  //     return;
+  //   }
+
+  //   // Check if the user has the required permission for the dashboard
+  //   if (!permit.includes("1")) {
+  //     // If the user doesn't have permission, redirect to login
+  //     console.warn("User does not have permission, redirecting to login...");
+  //     window.location.href = "/auth/login";
+  //     return;
+  //   }
+  // }, []);
 
   const [allRole, setAllRole] = useState<
     {

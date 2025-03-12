@@ -68,7 +68,7 @@ export default function Home() {
       setTotalDeviceRegistored(data.totalDevices);
       setActiveUsers(data.activeUsers);
       setTotalUpload(data.totalReportUploadedToday);
-      // console.log(data);
+      console.log(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
