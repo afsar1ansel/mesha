@@ -86,7 +86,7 @@ export default function LineChart() {
 
   return (
     <div>
-      <canvas ref={canvasRef} width="400" height="400"></canvas>;
+      <canvas ref={canvasRef} width="400" height="400"></canvas>
       <div
         style={{
           display: "flex",

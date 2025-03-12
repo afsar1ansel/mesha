@@ -164,7 +164,7 @@ export default function RootLayout({
         <div className="main-content">
           {/* Sidebar Navigation */}
           <nav className="sidebar">
-            <Image src={logo} alt="Logo" width={200} height={100} />
+            <Image src={logo} alt="Logo" className="logo" width={170} height={80} />
             <ul>
               {hasPermission("2") && (
                 <li className={active === "dashboard" ? "active" : ""}>

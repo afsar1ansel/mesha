@@ -17,6 +17,11 @@ body {
   /* height: 100vh; */
 }
 
+.logo{
+  border-bottom: solid 1px rgb(225, 227, 228);
+  margin: auto;
+}
+
 /* Header styles */
 .header {
   /* border: solid 1px red; */
