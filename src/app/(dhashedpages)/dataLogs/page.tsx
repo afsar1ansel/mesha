@@ -46,6 +46,31 @@ const DataLogs = () => {
 
   const [rowData, setRowData] = useState<any[]>([]);
   // const [isLoading, setIsLoading] = useState(false);
+    const handleIconClick = (
+      event: React.MouseEvent,
+      type: "csv" | "pdf",
+      id: string
+    ) => {
+      // Highlight the clicked icon
+      const iconElement = event.currentTarget as HTMLElement;
+      iconElement.style.color = "rgba(13, 94, 54, 1)";
+
+      // Perform the download action
+      if (type === "csv") {
+        downloadCSV(id);
+        setTimeout(() => {
+          iconElement.style.color = "inherit";
+        }, 500);
+      } else if (type === "pdf") {
+        downloadPDf(id);
+        setTimeout(() => {
+          iconElement.style.color = "inherit";
+        },500);
+        // iconElement.style.color = "inherit";
+      }
+    };
+  
+    
   const [slNo, setslNo] = useState(1);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     {
@@ -57,7 +82,6 @@ const DataLogs = () => {
       valueGetter: (params) =>
         params.node?.id !== undefined ? Number(params.node.id) + 1 : null,
     },
-
     {
       field: "customer_name",
       headerName: "Customer Name",
@@ -104,31 +128,22 @@ const DataLogs = () => {
       field: "action",
       headerName: "Action",
       cellRenderer: (params: any) => (
-        // console.log(params.data),
         <div style={{ display: "flex", gap: "12px", marginTop: "10px" }}>
-          <div style={{ cursor: "pointer" }}>
-            <PiFileCsvDuotone
-              size={20}
-              onClick={() => downloadCSV(params.data.scanned_file_log_id)}
-            />
-          </div>
-          {/* <div
-            onClick={() => handleEdit(params.data)}
-            style={{ cursor: "pointer" }}
-          >
-            <GrFormView size={20} />
-          </div> */}
-          {/* <div
-            // onClick={}
-            style={{ cursor: "pointer" }}
-          >
-            <RiDeleteBin6Line size={20} />
-          </div> */}
           <div
-            onClick={() => downloadPDf(params.data.saved_file_name)}
             style={{ cursor: "pointer" }}
+            onClick={(e) =>
+              handleIconClick(e, "csv", params.data.scanned_file_log_id)
+            }
           >
-            <PiFilePdf size={20} />
+            <PiFileCsvDuotone size={30} />
+          </div>
+          <div
+            style={{ cursor: "pointer" }}
+            onClick={(e) =>
+              handleIconClick(e, "pdf", params.data.saved_file_name)
+            }
+          >
+            <PiFilePdf size={30} />
           </div>
         </div>
       ),
@@ -348,6 +363,7 @@ const formatKey = (key: string): string => {
           <AgGridReact
             rowData={rowData}
             columnDefs={columnDefs}
+            rowStyle={{ border: "none", outline: "none", boxShadow: "none" }}
             pagination={true}
             paginationPageSize={5}
             paginationPageSizeSelector={[5, 10, 15]}

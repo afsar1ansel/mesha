@@ -90,7 +90,7 @@ export default function Home() {
       setTotalDeviceRegistored(data.totalDevices);
       setActiveUsers(data.activeUsers);
       setTotalUpload(data.totalReportUploadedToday);
-      // console.log(data);
+      console.log(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -141,7 +141,7 @@ export default function Home() {
 
         <div className={styles.stateBox}>
           <div className={styles.stateText}>
-            <p>TOTAL NO OF SCANNED DEVICES</p>
+            <p>TOTAL NO OF UPLOADS</p>
             <h2>{totalnumberscanned}</h2>
             {/* <p className={styles.measure}>↑ 3.5% Increase</p> */}
           </div>
