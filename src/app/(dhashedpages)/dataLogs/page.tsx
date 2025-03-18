@@ -377,6 +377,8 @@ const formatKey = (key: string): string => {
               const calculatedHeight = baseHeight + words * heightPerWord;
               return Math.max(minHeight, calculatedHeight);
             }}
+            suppressCellFocus={true} // This will prevent the cell from being focused
+           
           />
         </div>
       </div>
