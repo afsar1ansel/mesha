@@ -20,6 +20,8 @@ body {
 .logo{
   border-bottom: solid 1px rgb(225, 227, 228);
   margin: auto;
+  margin-top: 20px;
+  width: 200px;
 }
 
 /* Header styles */

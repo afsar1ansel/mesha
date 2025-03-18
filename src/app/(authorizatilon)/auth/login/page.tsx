@@ -69,7 +69,7 @@ export default function Login() {
     <div className={style.logbody}>
       <ToastContainer position="top-right" autoClose={3000} />
       <div className={style.logo}>
-        <Image src={logo} alt="Logo" width={350} height={200} />
+        <Image src={logo} alt="Logo" width={400} height={150} />
       </div>
       <div className={style.form}>
         <div>
