@@ -111,7 +111,7 @@ export default function Home() {
             {/* <p className={styles.measure}>↑ 3.5% Increase</p> */}
           </div>
           <div className={styles.stateIcon}>
-            <TbDeviceAnalytics />
+            <TbDeviceAnalytics size={28} />
           </div>
         </div>
 
@@ -124,7 +124,7 @@ export default function Home() {
             </p> */}
           </div>
           <div className={styles.stateIcon}>
-            <RiUser3Line />
+            <RiUser3Line size={28} />
           </div>
         </div>
 
@@ -135,7 +135,7 @@ export default function Home() {
             {/* <p className={styles.measure}>↑ 3.5% Increase</p> */}
           </div>
           <div className={styles.stateIcon}>
-            <AiOutlineCloudUpload />
+            <AiOutlineCloudUpload size={28} />
           </div>
         </div>
 
@@ -146,7 +146,7 @@ export default function Home() {
             {/* <p className={styles.measure}>↑ 3.5% Increase</p> */}
           </div>
           <div className={styles.stateIcon}>
-            <IoMdPaper />
+            <IoMdPaper size={28} />
           </div>
         </div>
       </div>
