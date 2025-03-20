@@ -157,7 +157,13 @@ export default function RootLayout({
         <div className="main-content">
           {/* Sidebar Navigation */}
           <nav className="sidebar">
-            <Image src={logo} alt="Logo" className="logo" width={170} height={80} />
+            <Image
+              src={logo}
+              alt="Logo"
+              className="logo"
+              width={170}
+              height={80}
+            />
             <ul>
               {hasPermission("2") && (
                 <li className={active === "dashboard" ? "active" : ""}>
@@ -173,30 +179,38 @@ export default function RootLayout({
                   <p className="linkname">Device Management</p>
                 </Link>
               </li> */}
-              { hasPermission("1") && <li className={active === "userManagement" ? "active" : ""}>
-                <RiUser3Line />
-                <Link href="/userManagement">
-                  <p className="linkname">User Management</p>
-                </Link>
-              </li>}
-              { hasPermission("4") && <li className={active === "userRoll" ? "active" : ""}>
-                <FaUserEdit />
-                <Link href="/userRoll">
-                  <p className="linkname">User Role</p>
-                </Link>
-              </li>}
-              { hasPermission("3") && <li className={active === "dataLogs" ? "active" : ""}>
-                <AiOutlineDatabase />
-                <Link href="/dataLogs">
-                  <p className="linkname">Data Logs</p>
-                </Link>
-              </li>}
-              { hasPermission("1") && <li className={active === "alertLogs" ? "active" : ""}>
-                <FiAlertTriangle />
-                <Link href="/alertLogs">
-                  <p className="linkname">Alert Logs</p>
-                </Link>
-              </li>}
+              {hasPermission("1") && (
+                <li className={active === "userManagement" ? "active" : ""}>
+                  <RiUser3Line />
+                  <Link href="/userManagement">
+                    <p className="linkname">User Management</p>
+                  </Link>
+                </li>
+              )}
+              {hasPermission("4") && (
+                <li className={active === "userRoll" ? "active" : ""}>
+                  <FaUserEdit />
+                  <Link href="/userRoll">
+                    <p className="linkname">User Role</p>
+                  </Link>
+                </li>
+              )}
+              {hasPermission("3") && (
+                <li className={active === "dataLogs" ? "active" : ""}>
+                  <AiOutlineDatabase />
+                  <Link href="/dataLogs">
+                    <p className="linkname">Data Logs</p>
+                  </Link>
+                </li>
+              )}
+              {hasPermission("1") && (
+                <li className={active === "alertLogs" ? "active" : ""}>
+                  <FiAlertTriangle />
+                  <Link href="/alertLogs">
+                    <p className="linkname">Alert Logs</p>
+                  </Link>
+                </li>
+              )}
               {/* <li className={active === "Reports" ? "active" : ""}>
                 <IoMdPaper />
                 <Link href="/Reports">
@@ -233,7 +247,7 @@ export default function RootLayout({
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
-            <ModalBody textAlign="center" padding="40px">
+            <ModalBody textAlign="center" padding="16px">
               <Flex
                 justifyContent="center"
                 alignItems="center"
@@ -245,8 +259,8 @@ export default function RootLayout({
                 <div style={{ marginTop: "20px", marginBottom: "20px" }}>
                   <h2
                     style={{
-                      fontSize: "18px",
-                      fontWeight: "500",
+                      fontSize: "20px",
+                      fontWeight: "600",
                       color: "rgba(25, 27, 28, 1)",
                     }}
                   >
@@ -254,8 +268,8 @@ export default function RootLayout({
                   </h2>
                   <p
                     style={{
-                      fontSize: "14px",
-                      fontWeight: "400",
+                      fontSize: "16px",
+                      fontWeight: "500",
                       color: "rgba(98, 108, 112, 1)",
                     }}
                   >
@@ -265,18 +279,26 @@ export default function RootLayout({
               </Flex>
             </ModalBody>
 
-            <ModalFooter justifyContent="space-around" padding="20px">
+            <ModalFooter justifyContent="center" gap={4} padding="20px">
               <Button
                 style={{
                   color: "red",
                   backgroundColor: "white",
                   border: "1px solid red",
+                  padding: "10px 20px",
+                  width: "154px",
+                  height: "54px",
                 }}
                 onClick={handleLogout}
               >
                 Logout
               </Button>
-              <Button colorScheme="gray" mr={3} onClick={onClose}>
+              <Button
+                colorScheme="gray"
+                mr={3}
+                onClick={onClose}
+                style={{ padding: "10px 20px", width: "160px", height: "60px" }}
+              >
                 Cancel
               </Button>
             </ModalFooter>
