@@ -76,8 +76,8 @@ export default function Login() {
           <Image src={photo} alt="pic" width={500} height={400} />
         </div>
         <div>
-          <h2>Login to your account</h2>
           <form className={style.formbox} onSubmit={handleSubmit}>
+          <h2>Login to your account</h2>
             <label htmlFor="email">Email</label>
             <input
               id="email"

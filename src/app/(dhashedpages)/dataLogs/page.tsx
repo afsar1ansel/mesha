@@ -118,6 +118,7 @@ const DataLogs = () => {
       field: "status",
       headerName: "Status",
       maxWidth: 100,
+      filter: false,
       cellRenderer: (params: any) => (
         <div style={{ color: params.data.status === 1 ? "green" : "red" }}>
           {params.data.status === 1 ? "Active" : "Inactilve"}
@@ -127,6 +128,8 @@ const DataLogs = () => {
     {
       field: "action",
       headerName: "Action",
+      filter: false,
+      maxWidth: 120,
       cellRenderer: (params: any) => (
         <div style={{ display: "flex", gap: "12px", marginTop: "10px" }}>
           <div
@@ -368,6 +371,17 @@ const formatKey = (key: string): string => {
             paginationPageSize={5}
             paginationPageSizeSelector={[5, 10, 15]}
             paginationAutoPageSize={true}
+            defaultColDef={{
+              sortable: true,
+              filter: true,
+              floatingFilter: true,
+              resizable: true,
+              flex: 1,
+              filterParams: {
+                debounceMs: 0,
+                buttons: ["reset"],
+              },
+            }}
             getRowHeight={function (params) {
               const description = params.data?.banner_description || "";
               const words = description.split(" ").length;
@@ -378,7 +392,6 @@ const formatKey = (key: string): string => {
               return Math.max(minHeight, calculatedHeight);
             }}
             suppressCellFocus={true} // This will prevent the cell from being focused
-           
           />
         </div>
       </div>

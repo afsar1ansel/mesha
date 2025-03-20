@@ -8,15 +8,10 @@ import logo from "/public/Mesha_inc_logo-1.png";
 import profile from "/public/Profile.png";
 
 import { IoIosHome } from "react-icons/io";
-import { TbDeviceAnalytics } from "react-icons/tb";
 import { RiUser3Line } from "react-icons/ri";
 import { AiOutlineDatabase } from "react-icons/ai";
-import { IoMdPaper } from "react-icons/io";
-import { FaRegBell } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
-import { MdHelpOutline } from "react-icons/md";
 import { FaPowerOff } from "react-icons/fa6";
-import { FaSearch } from "react-icons/fa";
 import { FaUserEdit } from "react-icons/fa";
 import { FiAlertTriangle } from "react-icons/fi";
 import { MdLogout } from "react-icons/md";
@@ -28,10 +23,8 @@ import {
   Flex,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
-  ModalHeader,
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";

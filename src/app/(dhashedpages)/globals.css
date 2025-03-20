@@ -148,3 +148,13 @@ body {
 .active .linkname{
   color: rgba(13, 94, 54, 1) !important;
 }
+
+.ag-root-wrapper {
+  border-radius: 0 0 8px 8px !important;
+  border: none !important;
+}
+
+.ag-header {
+  /* border: 1px solid black; */
+  background-color: #F5F6F7 !important;
+}

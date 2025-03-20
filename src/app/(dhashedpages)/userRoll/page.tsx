@@ -119,7 +119,8 @@ const UserRoll = () => {
     {
       field: "id",
       headerName: "Sl. Id",
-      filter: "agTextColumnFilter",
+      filter: false,
+      maxWidth: 80,
     },
     { field: "role_name", headerName: "Role Name", filter: true },
     {
@@ -132,6 +133,7 @@ const UserRoll = () => {
     {
       field: "status",
       headerName: "Access",
+      filter: false,
       valueFormatter: (params) => (params.value === 1 ? "Active" : "Inactive"),
     },
   ]);
@@ -227,6 +229,17 @@ const UserRoll = () => {
             pagination={true}
             paginationPageSize={10}
             paginationAutoPageSize={true}
+            defaultColDef={{
+              sortable: true,
+              filter: true,
+              floatingFilter: true,
+              resizable: true,
+              flex: 1,
+              filterParams: {
+                debounceMs: 0,
+                buttons: ["reset"],
+              },
+            }}
             getRowHeight={(params) => {
               const roles = params.data?.modules_permitted.split(",") || [];
               const baseHeight = 20;

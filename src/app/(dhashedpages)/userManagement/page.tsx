@@ -26,6 +26,7 @@ import {
   Switch,
   useDisclosure,
 } from "@chakra-ui/react";
+import { div } from "framer-motion/client";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -121,7 +122,8 @@ const UserManagement = () => {
     {
       field: "id",
       headerName: "User Id",
-      filter: true,
+      filter: false,
+      maxWidth: 100,
     },
     { field: "username", headerName: "Name", filter: true },
     { field: "email", headerName: "Email Id", filter: true },
@@ -129,20 +131,24 @@ const UserManagement = () => {
     {
       field: "status",
       headerName: "Access",
-      filter: true,
+      filter: false,
+      maxWidth: 150,
       cellRenderer: (params: any) => (
+        <div style={{ display: "flex",justifyContent:"center" }} >
         <Switch
           colorScheme="green"
           onChange={(event) => handleToggle(event, params.data)}
           defaultChecked={params.data.status}
-        />
+          />
+          </div>
       ),
     },
     {
       field: "action",
       headerName: "Action",
+      filter: false,
       cellRenderer: (params: any) => (
-        <div style={{ display: "flex", gap: "12px", marginTop: "10px" }}>
+        <div style={{ display: "flex", gap: "12px",justifyContent:"center" }}>
           <div
             onClick={() => handleEdit(params.data)}
             style={{ cursor: "pointer" }}
@@ -241,10 +247,6 @@ const UserManagement = () => {
     setEditUserId("");
     onEditClose();
   }
-
-  //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pblRva2VuIjoiZGlyZUBnbWFpbC5jb20tNC0yMDI1MDIyNjEzMjk0NiJ9.kvTFstI5ZckUkY6lQZh5x5cOkDWXaofniu8F3a4eIFw
-
-  // {"totalDevices": 0,"totalReportUploadedToday": 0}
 
   const [userId, setuserId] = useState("");
   const [userEmail, setuserEmail] = useState("");
@@ -354,6 +356,17 @@ const UserManagement = () => {
             pagination={true}
             paginationPageSize={10}
             paginationAutoPageSize={true}
+            defaultColDef={{
+              sortable: true,
+              filter: true,
+              floatingFilter: true,
+              resizable: true,
+              flex: 1,
+              filterParams: {
+                debounceMs: 0,
+                buttons: ["reset"],
+              },
+            }}
             getRowHeight={function (params) {
               const description = params.data?.banner_description || "";
               const words = description.split(" ").length;

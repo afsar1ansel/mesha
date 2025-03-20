@@ -18,7 +18,8 @@
 .form{
     display: flex;
     gap: 16px;
-    padding: 20px;
+    width: 1000px;
+    /* padding: 20px; */
     background-color: white;
     /* border: solid 1px red; */
     align-items: center;
@@ -27,7 +28,8 @@
 .formbox{
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
+    padding: 16px;
     /* border: solid 1px red; */
 }
 
@@ -36,6 +38,14 @@
 font-family: sans-serif;
 font-size: 24px;
 font-weight: 600;
+}
+
+.formbox p{
+    color: rgba(98, 108, 112, 1);
+    font-family: sans-serif;
+    /* size: 14px; */
+    /* font-weight: 400; */
+    text-align: center;
 }
 
 .formbox input{
