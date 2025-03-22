@@ -89,6 +89,7 @@ const UserManagement = () => {
         .then((response) => response.json())
         .then((data) => {
           setAllRole(data);
+          console.log(data);
           setLoading(false);
         })
         .catch((error) => {
@@ -108,7 +109,7 @@ const UserManagement = () => {
         .then((response) => response.json())
         .then((data) => {
           setUsers(data);
-          console.log(data);
+          // console.log(data);
           setLoading(false);
         })
         .catch((error) => {
@@ -211,14 +212,15 @@ const UserManagement = () => {
   function handleEdituser() {
     const tok =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      console.log("editRoleId", editRoleId);
 
-    const roleId = editRoleId == "Admin" ? 1 : 2;
+    // const roleId = editRoleId == "Admin" ? 1 : 2;
 
     const editData = new FormData();
     editData.append("username", editUserName);
     editData.append("email", editUserEmail);
     editData.append("password", editUserPassword ?? "");
-    editData.append("roleId", roleId.toString());
+    editData.append("roleId", editRoleId);
     editData.append("token", tok ?? "");
     editData.append("appUserId", editUserId);
 
@@ -230,8 +232,24 @@ const UserManagement = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        toast.success("User updated successfully.");
+       console.log(data);
+       toast.success("User updated successfully.");
+
+       // Update the specific user in the `users` state
+       setUsers((prevUsers) =>
+         prevUsers.map((user) =>
+           user.id === parseInt(editUserId)
+             ? {
+                 ...user,
+                 username: editUserName,
+                 email: editUserEmail,
+                 role_name:
+                   allRole.find((r) => r.id === parseInt(editRoleId))
+                     ?.role_name || "", // Update role name
+               }
+             : user
+         )
+       );
       })
       .catch((error) => {
         console.error("Error adding user:", error);
@@ -297,12 +315,14 @@ const UserManagement = () => {
         console.log(data);
         if (data.errFlag === 0) {
           //reload the page here so the new data can reflect here
+          toast.success("User added successfully.");
         } else {
           toast.error(data.message || "Adding user failed. Please try again.");
         }
       })
       .catch((error) => {
         console.error("Error adding user:", error);
+        toast.error("Adding user failed. Please try again.");
       })
       .finally(() => {
         setBtnLoading(false); // Re-enable the button
