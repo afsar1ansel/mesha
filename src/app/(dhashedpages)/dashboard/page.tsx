@@ -19,10 +19,16 @@ export default function Home() {
   const [activeUsers, setActiveUsers] = useState(0);
   const [totalUpload, setTotalUpload] = useState(0);
   const [totalnumberscanned, setTotalnumberscanned] = useState(0);
+  const [adminName, setAdminName] = useState("");
 
   useEffect(() => {
     fetchstatedata();
     fetchtotalscannedDev();
+    const name =
+      typeof window !== "undefined"
+        ? localStorage.getItem("username") ?? "Admin"
+        : "Admin";
+    setAdminName(name);
   }, []);
 
   useEffect(() => {
@@ -99,7 +105,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <div className={styles.hello}>
-        <h3>👋 Hello, admin</h3>
+        <h3>👋 Hello, {adminName}</h3>
         <p>Here is all your analytics overview</p>
       </div>
 

@@ -41,12 +41,14 @@ export default function Login() {
         message?: string;
         token?: string;
         modules_permitted?: string;
+        username?: string;
       } = await response.json();
 
       // console.log(res);
       if (res.errFlag === 0 && res.token) {
         setState(res.token);
         localStorage.setItem("token", res.token);
+        localStorage.setItem("username", res.username ?? "Admin");
        if (res.modules_permitted !== undefined) {
          localStorage.setItem("permits", res.modules_permitted);
        }else{
