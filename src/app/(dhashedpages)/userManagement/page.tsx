@@ -144,22 +144,22 @@ const UserManagement = () => {
           </div>
       ),
     },
-    // {
-    //   field: "action",
-    //   headerName: "Action",
-    //   filter: false,
-    //   cellRenderer: (params: any) => (
-    //     <div style={{ display: "flex", gap: "12px",justifyContent:"center" }}>
-    //       <div
-    //         onClick={() => handleEdit(params.data)}
-    //         style={{ cursor: "pointer" }}
-    //       >
-    //         Edit
-    //         <CiEdit size={20} />
-    //       </div>
-    //     </div>
-    //   ),
-    // },
+    {
+      field: "action",
+      headerName: "Action",
+      filter: false,
+      cellRenderer: (params: any) => (
+        <div style={{ display: "flex", gap: "12px",justifyContent:"center" }}>
+          <div
+            onClick={() => handleEdit(params.data)}
+            style={{ cursor: "pointer" }}
+          >
+            Edit
+            <CiEdit size={20} />
+          </div>
+        </div>
+      ),
+    },
   ]);
 
   const handleToggle = (
@@ -365,9 +365,9 @@ const UserManagement = () => {
           }}
         >
           <p style={{ fontSize: "16px", fontWeight: "600" }}>User management</p>
-          {/* <Button onClick={onOpen} colorScheme="green">
+          <Button onClick={onOpen} colorScheme="green">
             Add New User
-          </Button> */}
+          </Button>
         </div>
         <div style={{ height: "100%", width: "100%" }}>
           <AgGridReact

@@ -31,14 +31,14 @@ import {
 
 type NavItem =
   | "dashboard"
-  | "deviceManagement"
+  // | "deviceManagement"
   | "userManagement"
   | "userRoll"
   | "dataLogs"
   | "alertLogs"
-  | "Reports"
+  // | "Reports"
   | "Settings"
-  | "Support"
+  // | "Support"
   | "Logout";
 
 export default function RootLayout({
@@ -187,14 +187,14 @@ export default function RootLayout({
                   </Link>
                 </li>
               )}
-              {/* {hasPermission("4") && (
+               {hasPermission("4") && (
                 <li className={active === "userRoll" ? "active" : ""}>
                   <FaUserEdit />
                   <Link href="/userRoll">
                     <p className="linkname">User Role</p>
                   </Link>
                 </li>
-              )} */}
+              )} 
               {hasPermission("3") && (
                 <li className={active === "dataLogs" ? "active" : ""}>
                   <AiOutlineDatabase />
@@ -203,14 +203,14 @@ export default function RootLayout({
                   </Link>
                 </li>
               )}
-              {/* {hasPermission("1") && (
+               {hasPermission("1") && (
                 <li className={active === "alertLogs" ? "active" : ""}>
                   <FiAlertTriangle />
                   <Link href="/alertLogs">
                     <p className="linkname">Alert Logs</p>
                   </Link>
                 </li>
-              )} */}
+              )} 
               {/* <li className={active === "Reports" ? "active" : ""}>
                 <IoMdPaper />
                 <Link href="/Reports">

@@ -3,17 +3,20 @@
 .logbody{
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
+
+    justify-content: center;
     align-items: center;
-    height: 95vh;
+    height: 97vh;
     /* padding-bottom: 100px; */
     background-color: rgba(245, 246, 247, 1);
+    /* border: solid 1px red; */
 }
 
 .form{
     display: flex;
+    justify-content: space-around;
     gap: 16px;
-    width: 1000px;
+    width: 68vw;
     /* padding: 20px; */
     background-color: white;
     /* border: solid 1px red; */
@@ -31,6 +34,7 @@
     gap: 8px;
     padding: 16px;
     /* border: solid 1px red; */
+    /* width: 100%; */
 }
 
 .formbox h2{
