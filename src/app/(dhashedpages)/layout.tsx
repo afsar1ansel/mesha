@@ -203,7 +203,7 @@ export default function RootLayout({
                   </Link>
                 </li>
               )}
-               {hasPermission("1") && (
+               {hasPermission("5") && (
                 <li className={active === "alertLogs" ? "active" : ""}>
                   <FiAlertTriangle />
                   <Link href="/alertLogs">
