@@ -171,7 +171,8 @@ const GridComponent = () => {
             columnDefs={columnDefs}
             pagination={true}
             paginationPageSize={10}
-            paginationAutoPageSize={true}
+            paginationPageSizeSelector={[5, 10, 15]}
+            // paginationAutoPageSize={true}
             getRowHeight={function (params) {
               const description = params.data?.banner_description || "";
               const words = description.split(" ").length;

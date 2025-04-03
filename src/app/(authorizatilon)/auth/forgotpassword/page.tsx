@@ -36,7 +36,7 @@ export default function ForgotPassword() {
   return (
     <div className={style.logbody}>
       <div className={style.logo}>
-         <Image src={logo} alt="Logo" width={400} height={150} />
+        <Image src={logo} alt="Logo" width={400} height={150} />
       </div>
       <div className={style.form}>
         <div>
@@ -44,7 +44,7 @@ export default function ForgotPassword() {
         </div>
         <div>
           <form className={style.formbox} onSubmit={handleSubmit}>
-          <h2>Login to your account</h2>
+            <h2>Reset account password</h2>
             <label htmlFor="email">Email</label>
             <input
               id="email"
@@ -72,10 +72,10 @@ export default function ForgotPassword() {
             <div>
               <input
                 id="comfirmpassword"
-                type={showConfirmPassword ? "text" : "password"} 
+                type={showConfirmPassword ? "text" : "password"}
                 placeholder="Comfirm password"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)} 
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
               <div className={style.forgot} onClick={togglePasswordVisibility1}>
                 {showConfirmPassword ? (
@@ -89,8 +89,7 @@ export default function ForgotPassword() {
               Login
             </button>
             <p>
-              Already have Password?{" "}
-              <Link href="/auth/login">Login</Link>
+              Already have Password? <Link href="/auth/login">Login</Link>
             </p>
           </form>
         </div>

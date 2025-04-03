@@ -374,8 +374,9 @@ const UserManagement = () => {
             rowData={users}
             columnDefs={columnDefs}
             pagination={true}
-            paginationPageSize={10}
-            paginationAutoPageSize={true}
+            paginationPageSize={5}
+            paginationPageSizeSelector={[5, 10, 15]}
+            // paginationAutoPageSize={true}
             defaultColDef={{
               sortable: true,
               filter: true,

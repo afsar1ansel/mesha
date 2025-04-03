@@ -370,7 +370,7 @@ const formatKey = (key: string): string => {
             pagination={true}
             paginationPageSize={5}
             paginationPageSizeSelector={[5, 10, 15]}
-            paginationAutoPageSize={true}
+            // paginationAutoPageSize={true}
             defaultColDef={{
               sortable: true,
               filter: true,
