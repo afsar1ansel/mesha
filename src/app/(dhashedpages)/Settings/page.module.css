@@ -1,43 +1,42 @@
-.hello h3{
-    /* border: solid 1px red; */
-    color: rgba(25, 27, 28, 1);
-    size: 16px;
-    font-weight: 600;
-    margin-bottom: 10px;
+.hello h3 {
+  /* border: solid 1px red; */
+  color: rgba(25, 27, 28, 1);
+  size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 
-.hello p{
-    color: rgba(98, 108, 112, 1);
-    size: 14px;
-    font-weight: 400;
+.hello p {
+  color: rgba(98, 108, 112, 1);
+  size: 14px;
+  font-weight: 400;
 }
 
-.statesContainer{
-    /* border: solid 1px yellow; */
-    display: flex;
-    gap: 14px;
+.statesContainer {
+  /* border: solid 1px yellow; */
+  display: flex;
+  gap: 14px;
 }
 
-.mainBody{
-    /* border: solid 1px red; */
-    margin-top: 40px;
-    display: flex;
-    gap: 20px;
+.mainBody {
+  /* border: solid 1px red; */
+  margin-top: 40px;
+  display: flex;
+  gap: 20px;
 }
 
-.profileBox{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    /* border: solid 1px green; */
-    width: 22vw;
-    padding: 20px;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    border-radius: 8px;
+.profileBox {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* border: solid 1px green; */
+  width: 22vw;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 8px;
 }
-
 
 /* profile */
 .container {
@@ -79,8 +78,6 @@
   /* border: solid 1px red; */
 }
 
-
-
 .uploadArea {
   margin-bottom: 15px;
   /* border: solid 1px red; */
@@ -115,7 +112,6 @@
 .uploadLabel svg {
   font-size: 1.2rem; /* Adjust icon size to match text */
 }
-
 
 .uploadButton {
   display: inline-block;
@@ -169,82 +165,100 @@
   text-decoration: underline;
 }
 
-.remember{
-    width: 19vw;
-    /* border: solid 1px red; */
+.remember {
+  width: 19vw;
+  /* border: solid 1px red; */
 }
 
-.remember p{
-    font-size: 14px;
-    color: rgba(98, 108, 112, 1);
-    font-weight: 400;
-    line-height: 16px;
-    margin: 0;
-    padding: 0;
+.remember p {
+  font-size: 14px;
+  color: rgba(98, 108, 112, 1);
+  font-weight: 400;
+  line-height: 16px;
+  margin: 0;
+  padding: 0;
 }
 
 /* info */
 
-.info{
-    width: 30vw;
-    background-color: white;
-    height: 100%;
+.info {
+  width: 30vw;
+  background-color: white;
+  height: 100%;
 }
 
-.info label{
-    color: rgba(149, 159, 163, 1);
-    font-size: 14px;
-    font-weight: 500;
-    margin: 0;
-    padding: 0;
-    margin-left: 14px;
+.info label {
+  color: rgba(149, 159, 163, 1);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  margin-left: 14px;
 }
 
-.infoHead{
-    border-bottom: 1px solid rgba(229, 231, 232, 1);
-    padding: 16px;
+.infoHead {
+  border-bottom: 1px solid rgba(229, 231, 232, 1);
+  padding: 16px;
 }
 
-.infoBody{
-    /* border: solid 1px black; */
-    display: flex;
-    flex-direction: column;
-    margin-top: 24px;
-    gap: 20px;
-    padding-bottom: 24px;
+.infoBody {
+  /* border: solid 1px black; */
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+  gap: 20px;
+  padding-bottom: 24px;
 }
 
-.editable{
-    /* border: solid 1px black; */
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 16px;
-    width: 27vw;
+.editable {
+  /* border: solid 1px black; */
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  width: 27vw;
 }
 
-.infoBox{
-    /* border: solid 1px black; */
-    align-items: center;
-    display: flex;
-    margin: 6px;
+.infoBox {
+  /* border: solid 1px black; */
+  align-items: center;
+  display: flex;
+  margin: 6px;
+}
+
+/* Backup */
+
+/* Add these styles to your existing CSS */
+.backup {
+  width: 30vw;
+  background-color: white;
+  height: 100%;
+}
+
+.backupBody {
+  padding: 15px;
+}
+
+.backupBody p {
+  margin-bottom: 15px;
+  color: #666;
 }
 
 /* PASSWORD */
 
-.password{
-    /* border: solid 1px black; */
-    background-color: white;
-    height: 100%;
-    padding: 16px;
-    border-radius: 10px;
-    width: 26vw;
+.password {
+  /* border: solid 1px black; */
+  background-color: white;
+  height: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  width: 26vw;
 }
 
-.passBody{
-    /* border: solid 1px black; */
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    margin-top: 24px;
-    padding-bottom: 24px;
+.passBody {
+  /* border: solid 1px black; */
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 24px;
+  padding-bottom: 24px;
 }

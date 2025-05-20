@@ -9,6 +9,7 @@ import { FaUserEdit } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
 
 import {
+  Box,
   Button,
   ButtonGroup,
   // CheckboxIcon,
@@ -21,7 +22,17 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Spinner,
+  Text,
   useEditableControls,
+  useToast,
 } from "@chakra-ui/react";
 
 import { CiEdit } from "react-icons/ci";
@@ -37,6 +48,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 const Settings = () => {
   let baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+  const toast = useToast();
 
   // Handle file selection
   // const [files, setFiles] = useState<File[]>([]);
@@ -51,7 +63,7 @@ const Settings = () => {
   //   ]);
   // };
 
-  // Handle removing a 
+  // Handle removing a
   // const removeFile = (fileName: string) => {
   //   setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
   // };
@@ -60,7 +72,7 @@ const Settings = () => {
   const [show, setShow] = React.useState(false);
   const [newPass, setNewpass] = React.useState(false);
   const [confirm, setConfirm] = React.useState(false);
- const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [userID, setUserID] = React.useState("User name");
   const [userEmail, setUserEmail] = React.useState("Dire@gmail.com");
 
@@ -68,11 +80,73 @@ const Settings = () => {
   const [newPassword, setNewPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
+  // Backup modal state
+  const [isBackupModalOpen, setIsBackupModalOpen] = useState(false);
+  const [isBackupLoading, setIsBackupLoading] = useState(false);
+
+  // Function to handle backup
+  const handleBackup = async () => {
+    setIsBackupLoading(true);
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+    if (!token) {
+      toast({
+        title: "Error",
+        description: "No authentication token found",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      setIsBackupLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${baseURL}/backups/${token}`, {
+        method: "GET",
+      });
+
+      const data = await response.json();
+
+      console.log("Backup response:", data);
+
+      if (data.message !== "") {
+        toast({
+          title: "Backup Successful",
+          description: "Your data has been backed up successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Backup Failed",
+          description: data.message || "Failed to create backup",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Backup error:", error);
+      toast({
+        title: "Error",
+        description: "An error occurred while creating backup",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsBackupLoading(false);
+      setIsBackupModalOpen(false);
+    }
+  };
+
   const handleClick = () => setShow(!show);
 
   // ediltable
   function EditableControls() {
-
     const {
       isEditing,
       getSubmitButtonProps,
@@ -113,7 +187,6 @@ const Settings = () => {
   // for password changing
 
   const handleLogout = () => {
-
     const token =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
@@ -141,7 +214,7 @@ const Settings = () => {
     // console.log("Current Password:", currentPassword);
     // console.log("New Password:", newPassword);
     // console.log("Confirm Password:", confirmPassword);
-    setLoading(true); 
+    setLoading(true);
 
     const token =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
@@ -150,7 +223,7 @@ const Settings = () => {
     if (newPassword !== confirmPassword) {
       console.log("Passwords do not match");
       alert("Passwords do not match");
-       setLoading(false);
+      setLoading(false);
       return;
     }
 
@@ -318,53 +391,54 @@ const Settings = () => {
           </div>
         </div> */}
 
-        <div className={styles.info}>
-          <div className={styles.infoHead}>
-            <h3>Personal Info</h3>
-          </div>
-
-          <div className={styles.infoBody}>
-            <div className={styles.infoBox}>
-              <AiTwotoneMail size={30} />
-              <div>
-                <label htmlFor="email">Email</label>
-                <Editable
-                  textAlign="center"
-                  defaultValue={userEmail}
-                  fontSize="16px"
-                  isPreviewFocusable={false}
-                  onSubmit={hadndleEditEmail}
-                >
-                  <Flex className={styles.editable}>
-                    <EditablePreview />
-                    <Input as={EditableInput} />
-                    <EditableControls />
-                  </Flex>
-                </Editable>
-              </div>
+        <Box display={"flex"} flexDirection="column" gap="20px">
+          <div className={styles.info}>
+            <div className={styles.infoHead}>
+              <h3>Personal Info</h3>
             </div>
 
-            <div className={styles.infoBox}>
-              <FaUserEdit size={30} />
-              <div>
-                <label htmlFor="/">User ID</label>
-                <Editable
-                  textAlign="center"
-                  defaultValue={userID}
-                  fontSize="16px"
-                  isPreviewFocusable={false}
-                  onSubmit={handleEditUserId}
-                >
-                  <Flex className={styles.editable}>
-                    <EditablePreview />
-                    <Input as={EditableInput} />
-                    <EditableControls />
-                  </Flex>
-                </Editable>
+            <div className={styles.infoBody}>
+              <div className={styles.infoBox}>
+                <AiTwotoneMail size={30} />
+                <div>
+                  <label htmlFor="email">Email</label>
+                  <Editable
+                    textAlign="center"
+                    defaultValue={userEmail}
+                    fontSize="16px"
+                    isPreviewFocusable={false}
+                    onSubmit={hadndleEditEmail}
+                  >
+                    <Flex className={styles.editable}>
+                      <EditablePreview />
+                      <Input as={EditableInput} />
+                      <EditableControls />
+                    </Flex>
+                  </Editable>
+                </div>
               </div>
-            </div>
 
-            {/* <div className={styles.infoBox}>
+              <div className={styles.infoBox}>
+                <FaUserEdit size={30} />
+                <div>
+                  <label htmlFor="/">User ID</label>
+                  <Editable
+                    textAlign="center"
+                    defaultValue={userID}
+                    fontSize="16px"
+                    isPreviewFocusable={false}
+                    onSubmit={handleEditUserId}
+                  >
+                    <Flex className={styles.editable}>
+                      <EditablePreview />
+                      <Input as={EditableInput} />
+                      <EditableControls />
+                    </Flex>
+                  </Editable>
+                </div>
+              </div>
+
+              {/* <div className={styles.infoBox}>
               <IoLocationOutline size={30} />
               <div>
                 <label htmlFor="email">Location</label>
@@ -382,8 +456,74 @@ const Settings = () => {
                 </Editable>
               </div>
             </div>    */}
+            </div>
           </div>
-        </div>
+
+          <div className={styles.backup}>
+            <div className={styles.infoHead}>
+              <h3>Data Backup</h3>
+            </div>
+            <div className={styles.backupBody}>
+              <p>Create a backup of your current data</p>
+              <Button
+                colorScheme="blue"
+                onClick={() => setIsBackupModalOpen(true)}
+                mt={4}
+              >
+                Take Data Backup
+              </Button>
+            </div>
+          </div>
+        </Box>
+
+        {/* Backup Confirmation Modal */}
+        <Modal
+          isOpen={isBackupModalOpen}
+          onClose={() => {
+            // Only allow closing if not loading
+            if (!isBackupLoading) {
+              setIsBackupModalOpen(false);
+            }
+          }}
+          closeOnOverlayClick={!isBackupLoading} // Disable click outside to close when loading
+          closeOnEsc={!isBackupLoading} // Disable ESC key to close when loading
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Confirm Backup</ModalHeader>
+            {!isBackupLoading && <ModalCloseButton />}{" "}
+            {/* Hide close button when loading */}
+            <ModalBody>
+              {isBackupLoading ? (
+                <Flex direction="column" align="center" justify="center" p={4}>
+                  <Spinner size="xl" mb={4} />
+                  <Text>Creating backup, please wait...</Text>
+                </Flex>
+              ) : (
+                "Are you sure you want to create a backup of your current data? This action cannot be undone."
+              )}
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                variant="ghost"
+                mr={3}
+                onClick={() => setIsBackupModalOpen(false)}
+                isDisabled={isBackupLoading} // Disable cancel button when loading
+              >
+                Cancel
+              </Button>
+              <Button
+                colorScheme="blue"
+                onClick={handleBackup}
+                isLoading={isBackupLoading}
+                loadingText="Creating Backup..."
+                isDisabled={isBackupLoading} // Disable while loading (redundant but safe)
+              >
+                Confirm Backup
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
 
         <div className={styles.password}>
           <div className={styles.infoHead}>
