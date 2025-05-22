@@ -26,6 +26,12 @@ import {
   ModalOverlay,
   Select,
   useDisclosure,
+  Box,
+  Flex,
+  Grid,
+  GridItem,
+  useToast,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -66,70 +72,241 @@ const AlertLogs = () => {
       headerName: "Value",
       field: "b3",
     },
-    // {
-    //   headerName: "Created Date",
-    //   field: "device_log_date",
-    //   filter: "agDateColumnFilter",
-    //   maxWidth: 300,
-    //   filterParams: {
-    //     comparator: (filterLocalDateAtMidnight, cellValue) => {
-    //       const dateParts = cellValue.split("-");
-    //       const year = Number(dateParts[2]);
-    //       const month = Number(dateParts[1]) - 1;
-    //       const day = Number(dateParts[0]);
-    //       const cellDate = new Date(year, month, day);
-    //       // Compare dates
-    //       if (cellDate < filterLocalDateAtMidnight) {
-    //         return -1;
-    //       } else if (cellDate > filterLocalDateAtMidnight) {
-    //         return 1;
-    //       } else {
-    //         return 0;
-    //       }
-    //     },
-    //   },
-    // },
-    // {
-    //   headerName: "Created Tiem",
-    //   field: "device_log_time",
-    //   filter: false,
-    //   sortable: false,
-    //   maxWidth: 200,
-    // },
   ]);
 
- 
+  // Form state
+  const [formData, setFormData] = useState({
+    voltage: {
+      type: "low",
+      value: "",
+    },
+    current: {
+      type: "low",
+      value: "",
+    },
+    temperature: {
+      type: "low",
+      value: "",
+    },
+  });
+
+  // Validation state
+  const [errors, setErrors] = useState({
+    voltage: "",
+    current: "",
+    temperature: "",
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
+
+  // Fetch initial alert log data
+  useEffect(() => {
+    const fetchAlertLogData = async () => {
+      try {
+        setIsLoading(true);
+        const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        const response = await fetch(
+          `https://bt.meshaenergy.com/apis/alertLog/get/${token}`
+        );
+        const data = await response.json();
+        console.log("Alert log data:", data);
+
+        if (data.length > 0) {
+          setFormData({
+            voltage: {
+              type: data[0].voltage_low_high_flag === 0 ? "low" : "high",
+              value: data[0].voltage_th_value.toString(),
+            },
+            current: {
+              type: data[0].current_low_high_flag === 0 ? "low" : "high",
+              value: data[0].current_th_value.toString(),
+            },
+            temperature: {
+              type: data[0].temp_low_high_flag === 0 ? "low" : "high",
+              value: data[0].temp_th_value.toString(),
+            },
+          });
+        } else {
+          // toast({
+          //   title: "Error",
+          //   description: data.message || "Failed to fetch alert log data",
+          //   status: "error",
+          //   duration: 5000,
+          //   isClosable: true,
+          // });
+          console.log(
+            "Error fetching alert log data:",
+            data.message || "Failed to fetch alert log data"
+          );
+        }
+      } catch (error) {
+        console.log("Error fetching alert log data:", error);
+        // toast({
+        //   title: "Error",
+        //   description: "Failed to fetch alert log data",
+        //   status: "error",
+        //   duration: 5000,
+        //   isClosable: true,
+        // });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAlertLogData();
+  }, [toast]);
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = {
+      voltage: "",
+      current: "",
+      temperature: "",
+    };
+
+    // Validate voltage
+    if (!formData.voltage.value.trim()) {
+      newErrors.voltage = "Voltage value is required";
+      isValid = false;
+    } else if (isNaN(Number(formData.voltage.value))) {
+      newErrors.voltage = "Voltage must be a number";
+      isValid = false;
+    }
+
+    // Validate current
+    if (!formData.current.value.trim()) {
+      newErrors.current = "Current value is required";
+      isValid = false;
+    } else if (isNaN(Number(formData.current.value))) {
+      newErrors.current = "Current must be a number";
+      isValid = false;
+    }
+
+    // Validate temperature
+    if (!formData.temperature.value.trim()) {
+      newErrors.temperature = "Temperature value is required";
+      isValid = false;
+    } else if (isNaN(Number(formData.temperature.value))) {
+      newErrors.temperature = "Temperature must be a number";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleInputChange = (field: string, key: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: {
+        ...prev[field as keyof typeof formData],
+        [key]: value,
+      },
+    }));
+
+    // Clear error when user starts typing
+    if (key === "value" && errors[field as keyof typeof errors]) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "",
+      }));
+    }
+  };
+
+  const handleGetAlertLogs = async () => {
+    if (!validateForm()) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill all fields with valid values",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+      if (!token) {
+        throw new Error("No token found");
+      }
+      const payload = new FormData();
+      // const payload = {
+      //   token,
+      //   voltage_low_high_flag: formData.voltage.type === "low" ? 0 : 1,
+      //   voltage_th_value: formData.voltage.value,
+      //   current_low_high_flag: formData.current.type === "low" ? 0 : 1,
+      //   current_th_value: formData.current.value,
+      //   temp_low_high_flag: formData.temperature.type === "low" ? 0 : 1,
+      //   temp_th_value: formData.temperature.value,
+      // };
+      payload.append("token", token);
+      payload.append(
+        "voltage_low_high_flag",
+        formData.voltage.type === "low" ? "0" : "1"
+      );
+      payload.append("voltage_th_value", formData.voltage.value);
+      payload.append(
+        "current_low_high_flag",
+        formData.current.type === "low" ? "0" : "1"
+      );
+      payload.append("current_th_value", formData.current.value);
+      payload.append(
+        "temp_low_high_flag",
+        formData.temperature.type === "low" ? "0" : "1"
+      );
+      payload.append("temp_th_value", formData.temperature.value);
+
+      const response = await fetch(
+        "https://bt.meshaenergy.com/apis/alertLog/add",
+        {
+          method: "POST",
+          body: payload,
+        }
+      );
+
+      const data = await response.json();
+      console.log("Response data:", data);
+
+      if (data.errFlag === 0) {
+        toast({
+          title: "Success",
+          description: "Alert log parameters updated successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        throw new Error(
+          data.message || "Failed to update alert log parameters"
+        );
+      }
+    } catch (error) {
+      console.error("Error updating alert log parameters:", error);
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to update alert log parameters",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   function handleEdit(data: any) {
     console.log(data);
   }
-
-  // modal
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const [deviceId, setDeviceId] = useState("");
-  const [deviceName, setDeviceName] = useState("");
-  const [password, setpassword] = useState("");
-  const [role, setRole] = useState("");
-
-  const [show, setShow] = React.useState(false);
-  const handleClickpass = () => setShow(!show);
-
-  const handleAddDevice = () => {
-    const newDevice = {
-      deviceId,
-      deviceName,
-      password,
-      role,
-    };
-    console.log(newDevice);
-    // Clear inputs and close modal (optional)
-    setDeviceId("");
-    setDeviceName("");
-    setpassword("");
-    setRole("");
-    onClose();
-  };
 
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
@@ -140,11 +317,113 @@ const AlertLogs = () => {
           processing history for better transparency and control.
         </p>
       </div>
-      <div
+
+      {/* New Form Section */}
+      <Box bg="white" p={4} borderRadius="md" boxShadow="sm" mt={4} width="40%">
+        <Heading size="md" mb={4}>
+          Alert Parameters
+        </Heading>
+
+        <Grid templateColumns="repeat(1, 1fr)" gap={6}>
+          {/* Voltage */}
+          <GridItem>
+            <FormControl isInvalid={!!errors.voltage}>
+              <FormLabel>Voltage</FormLabel>
+              <Flex>
+                <Select
+                  value={formData.voltage.type}
+                  onChange={(e) =>
+                    handleInputChange("voltage", "type", e.target.value)
+                  }
+                  mr={2}
+                >
+                  <option value="low">Low</option>
+                  <option value="high">High</option>
+                </Select>
+                <Input
+                  placeholder="Th Value"
+                  value={formData.voltage.value}
+                  onChange={(e) =>
+                    handleInputChange("voltage", "value", e.target.value)
+                  }
+                />
+              </Flex>
+              <FormErrorMessage>{errors.voltage}</FormErrorMessage>
+            </FormControl>
+          </GridItem>
+
+          {/* Current */}
+          <GridItem>
+            <FormControl isInvalid={!!errors.current}>
+              <FormLabel>Current</FormLabel>
+              <Flex>
+                <Select
+                  value={formData.current.type}
+                  onChange={(e) =>
+                    handleInputChange("current", "type", e.target.value)
+                  }
+                  mr={2}
+                >
+                  <option value="low">Low</option>
+                  <option value="high">High</option>
+                </Select>
+                <Input
+                  placeholder="Th Value"
+                  value={formData.current.value}
+                  onChange={(e) =>
+                    handleInputChange("current", "value", e.target.value)
+                  }
+                />
+              </Flex>
+              <FormErrorMessage>{errors.current}</FormErrorMessage>
+            </FormControl>
+          </GridItem>
+
+          {/* Temperature */}
+          <GridItem>
+            <FormControl isInvalid={!!errors.temperature}>
+              <FormLabel>Temperature</FormLabel>
+              <Flex>
+                <Select
+                  value={formData.temperature.type}
+                  onChange={(e) =>
+                    handleInputChange("temperature", "type", e.target.value)
+                  }
+                  mr={2}
+                >
+                  <option value="low">Low</option>
+                  <option value="high">High</option>
+                </Select>
+                <Input
+                  placeholder="Th Value"
+                  value={formData.temperature.value}
+                  onChange={(e) =>
+                    handleInputChange("temperature", "value", e.target.value)
+                  }
+                />
+              </Flex>
+              <FormErrorMessage>{errors.temperature}</FormErrorMessage>
+            </FormControl>
+          </GridItem>
+        </Grid>
+
+        <Button
+          mt={6}
+          colorScheme="blue"
+          width={"100%"}
+          onClick={handleGetAlertLogs}
+          isLoading={isLoading}
+          loadingText="Submitting..."
+        >
+          Save Config
+        </Button>
+      </Box>
+
+      {/* <div
         style={{
           height: "100%",
           width: "80vw",
-          marginTop: "40px",
+          marginTop: "20px",
         }}
       >
         <div
@@ -160,9 +439,6 @@ const AlertLogs = () => {
           }}
         >
           <p style={{ fontSize: "16px", fontWeight: "600" }}>Alert Logs</p>
-          {/* <Button onClick={onOpen} colorScheme="green">
-            Add New User
-          </Button> */}
         </div>
         <div className={styles.vLowAndHigh}>
           <h5>Voltage Range : </h5>
@@ -197,62 +473,7 @@ const AlertLogs = () => {
             }}
           />
         </div>
-      </div>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create New User</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl>
-              <FormLabel>Name</FormLabel>
-              <Input
-                placeholder="Enter User Name"
-                value={deviceId}
-                onChange={(e) => setDeviceId(e.target.value)}
-              />
-              <FormLabel>Email ID</FormLabel>
-              <Input
-                placeholder="Enter Email Id"
-                value={deviceName}
-                onChange={(e) => setDeviceName(e.target.value)}
-              />
-              <FormLabel>Password</FormLabel>
-              <InputGroup size="md">
-                <Input
-                  pr="4.5rem"
-                  type={show ? "text" : "password"}
-                  placeholder="Enter password"
-                  value={password}
-                  onChange={(e) => setpassword(e.target.value)}
-                />
-                <InputRightElement width="4.5rem">
-                  <Button h="1.75rem" size="sm" onClick={handleClickpass}>
-                    {show ? "Hide" : "Show"}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-              <FormLabel>Role</FormLabel>
-              <Select
-                placeholder="Select option"
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-              </Select>
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="gray" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="green" onClick={handleAddDevice}>
-              Add Device
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      </div> */}
     </div>
   );
 };
