@@ -1,12 +1,7 @@
 "use client";
 
-import { AgGridReact } from "ag-grid-react";
-import React, { useEffect, useMemo, useState } from "react";
-import { HiDownload } from "react-icons/hi";
-import { FaEye } from "react-icons/fa";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import React, { useEffect, useState } from "react";
 import type { ColDef } from "ag-grid-community";
-import { IoReload } from "react-icons/io5";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
 import {
@@ -15,17 +10,6 @@ import {
   FormLabel,
   Heading,
   Input,
-  InputGroup,
-  InputRightElement,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Select,
-  useDisclosure,
   Box,
   Flex,
   Grid,
@@ -37,64 +21,30 @@ import {
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const AlertLogs = () => {
-  const [rowData, setRowData] = useState<any[]>([
-    {
-      fileName: "UPS_Data_20250108_001.csv",
-      uploadDate: "23/12/2024",
-      deviceName: "MESHA_001",
-      status: "Processed",
-      action: "action",
-    },
-  ]);
-
-  const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    {
-      headerName: "Sl. No",
-      field: "index",
-      maxWidth: 80,
-      filter: false,
-      suppressAutoSize: true,
-    },
-    {
-      headerName: "Device ID",
-      field: "Cycle",
-      minWidth: 180,
-    },
-    {
-      headerName: "Parameter",
-      field: "b1",
-    },
-    {
-      headerName: "Operation",
-      field: "b2",
-    },
-    {
-      headerName: "Value",
-      field: "b3",
-    },
-  ]);
-
   // Form state
   const [formData, setFormData] = useState({
     voltage: {
-      type: "low",
-      value: "",
+      low: "",
+      high: "",
     },
     current: {
-      type: "low",
-      value: "",
+      low: "",
+      high: "",
     },
     temperature: {
-      type: "low",
-      value: "",
+      low: "",
+      high: "",
     },
   });
 
   // Validation state
   const [errors, setErrors] = useState({
-    voltage: "",
-    current: "",
-    temperature: "",
+    voltageLow: "",
+    voltageHigh: "",
+    currentLow: "",
+    currentHigh: "",
+    temperatureLow: "",
+    temperatureHigh: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -119,26 +69,19 @@ const AlertLogs = () => {
         if (data.length > 0) {
           setFormData({
             voltage: {
-              type: data[0].voltage_low_high_flag === 0 ? "low" : "high",
-              value: data[0].voltage_th_value.toString(),
+              low: data[0].voltage_low?.toString() || "",
+              high: data[0].voltage_high?.toString() || "",
             },
             current: {
-              type: data[0].current_low_high_flag === 0 ? "low" : "high",
-              value: data[0].current_th_value.toString(),
+              low: data[0].current_low?.toString() || "",
+              high: data[0].current_high?.toString() || "",
             },
             temperature: {
-              type: data[0].temp_low_high_flag === 0 ? "low" : "high",
-              value: data[0].temp_th_value.toString(),
+              low: data[0].temp_low?.toString() || "",
+              high: data[0].temp_high?.toString() || "",
             },
           });
         } else {
-          // toast({
-          //   title: "Error",
-          //   description: data.message || "Failed to fetch alert log data",
-          //   status: "error",
-          //   duration: 5000,
-          //   isClosable: true,
-          // });
           console.log(
             "Error fetching alert log data:",
             data.message || "Failed to fetch alert log data"
@@ -146,13 +89,6 @@ const AlertLogs = () => {
         }
       } catch (error) {
         console.log("Error fetching alert log data:", error);
-        // toast({
-        //   title: "Error",
-        //   description: "Failed to fetch alert log data",
-        //   status: "error",
-        //   duration: 5000,
-        //   isClosable: true,
-        // });
       } finally {
         setIsLoading(false);
       }
@@ -164,35 +100,77 @@ const AlertLogs = () => {
   const validateForm = () => {
     let isValid = true;
     const newErrors = {
-      voltage: "",
-      current: "",
-      temperature: "",
+      voltageLow: "",
+      voltageHigh: "",
+      currentLow: "",
+      currentHigh: "",
+      temperatureLow: "",
+      temperatureHigh: "",
     };
 
-    // Validate voltage
-    if (!formData.voltage.value.trim()) {
-      newErrors.voltage = "Voltage value is required";
+    // Validate voltage low
+    if (!formData.voltage.low.trim()) {
+      newErrors.voltageLow = "Voltage low value is required";
       isValid = false;
-    } else if (isNaN(Number(formData.voltage.value))) {
-      newErrors.voltage = "Voltage must be a number";
-      isValid = false;
-    }
-
-    // Validate current
-    if (!formData.current.value.trim()) {
-      newErrors.current = "Current value is required";
-      isValid = false;
-    } else if (isNaN(Number(formData.current.value))) {
-      newErrors.current = "Current must be a number";
+    } else if (isNaN(Number(formData.voltage.low))) {
+      newErrors.voltageLow = "Voltage low must be a number";
       isValid = false;
     }
 
-    // Validate temperature
-    if (!formData.temperature.value.trim()) {
-      newErrors.temperature = "Temperature value is required";
+    // Validate voltage high
+    if (!formData.voltage.high.trim()) {
+      newErrors.voltageHigh = "Voltage high value is required";
       isValid = false;
-    } else if (isNaN(Number(formData.temperature.value))) {
-      newErrors.temperature = "Temperature must be a number";
+    } else if (isNaN(Number(formData.voltage.high))) {
+      newErrors.voltageHigh = "Voltage high must be a number";
+      isValid = false;
+    } else if (Number(formData.voltage.high) <= Number(formData.voltage.low)) {
+      newErrors.voltageHigh = "Voltage high must be greater than low value";
+      isValid = false;
+    }
+
+    // Validate current low
+    if (!formData.current.low.trim()) {
+      newErrors.currentLow = "Current low value is required";
+      isValid = false;
+    } else if (isNaN(Number(formData.current.low))) {
+      newErrors.currentLow = "Current low must be a number";
+      isValid = false;
+    }
+
+    // Validate current high
+    if (!formData.current.high.trim()) {
+      newErrors.currentHigh = "Current high value is required";
+      isValid = false;
+    } else if (isNaN(Number(formData.current.high))) {
+      newErrors.currentHigh = "Current high must be a number";
+      isValid = false;
+    } else if (Number(formData.current.high) <= Number(formData.current.low)) {
+      newErrors.currentHigh = "Current high must be greater than low value";
+      isValid = false;
+    }
+
+    // Validate temperature low
+    if (!formData.temperature.low.trim()) {
+      newErrors.temperatureLow = "Temperature low value is required";
+      isValid = false;
+    } else if (isNaN(Number(formData.temperature.low))) {
+      newErrors.temperatureLow = "Temperature low must be a number";
+      isValid = false;
+    }
+
+    // Validate temperature high
+    if (!formData.temperature.high.trim()) {
+      newErrors.temperatureHigh = "Temperature high value is required";
+      isValid = false;
+    } else if (isNaN(Number(formData.temperature.high))) {
+      newErrors.temperatureHigh = "Temperature high must be a number";
+      isValid = false;
+    } else if (
+      Number(formData.temperature.high) <= Number(formData.temperature.low)
+    ) {
+      newErrors.temperatureHigh =
+        "Temperature high must be greater than low value";
       isValid = false;
     }
 
@@ -200,20 +178,25 @@ const AlertLogs = () => {
     return isValid;
   };
 
-  const handleInputChange = (field: string, key: string, value: string) => {
+  const handleInputChange = (
+    field: string,
+    type: "low" | "high",
+    value: string
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: {
         ...prev[field as keyof typeof formData],
-        [key]: value,
+        [type]: value,
       },
     }));
 
     // Clear error when user starts typing
-    if (key === "value" && errors[field as keyof typeof errors]) {
+    const errorKey = `${field}${type.charAt(0).toUpperCase() + type.slice(1)}`;
+    if (errors[errorKey as keyof typeof errors]) {
       setErrors((prev) => ({
         ...prev,
-        [field]: "",
+        [errorKey]: "",
       }));
     }
   };
@@ -232,36 +215,19 @@ const AlertLogs = () => {
 
     try {
       setIsLoading(true);
-      const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("No token found");
       }
+
       const payload = new FormData();
-      // const payload = {
-      //   token,
-      //   voltage_low_high_flag: formData.voltage.type === "low" ? 0 : 1,
-      //   voltage_th_value: formData.voltage.value,
-      //   current_low_high_flag: formData.current.type === "low" ? 0 : 1,
-      //   current_th_value: formData.current.value,
-      //   temp_low_high_flag: formData.temperature.type === "low" ? 0 : 1,
-      //   temp_th_value: formData.temperature.value,
-      // };
       payload.append("token", token);
-      payload.append(
-        "voltage_low_high_flag",
-        formData.voltage.type === "low" ? "0" : "1"
-      );
-      payload.append("voltage_th_value", formData.voltage.value);
-      payload.append(
-        "current_low_high_flag",
-        formData.current.type === "low" ? "0" : "1"
-      );
-      payload.append("current_th_value", formData.current.value);
-      payload.append(
-        "temp_low_high_flag",
-        formData.temperature.type === "low" ? "0" : "1"
-      );
-      payload.append("temp_th_value", formData.temperature.value);
+      payload.append("voltage_low", formData.voltage.low);
+      payload.append("voltage_high", formData.voltage.high);
+      payload.append("current_low", formData.current.low);
+      payload.append("current_high", formData.current.high);
+      payload.append("temp_low", formData.temperature.low);
+      payload.append("temp_high", formData.temperature.high);
 
       const response = await fetch(
         "https://bt.meshaenergy.com/apis/alertLog/add",
@@ -327,83 +293,83 @@ const AlertLogs = () => {
         <Grid templateColumns="repeat(1, 1fr)" gap={6}>
           {/* Voltage */}
           <GridItem>
-            <FormControl isInvalid={!!errors.voltage}>
-              <FormLabel>Voltage</FormLabel>
-              <Flex>
-                <Select
-                  value={formData.voltage.type}
-                  onChange={(e) =>
-                    handleInputChange("voltage", "type", e.target.value)
-                  }
-                  mr={2}
-                >
-                  <option value="low">Low</option>
-                  <option value="high">High</option>
-                </Select>
+            <FormLabel>Voltage</FormLabel>
+            <Flex gap={2} mb={2}>
+              <FormControl isInvalid={!!errors.voltageLow}>
                 <Input
-                  placeholder="Th Value"
-                  value={formData.voltage.value}
+                  placeholder="Low Value"
+                  value={formData.voltage.low}
                   onChange={(e) =>
-                    handleInputChange("voltage", "value", e.target.value)
+                    handleInputChange("voltage", "low", e.target.value)
                   }
                 />
-              </Flex>
-              <FormErrorMessage>{errors.voltage}</FormErrorMessage>
-            </FormControl>
+                <FormErrorMessage>{errors.voltageLow}</FormErrorMessage>
+              </FormControl>
+              <FormControl isInvalid={!!errors.voltageHigh}>
+                <Input
+                  placeholder="High Value"
+                  value={formData.voltage.high}
+                  onChange={(e) =>
+                    handleInputChange("voltage", "high", e.target.value)
+                  }
+                />
+                <FormErrorMessage>{errors.voltageHigh}</FormErrorMessage>
+              </FormControl>
+            </Flex>
           </GridItem>
 
           {/* Current */}
           <GridItem>
-            <FormControl isInvalid={!!errors.current}>
-              <FormLabel>Current</FormLabel>
-              <Flex>
-                <Select
-                  value={formData.current.type}
-                  onChange={(e) =>
-                    handleInputChange("current", "type", e.target.value)
-                  }
-                  mr={2}
-                >
-                  <option value="low">Low</option>
-                  <option value="high">High</option>
-                </Select>
+            <FormLabel>Current</FormLabel>
+            <Flex gap={2} mb={2}>
+              <FormControl isInvalid={!!errors.currentLow}>
                 <Input
-                  placeholder="Th Value"
-                  value={formData.current.value}
+                  placeholder="Low Value"
+                  value={formData.current.low}
                   onChange={(e) =>
-                    handleInputChange("current", "value", e.target.value)
+                    handleInputChange("current", "low", e.target.value)
                   }
                 />
-              </Flex>
-              <FormErrorMessage>{errors.current}</FormErrorMessage>
-            </FormControl>
+                <FormErrorMessage>{errors.currentLow}</FormErrorMessage>
+              </FormControl>
+              <FormControl isInvalid={!!errors.currentHigh}>
+                <Input
+                  placeholder="High Value"
+                  value={formData.current.high}
+                  onChange={(e) =>
+                    handleInputChange("current", "high", e.target.value)
+                  }
+                />
+                <FormErrorMessage>{errors.currentHigh}</FormErrorMessage>
+              </FormControl>
+            </Flex>
           </GridItem>
 
           {/* Temperature */}
           <GridItem>
-            <FormControl isInvalid={!!errors.temperature}>
-              <FormLabel>Temperature</FormLabel>
-              <Flex>
-                <Select
-                  value={formData.temperature.type}
-                  onChange={(e) =>
-                    handleInputChange("temperature", "type", e.target.value)
-                  }
-                  mr={2}
-                >
-                  <option value="low">Low</option>
-                  <option value="high">High</option>
-                </Select>
+            <FormLabel>Temperature</FormLabel>
+            <Flex gap={2} mb={2}>
+              <FormControl isInvalid={!!errors.temperatureLow}>
                 <Input
-                  placeholder="Th Value"
-                  value={formData.temperature.value}
+                  placeholder="Low Value"
+                  value={formData.temperature.low}
                   onChange={(e) =>
-                    handleInputChange("temperature", "value", e.target.value)
+                    handleInputChange("temperature", "low", e.target.value)
                   }
                 />
-              </Flex>
-              <FormErrorMessage>{errors.temperature}</FormErrorMessage>
-            </FormControl>
+                <FormErrorMessage>{errors.temperatureLow}</FormErrorMessage>
+              </FormControl>
+              <FormControl isInvalid={!!errors.temperatureHigh}>
+                <Input
+                  placeholder="High Value"
+                  value={formData.temperature.high}
+                  onChange={(e) =>
+                    handleInputChange("temperature", "high", e.target.value)
+                  }
+                />
+                <FormErrorMessage>{errors.temperatureHigh}</FormErrorMessage>
+              </FormControl>
+            </Flex>
           </GridItem>
         </Grid>
 
@@ -418,62 +384,6 @@ const AlertLogs = () => {
           Save Config
         </Button>
       </Box>
-
-      {/* <div
-        style={{
-          height: "100%",
-          width: "80vw",
-          marginTop: "20px",
-        }}
-      >
-        <div
-          style={{
-            height: "60px",
-            width: "100%",
-            backgroundColor: "white",
-            padding: "20px",
-            borderRadius: "10px 10px 0px 0px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <p style={{ fontSize: "16px", fontWeight: "600" }}>Alert Logs</p>
-        </div>
-        <div className={styles.vLowAndHigh}>
-          <h5>Voltage Range : </h5>
-          <p>
-            B1: L <span id="v1Low">10</span> - H <span id="v1High">12</span>
-          </p>
-          <p>
-            B2: L <span id="v2Low">12</span> - H <span id="v2High">15</span>
-          </p>
-          <p>
-            B3: L <span id="v3Low">15</span> - H <span id="v3High">20</span>
-          </p>
-          <p>
-            B4: L <span id="v4Low">20</span> - H <span id="v4High">22</span>
-          </p>
-        </div>
-        <div style={{ height: "100%", width: "100%" }}>
-          <AgGridReact
-            rowData={rowData}
-            columnDefs={columnDefs}
-            pagination={true}
-            paginationPageSize={10}
-            paginationAutoPageSize={true}
-            getRowHeight={function (params) {
-              const description = params.data?.banner_description || "";
-              const words = description.split(" ").length;
-              const baseHeight = 80;
-              const heightPerWord = 6;
-              const minHeight = 80;
-              const calculatedHeight = baseHeight + words * heightPerWord;
-              return Math.max(minHeight, calculatedHeight);
-            }}
-          />
-        </div>
-      </div> */}
     </div>
   );
 };
