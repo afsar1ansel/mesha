@@ -174,7 +174,7 @@ export default function Home() {
           </div>
           <BarChart />
         </div>
-        <div className={styles.bChart}>
+        <div className={styles.bChart2}>
           <div>
             <p style={{ marginBottom: "4px" }}>Reports Generated</p>
             {/* <div

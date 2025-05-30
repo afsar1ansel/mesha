@@ -129,7 +129,7 @@ export default function BarChart() {
 
   return (
     <div>
-      <canvas ref={canvasRef} width="100px" height="100px"></canvas>
+      <canvas ref={canvasRef} width="400" height="600"></canvas>
       <div
         style={{
           display: "flex",
